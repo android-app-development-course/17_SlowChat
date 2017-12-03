@@ -15,7 +15,7 @@ public class MakeFriendHall extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.make_friend_hall_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_make_friend);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.make_friend_toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.make_friend_fab);

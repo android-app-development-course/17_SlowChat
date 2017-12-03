@@ -30,7 +30,7 @@ public class MainLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
 
         initial();
@@ -64,11 +64,11 @@ public class MainLogin extends AppCompatActivity {
         this.username="admin";
         this.password="admin";
 
-        this.usernameText=(EditText) findViewById(R.id.username_input_login);
-        this.passwordText=(EditText)findViewById(R.id.password_input_login);
+        this.usernameText=(EditText) findViewById(R.id.login_username_input);
+        this.passwordText=(EditText)findViewById(R.id.login_password_input);
 
         this.loginBtn=(Button)findViewById(R.id.login_login);
-        this.exitBtn=(Button)findViewById(R.id.exit_login);
+        this.exitBtn=(Button)findViewById(R.id.login_exit);
     }
 
     private void clickLogin(){

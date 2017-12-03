@@ -63,31 +63,4 @@ public class ChatListFragment extends Fragment
 
 
 
-    private void initTab()
-    {
-        this.resetTab();
-        this.selectTab();
-    }
-
-    private void selectTab()
-    {
-        this.icon=(ImageView)getActivity().findViewById(R.id.chat_manage_image_main);
-        this.icon.setSelected(true);
-        this.text=(TextView)getActivity().findViewById(R.id.chat_manage_text_main);
-        this.text.setSelected(true);
-        this.text.setTextColor(getResources().getColor(R.color.mainSelectedText));
-    }
-
-    private void resetTab()
-    {
-        ImageView friendManageI=(ImageView)getActivity().findViewById(R.id.friend_manage_image_main);
-        TextView friendManageT=(TextView)getActivity().findViewById(R.id.friend_manage_text_main);
-        friendManageT.setTextColor(getResources().getColor(R.color.mainNormalText));
-
-        ImageView personalInfoI=(ImageView)getActivity().findViewById(R.id.personal_info_image_main);
-        TextView personalInfoT=(TextView)getActivity().findViewById(R.id.personal_info_text_main);
-        personalInfoT.setTextColor(getResources().getColor(R.color.mainNormalText));
-
-    }
-
 }
