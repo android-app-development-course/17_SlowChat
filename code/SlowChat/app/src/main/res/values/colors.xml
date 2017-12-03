@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!--主界面-->
+    <color name="mainSelectedText">#128f78</color>
+    <color name="mainNormalText">#040505</color>
+
+
+    <!--聊天管理-->
+
+
+
+    <!--好友管理-->
+
+
+
+    <!--登录-->
+    <color name="loginNormalText">#1e1b1b</color>
+    <color name="loginButton">#1b474b</color>
+
+
+    <!--交友大厅-->
+
+
+
+    <!--个人信息-->
+
+
+
+</resources>
+
