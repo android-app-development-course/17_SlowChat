@@ -5,6 +5,7 @@ package com.example.dell.slowchat.ChatManage;
  */
 
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -75,6 +77,14 @@ public class ChatListFragment extends Fragment
         this.chatList=(ListView)rootView.findViewById(R.id.chat_manage_chat_list);
         MyBaseAdapter myBaseAdapter=new MyBaseAdapter(getContext(),this.sqLiteOp,this.chatInfos);
         this.chatList.setAdapter(myBaseAdapter);
+
+        this.chatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(getContext(),ChatInterface.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

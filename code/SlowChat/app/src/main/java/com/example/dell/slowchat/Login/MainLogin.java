@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.dell.slowchat.ChatManage.ChatInterface;
 import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
 

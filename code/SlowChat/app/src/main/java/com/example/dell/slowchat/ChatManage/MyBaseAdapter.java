@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,7 +56,7 @@ public class MyBaseAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder=new ViewHolder();
-            convertView = mInflater.inflate(R.layout.chat_mange_main_list_item, parent,false);
+            convertView = mInflater.inflate(R.layout.chat_manage_main_list_item, parent,false);
             holder.portrait = (ImageView) convertView.findViewById(R.id.chat_mange_main_list_portrait);
             holder.name = (TextView)convertView.findViewById(R.id.chat_mange_main_list_name);
             holder.time=(TextView) convertView.findViewById(R.id.chat_mange_main_list_time);

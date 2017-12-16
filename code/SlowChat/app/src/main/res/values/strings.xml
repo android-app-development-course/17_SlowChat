@@ -10,16 +10,11 @@
     <string name="main_activity_personal_info">个人</string>
 
 
-
-
     <!--聊天管理-->
-
-
+    <string name="chat_manage_send">发送</string>
 
 
     <!--好友管理-->
-
-
 
 
     <!--登录-->
@@ -35,9 +30,6 @@
     <string name="login_dialog_sure" translatable="false">确定</string>
     <string name="login_dialog_cancel" translatable="false">取消</string>
     <string name="login_dialog_exit" translatable="false">你确定要离开吗？</string>
-
-
-
 
 
     <!--交友大厅-->
@@ -131,7 +123,6 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-
 
 
     <!--个人信息-->

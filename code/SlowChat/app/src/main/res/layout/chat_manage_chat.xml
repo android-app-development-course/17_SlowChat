@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.dell.slowchat.ChatManage.ChatInterface" >
+
+    <ListView
+        android:id="@+id/chat_manage_chat_msg_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.25"
+        android:divider="#ffffff"></ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#EEEEEE"
+        android:gravity="bottom">
+
+        <EditText
+            android:id="@+id/chat_manage_chat_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/chat_manage_bg_et"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="@color/loginNormalText">
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/chat_manage_chat_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="@string/chat_manage_send"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</LinearLayout>
