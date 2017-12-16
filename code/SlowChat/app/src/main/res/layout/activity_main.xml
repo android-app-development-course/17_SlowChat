@@ -58,7 +58,9 @@
                 android:id="@+id/main_chat_manage_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name" />
+                android:text="@string/app_name"
+                android:textColor="@color/mainNormalText"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -80,7 +82,9 @@
                 android:id="@+id/main_friend_manage_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_activity_friend_manage" />
+                android:text="@string/main_activity_friend_manage"
+                android:textColor="@color/mainNormalText"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -102,7 +106,9 @@
                 android:id="@+id/main_personal_info_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_activity_personal_info" />
+                android:text="@string/main_activity_personal_info"
+                android:textColor="@color/mainNormalText"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 

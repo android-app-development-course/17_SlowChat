@@ -8,6 +8,7 @@ package com.example.dell.slowchat.ChatManage;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,13 +61,13 @@ public class ChatListFragment extends Fragment
         return rootView;
     }
 
-    private void initShowVieW(View rootView )
-    {
-        TextView textView = (TextView) rootView.findViewById(R.id.chat_manage_show);
-        int position=getArguments().getInt(ARG_SECTION_NUMBER);
-        String showText="ChatList index:"+String.valueOf(position);
-        textView.setText(showText);
-    }
+//    private void initShowVieW(View rootView )
+//    {
+//        TextView textView = (TextView) rootView.findViewById(R.id.chat_manage_show);
+//        int position=getArguments().getInt(ARG_SECTION_NUMBER);
+//        String showText="ChatList index:"+String.valueOf(position);
+//        textView.setText(showText);
+//    }
 
 
     private void iniChatList(View rootView ){
@@ -95,7 +96,7 @@ public class ChatListFragment extends Fragment
         String pictureName="portrait"+String.valueOf(position);
         int picID=getPictureID(pictureName);
         if (picID!=0) {
-            return getResources().getDrawable(picID);
+            return ContextCompat.getDrawable(getContext(),picID);
         }
         return null;
     }

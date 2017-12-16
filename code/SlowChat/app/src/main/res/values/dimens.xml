@@ -6,4 +6,7 @@
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="main_selected_font">4.0sp</dimen>
+    <dimen name="main_normal_font">3.4sp</dimen>
 </resources>

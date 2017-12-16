@@ -2,6 +2,7 @@ package com.example.dell.slowchat.MainInterface;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -181,13 +182,16 @@ public class MainActivity extends AppCompatActivity
         switch (position)
         {
             case 0:
-                chatManageT.setTextColor(getResources().getColor(R.color.mainNormalText));
+                chatManageT.setTextColor(ContextCompat.getColor(this,R.color.mainNormalText));
+                chatManageT.setTextSize(getResources().getDimension(R.dimen.main_normal_font));
                 break;
             case 1:
-                friendManageT.setTextColor(getResources().getColor(R.color.mainNormalText));
+                friendManageT.setTextColor(ContextCompat.getColor(this,R.color.mainNormalText));
+                friendManageT.setTextSize(getResources().getDimension(R.dimen.main_normal_font));
                 break;
             case 2:
-                personalInfoT.setTextColor(getResources().getColor(R.color.mainNormalText));
+                personalInfoT.setTextColor(ContextCompat.getColor(this,R.color.mainNormalText));
+                personalInfoT.setTextSize(getResources().getDimension(R.dimen.main_normal_font));
         }
     }
 
@@ -196,13 +200,16 @@ public class MainActivity extends AppCompatActivity
         switch (position)
         {
             case 0:
-                chatManageT.setTextColor(getResources().getColor(R.color.mainSelectedText));
+                chatManageT.setTextColor(ContextCompat.getColor(this,R.color.mainSelectedText));
+                chatManageT.setTextSize(getResources().getDimension(R.dimen.main_selected_font));
                 break;
             case 1:
-                friendManageT.setTextColor(getResources().getColor(R.color.mainSelectedText));
+                friendManageT.setTextColor(ContextCompat.getColor(this,R.color.mainSelectedText));
+                friendManageT.setTextSize(getResources().getDimension(R.dimen.main_selected_font));
                 break;
             case 2:
-                personalInfoT.setTextColor(getResources().getColor(R.color.mainSelectedText));
+                personalInfoT.setTextColor(ContextCompat.getColor(this,R.color.mainSelectedText));
+                personalInfoT.setTextSize(getResources().getDimension(R.dimen.main_selected_font));
         }
     }
 
