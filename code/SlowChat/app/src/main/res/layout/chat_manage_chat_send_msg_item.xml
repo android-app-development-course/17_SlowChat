@@ -29,6 +29,7 @@
         android:paddingRight="8dp"
         android:paddingTop="6dp"
         android:text="111"
+        android:textAlignment="textStart"
         android:textColor="#FFFFFF" />
 
 

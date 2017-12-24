@@ -24,14 +24,12 @@ public class MyBaseAdapter extends BaseAdapter {
     private ArrayList<ChatInfo> chatInfos;
     private LayoutInflater mInflater;
     private Context mainContext;
-    private SQLiteOp sqLiteOp;
 
 
-    public MyBaseAdapter(Context context,SQLiteOp sqLiteOp, ArrayList<ChatInfo> chatInfos){
+    public MyBaseAdapter(Context context, ArrayList<ChatInfo> chatInfos){
         this.chatInfos=chatInfos;
         this.mInflater = LayoutInflater.from(context);
         this.mainContext=context;
-        this.sqLiteOp=sqLiteOp;
     }
 
 
@@ -70,29 +68,29 @@ public class MyBaseAdapter extends BaseAdapter {
         return convertView;
     }
 
-    // listview中点击按键弹出对话框
-    private void showInfo(final int position) {
-        new AlertDialog.Builder(this.mainContext).setTitle("我的提示").setMessage("确定要删除吗？")
-                .setPositiveButton("确定",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteDataInDB(position);
-                        // 通过程序我们知道删除了，但是怎么刷新ListView呢？
-                        // 只需要重新设置一下adapter
-                        notifyDataSetChanged();
-                    }}
-                )
-                .setNegativeButton("取消",null)
-                .show();
-    }
-
-    private void deleteDataInDB(int position){
-        SQLiteDatabase db=this.sqLiteOp.getWritableDatabase();
-        String whereClause = "id=?";
-        String[] whereArgs = {String.valueOf(this.chatInfos.get(position).getFriendId())};
-        db.delete("message",whereClause,whereArgs);
-       db.close();
-    }
+//    // listview中点击按键弹出对话框
+//    private void showInfo(final int position) {
+//        new AlertDialog.Builder(this.mainContext).setTitle("我的提示").setMessage("确定要删除吗？")
+//                .setPositiveButton("确定",new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        deleteDataInDB(position);
+//                        // 通过程序我们知道删除了，但是怎么刷新ListView呢？
+//                        // 只需要重新设置一下adapter
+//                        notifyDataSetChanged();
+//                    }}
+//                )
+//                .setNegativeButton("取消",null)
+//                .show();
+//    }
+//
+//    private void deleteDataInDB(int position){
+//        SQLiteDatabase db=this.sqLiteOp.getWritableDatabase();
+//        String whereClause = "id=?";
+//        String[] whereArgs = {String.valueOf(this.chatInfos.get(position).getFriendId())};
+//        db.delete("message",whereClause,whereArgs);
+//       db.close();
+//    }
 
 
     private class ViewHolder {

@@ -15,6 +15,8 @@ public class ChatInfo {
     private int msgNum;
     private Drawable portrait;
 
+    public static Drawable friendPortrait;
+
     public ChatInfo(int friendId,String name,String time,String content,int msgNum,Drawable portrait){
         this.friendId=friendId;
         this.name=name;

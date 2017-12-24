@@ -17,9 +17,8 @@ public class SQLiteOp extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        db.execSQL("CREATE TABLE friend(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20),portrait BLOB)");
-//        db.execSQL("CREATE TABLE message(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_id VARCHAR(20)," +
-//                "content VARCHAR(1000),time datetime )");
+        db.execSQL("CREATE TABLE IF NOT EXISTS friend(friend_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20),portrait BLOB)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS message(id INTEGER PRIMARY KEY AUTOINCREMENT, friend_id INTEGER, msg_type INTEGER,content VARCHAR(1000))");
     }
 
     @Override

@@ -5,7 +5,13 @@ package com.example.dell.slowchat.ChatManage;
  */
 
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +25,7 @@ import android.widget.TextView;
 
 import com.example.dell.slowchat.R;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -34,7 +41,8 @@ public class ChatListFragment extends Fragment
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ArrayList<ChatInfo> chatInfos;
     private ListView chatList;
-    private SQLiteOp sqLiteOp;
+    private SQLiteDatabase writeDB;
+    private SQLiteDatabase readDB;
 
 
     public ChatListFragment() {}
@@ -57,50 +65,92 @@ public class ChatListFragment extends Fragment
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.chat_manage_main, container, false);
-        this.sqLiteOp=new SQLiteOp(getContext());
+        this.initSQLOp();
         this.iniChatList(rootView);
-//        textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
         return rootView;
     }
 
-//    private void initShowVieW(View rootView )
-//    {
-//        TextView textView = (TextView) rootView.findViewById(R.id.chat_manage_show);
-//        int position=getArguments().getInt(ARG_SECTION_NUMBER);
-//        String showText="ChatList index:"+String.valueOf(position);
-//        textView.setText(showText);
-//    }
+
+    private void initSQLOp(){
+        SQLiteOp sqLiteOp=new SQLiteOp(getContext());
+        writeDB=sqLiteOp.getWritableDatabase();
+        readDB=sqLiteOp.getReadableDatabase();
+    }
+
 
 
     private void iniChatList(View rootView ){
         initChatInfos();
         this.chatList=(ListView)rootView.findViewById(R.id.chat_manage_chat_list);
-        MyBaseAdapter myBaseAdapter=new MyBaseAdapter(getContext(),this.sqLiteOp,this.chatInfos);
+        MyBaseAdapter myBaseAdapter=new MyBaseAdapter(getContext(),this.chatInfos);
         this.chatList.setAdapter(myBaseAdapter);
+        initListViewClickAction();
+    }
 
+
+    private void initListViewClickAction(){
         this.chatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent=new Intent(getContext(),ChatInterface.class);
+                int friendID=chatInfos.get(position).getFriendId();
+                intent.putExtra("friend_id",friendID);
+                String friendName=chatInfos.get(position).getName();
+                intent.putExtra("name",friendName);
+                setFriendPortrait(position);
                 startActivity(intent);
             }
         });
     }
 
 
+    private void setFriendPortrait(int position){
+        Drawable portrait=chatInfos.get(position).getPortrait();
+        ChatInfo.friendPortrait=portrait;
+    }
+
+
     private void initChatInfos(){
         this.chatInfos=new ArrayList<>();
-        ChatInfo chatInfo=new ChatInfo(1,"张三","12月4号","你好",1,getPortrait(1));
-        this.chatInfos.add(chatInfo);
-        chatInfo=new ChatInfo(2,"李四","12月4号","还好吗",2,getPortrait(2));
-        this.chatInfos.add(chatInfo);
-        chatInfo=new ChatInfo(3,"王五","12月1号","昨天多谢了",0,getPortrait(3));
-        this.chatInfos.add(chatInfo);
-        chatInfo=new ChatInfo(4,"这就是传说中的。。","11月27号","有啥事啊",0,getPortrait(4));
-        this.chatInfos.add(chatInfo);
-        chatInfo=new ChatInfo(5,"perfect","11月30号","what",0,getPortrait(5));
-        this.chatInfos.add(chatInfo);
+        getFriendInfoFromDB();
     }
+
+
+    private void getFriendInfoFromDB() {
+        String[] columns = {"friend_id","name", "portrait"};
+        Cursor cursor = readDB.query("friend", columns, null, null, null, null, null);
+        String[] talks={"你好","还好吗","昨天多谢了","有啥事啊","what"};
+        String[] time={"12月4号","12月4号","12月1号","11月27号","11月30号"};
+        int[] msgNum={1,2,0,4,6};
+        int index=0;
+        //判断游标是否为空
+        if (cursor.moveToFirst())
+        {
+            do{
+                int id=cursor.getInt(0);
+                String name = cursor.getString(1);
+                byte[] portrait = cursor.getBlob(2);
+                Drawable dPortrait=exchangeByteToDrawble(portrait);
+                ChatInfo chatInf=new ChatInfo(id,name,time[index],talks[index],msgNum[index],dPortrait);
+                this.chatInfos.add(chatInf);
+                index++;
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
+
+    private Drawable exchangeByteToDrawble(byte[] blob){
+        Bitmap bmp = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+        BitmapDrawable bd = new BitmapDrawable(this.getResources(),bmp);
+        return bd;
+    }
+
+
+//    private void addAllFriends(){
+//        for (int i=0;i<this.chatInfos.size();i++) {
+//            addFriendInfoIntoSQLite(chatInfos.get(i).getName(),i+1);
+//        }
+//    }
 
     private Drawable getPortrait(int position){
         String pictureName="portrait"+String.valueOf(position);
@@ -109,6 +159,28 @@ public class ChatListFragment extends Fragment
             return ContextCompat.getDrawable(getContext(),picID);
         }
         return null;
+    }
+
+
+    private void addFriendInfoIntoSQLite(String name,int position){
+        Drawable portrait=getPortrait(position);
+        addFriendInfoIntoSQLite(name,drawableToBytes(portrait));
+    }
+
+
+    private byte[] drawableToBytes(Drawable picture){
+        Bitmap bmp = (((BitmapDrawable)picture).getBitmap());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, os);
+        return os.toByteArray();
+    }
+
+
+    private void addFriendInfoIntoSQLite(String name,byte[] portrait){
+        ContentValues values=new ContentValues();
+        values.put("name",name);
+        values.put("portrait",portrait);
+        writeDB.insert("friend",null,values);
     }
 
     public int getPictureID(String pictureName){
@@ -124,4 +196,9 @@ public class ChatListFragment extends Fragment
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        writeDB.close();
+    }
 }
