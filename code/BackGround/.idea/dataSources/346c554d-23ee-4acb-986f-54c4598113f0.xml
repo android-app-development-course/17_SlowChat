@@ -1162,7 +1162,7 @@
       <DataType>varchar(120)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="278" parent="233" name="cookie">
+    <column id="278" parent="233" name="certificate">
       <Position>8</Position>
       <DataType>varchar(60)|0</DataType>
       <ColumnKind>normal</ColumnKind>
