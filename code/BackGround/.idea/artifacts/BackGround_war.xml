@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="BackGround:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="Chat.war">
+      <element id="artifact" artifact-name="BackGround:war exploded" />
+    </root>
+  </artifact>
+</component>
