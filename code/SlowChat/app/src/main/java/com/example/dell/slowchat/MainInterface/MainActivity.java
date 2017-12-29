@@ -1,12 +1,12 @@
 package com.example.dell.slowchat.MainInterface;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.dell.slowchat.ChatManage.ChatListFragment;
-import com.example.dell.slowchat.FriendManage.FriendManageFragment;
-import com.example.dell.slowchat.PersonalInformation.PersonalInfoFragment;
+import com.example.dell.slowchat.MakeFriendHall.MakeFriendHall;
 import com.example.dell.slowchat.R;
 
 public class MainActivity extends AppCompatActivity
@@ -122,12 +120,17 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-        {
-            return true;
+        switch (id){
+            case R.id.main_action_settings:
+                return true;
+            case R.id.main_action_friend_hall:
+                Intent intent=new Intent(this, MakeFriendHall.class);
+                startActivity(intent);
+                break;
+            case R.id.main_action_search:
+                return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -182,14 +185,17 @@ public class MainActivity extends AppCompatActivity
         switch (position)
         {
             case 0:
+                chatManageI.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.msg));
                 chatManageT.setTextColor(ContextCompat.getColor(this,R.color.mainNormalText));
                 chatManageT.setTextSize(getResources().getDimension(R.dimen.main_normal_font));
                 break;
             case 1:
+                friendManageI.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.favorite));
                 friendManageT.setTextColor(ContextCompat.getColor(this,R.color.mainNormalText));
                 friendManageT.setTextSize(getResources().getDimension(R.dimen.main_normal_font));
                 break;
             case 2:
+                personalInfoI.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.person));
                 personalInfoT.setTextColor(ContextCompat.getColor(this,R.color.mainNormalText));
                 personalInfoT.setTextSize(getResources().getDimension(R.dimen.main_normal_font));
         }
@@ -200,14 +206,17 @@ public class MainActivity extends AppCompatActivity
         switch (position)
         {
             case 0:
+                chatManageI.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.msg_fill));
                 chatManageT.setTextColor(ContextCompat.getColor(this,R.color.mainSelectedText));
                 chatManageT.setTextSize(getResources().getDimension(R.dimen.main_selected_font));
                 break;
             case 1:
+                friendManageI.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.favorite_fill));
                 friendManageT.setTextColor(ContextCompat.getColor(this,R.color.mainSelectedText));
                 friendManageT.setTextSize(getResources().getDimension(R.dimen.main_selected_font));
                 break;
             case 2:
+                personalInfoI.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.person_fill));
                 personalInfoT.setTextColor(ContextCompat.getColor(this,R.color.mainSelectedText));
                 personalInfoT.setTextSize(getResources().getDimension(R.dimen.main_selected_font));
         }

@@ -21,13 +21,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.dell.slowchat.R;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -43,6 +46,8 @@ public class ChatListFragment extends Fragment
     private ListView chatList;
     private SQLiteDatabase writeDB;
     private SQLiteDatabase readDB;
+
+    private HashMap<Integer,Integer> chatMsgNum;
 
 
     public ChatListFragment() {}
@@ -66,6 +71,7 @@ public class ChatListFragment extends Fragment
     {
         View rootView = inflater.inflate(R.layout.chat_manage_main, container, false);
         this.initSQLOp();
+        this.addNewChatMsgIntoDB();
         this.iniChatList(rootView);
         return rootView;
     }
@@ -112,16 +118,19 @@ public class ChatListFragment extends Fragment
 
     private void initChatInfos(){
         this.chatInfos=new ArrayList<>();
-        getFriendInfoFromDB();
+        if(ifDBIsNull())
+            addAllFriends();
+        else
+            getFriendInfoFromDB();
     }
 
 
     private void getFriendInfoFromDB() {
         String[] columns = {"friend_id","name", "portrait"};
         Cursor cursor = readDB.query("friend", columns, null, null, null, null, null);
-        String[] talks={"你好","还好吗","昨天多谢了","有啥事啊","what"};
-        String[] time={"12月4号","12月4号","12月1号","11月27号","11月30号"};
-        int[] msgNum={1,2,0,4,6};
+//        String[] talks={"你好","还好吗","昨天多谢了","有啥事啊","what"};
+        HashMap<Integer,String> lastMsg=getLastMsg();
+        HashMap<Integer,String> lastSendTime=getLastSendTime();
         int index=0;
         //判断游标是否为空
         if (cursor.moveToFirst())
@@ -131,12 +140,63 @@ public class ChatListFragment extends Fragment
                 String name = cursor.getString(1);
                 byte[] portrait = cursor.getBlob(2);
                 Drawable dPortrait=exchangeByteToDrawble(portrait);
-                ChatInfo chatInf=new ChatInfo(id,name,time[index],talks[index],msgNum[index],dPortrait);
+                String lastSenTime=(new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
+                if(lastSendTime.containsKey(id))
+                    lastSenTime=lastSendTime.get(id);
+                String talk="你们已是朋友了，赶紧开始聊天吧！";
+                if(lastMsg.containsKey(id))
+                    talk=lastMsg.get(id);
+                int msgNum=0;
+                if(chatMsgNum.containsKey(id))
+                    msgNum=chatMsgNum.get(id);
+                ChatInfo chatInf=new ChatInfo(id,name,lastSenTime,talk,msgNum,dPortrait);
                 this.chatInfos.add(chatInf);
                 index++;
             }while (cursor.moveToNext());
         }
         cursor.close();
+    }
+
+
+    private HashMap<Integer,String> getLastSendTime(){
+        HashMap<Integer,String> lastSendTime=new HashMap<>();
+        String sqlCmm="SELECT message1.friend_id,message1.content \n" +
+                "FROM message message1,(SELECT friend_id,MAX(id) AS max_id FROM message WHERE msg_type=" +String .valueOf(ChatMsg.MessageTypeTime)+
+                " GROUP BY friend_id) message2\n" +
+                "WHERE message1.friend_id=message2.friend_id AND message1.id=message2.max_id;";
+        Cursor cursor=readDB.rawQuery(sqlCmm,null);
+        //判断游标是否为空
+        if (cursor.moveToFirst())
+        {
+            do{
+                int id=cursor.getInt(0);
+                String time = cursor.getString(1);
+                lastSendTime.put(id,time);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        return lastSendTime;
+    }
+
+
+    private HashMap<Integer,String> getLastMsg(){
+        HashMap<Integer,String> LastMsg=new HashMap<>();
+        String sqlCmm="SELECT message1.friend_id,message1.content \n" +
+                "FROM message message1,(SELECT friend_id,MAX(id) AS max_id FROM message WHERE msg_type<>" +String .valueOf(ChatMsg.MessageTypeTime)+
+                " GROUP BY friend_id) message2\n" +
+                "WHERE message1.friend_id=message2.friend_id AND message1.id=message2.max_id;";
+        Cursor cursor=readDB.rawQuery(sqlCmm,null);
+        //判断游标是否为空
+        if (cursor.moveToFirst())
+        {
+            do{
+                int id=cursor.getInt(0);
+                String time = cursor.getString(1);
+                LastMsg.put(id,time);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        return LastMsg;
     }
 
     private Drawable exchangeByteToDrawble(byte[] blob){
@@ -146,11 +206,36 @@ public class ChatListFragment extends Fragment
     }
 
 
-//    private void addAllFriends(){
-//        for (int i=0;i<this.chatInfos.size();i++) {
-//            addFriendInfoIntoSQLite(chatInfos.get(i).getName(),i+1);
-//        }
-//    }
+    private boolean ifDBIsNull(){
+        String command="select count(*) from friend";
+        Cursor cursor =readDB.rawQuery(command,null);
+        cursor.moveToFirst();
+        int dataNum=cursor.getInt(0);
+        cursor.close();
+        return dataNum==0;
+    }
+
+    private void addAllFriends(){
+        loadDataForChatInfos();
+        for (int i=0;i<this.chatInfos.size();i++) {
+            addFriendInfoIntoSQLite(chatInfos.get(i).getFriendId(),chatInfos.get(i).getName(),i+1);
+        }
+    }
+
+    private void loadDataForChatInfos(){
+        ChatInfo chatInfo;
+        chatInfo=new ChatInfo(1,"张三","12月4号","你好",1,getPortrait(1));
+        chatInfos.add(chatInfo);
+        chatInfo=new ChatInfo(2,"李四","12月4号","还好吗",2,getPortrait(2));
+        chatInfos.add(chatInfo);
+        chatInfo=new ChatInfo(3,"王五","12月1号","昨天多谢了",0,getPortrait(3));
+        chatInfos.add(chatInfo);
+        chatInfo=new ChatInfo(4,"小明","11月25号","有啥事啊",4,getPortrait(4));
+        chatInfos.add(chatInfo);
+        chatInfo=new ChatInfo(5,"小红","11月20号","what",0,getPortrait(5));
+        chatInfos.add(chatInfo);
+    }
+
 
     private Drawable getPortrait(int position){
         String pictureName="portrait"+String.valueOf(position);
@@ -162,9 +247,9 @@ public class ChatListFragment extends Fragment
     }
 
 
-    private void addFriendInfoIntoSQLite(String name,int position){
+    private void addFriendInfoIntoSQLite(int friendId,String name,int position){
         Drawable portrait=getPortrait(position);
-        addFriendInfoIntoSQLite(name,drawableToBytes(portrait));
+        addFriendInfoIntoSQLite(friendId,name,drawableToBytes(portrait));
     }
 
 
@@ -176,8 +261,9 @@ public class ChatListFragment extends Fragment
     }
 
 
-    private void addFriendInfoIntoSQLite(String name,byte[] portrait){
+    private void addFriendInfoIntoSQLite(int friendId,String name,byte[] portrait){
         ContentValues values=new ContentValues();
+        values.put("friend_id",friendId);
         values.put("name",name);
         values.put("portrait",portrait);
         writeDB.insert("friend",null,values);
@@ -195,6 +281,38 @@ public class ChatListFragment extends Fragment
         }
 
     }
+
+
+    private void addNewChatMsgIntoDB(){
+        List<ChatRecord> chatRecords=getDataFromServer();
+        initChatNum(chatRecords);
+        DealReceiveMsg dealReceiveMsg=new DealReceiveMsg(chatRecords,readDB);
+        dealReceiveMsg.writeDataIntoDB(writeDB);
+    }
+
+
+    private void initChatNum(List<ChatRecord> chatRecords){
+        chatMsgNum=new HashMap<>();
+        for(ChatRecord chatRecord:chatRecords){
+            int friendId=chatRecord.getFriendId();
+            if(chatMsgNum.containsKey(friendId))
+                chatMsgNum.put(friendId,chatMsgNum.get(friendId)+1);
+            else
+                chatMsgNum.put(friendId,1);
+        }
+    }
+
+    private List<ChatRecord> getDataFromServer(){
+        List<ChatRecord> chatRecords =new ArrayList<>();
+//        for (int i=1;i<5;i++) {
+//            ChatRecord rercord = new ChatRecord(i, "2017-12-27", "就你会吹比");
+//            chatRecords.add(rercord);
+//            rercord = new ChatRecord(i, "2017-12-27", "不吹会死啊");
+//            chatRecords.add(rercord);
+//        }
+        return chatRecords;
+    }
+
 
     @Override
     public void onDestroy() {

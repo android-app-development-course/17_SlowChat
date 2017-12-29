@@ -49,10 +49,11 @@
 
             <ImageView
                 android:id="@+id/main_chat_manage_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:background="#00000000"
-                android:src="@android:drawable/sym_action_chat" />
+                android:src="@android:drawable/sym_action_chat"
+                app:srcCompat="@drawable/msg" />
 
             <TextView
                 android:id="@+id/main_chat_manage_text"
@@ -73,10 +74,12 @@
 
             <ImageView
                 android:id="@+id/main_friend_manage_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:background="#00000000"
-                android:src="@android:drawable/ic_menu_view" />
+                app:srcCompat="@drawable/favorite" />
+            <!--android:src="@android:drawable/ic_menu_view"-->
+
 
             <TextView
                 android:id="@+id/main_friend_manage_text"
@@ -97,10 +100,10 @@
 
             <ImageView
                 android:id="@+id/main_personal_info_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:background="#00000000"
-                android:src="@android:drawable/ic_menu_myplaces" />
+                android:src="@drawable/person" />
 
             <TextView
                 android:id="@+id/main_personal_info_text"

@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">慢聊天</string>
-    <string name="action_settings">Settings</string>
+
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!--主界面-->
+    <string name="main_action_settings">设置</string>
+    <string name="main_action_search">搜索</string>
+    <string name="main_action_friend_hall">好友大厅</string>
     <string name="title_activity_main">慢聊天</string>
     <string name="main_activity_chat_manage">慢聊天</string>
     <string name="main_activity_friend_manage">关注</string>
