@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.chat.entity.FriendEntity" table="friend" schema="chat">
+        <id name="id">
+            <column name="id" sql-type="int(10) unsigned"/>
+        </id>
+        <property name="sourceId">
+            <column name="source_id" sql-type="smallint(5) unsigned"/>
+        </property>
+        <property name="targetId">
+            <column name="target_id" sql-type="smallint(5) unsigned"/>
+        </property>
+        <property name="sendCount">
+            <column name="send_count" sql-type="smallint(5) unsigned"/>
+        </property>
+        <property name="feeling">
+            <column name="feeling" sql-type="int(10) unsigned"/>
+        </property>
+        <property name="column6">
+            <column name="column_6" sql-type="int(11)" not-null="true"/>
+        </property>
+        <many-to-one name="userBySourceId" class="com.chat.entity.UserEntity">
+            <column name="source_id"/>
+        </many-to-one>
+        <many-to-one name="userByTargetId" class="com.chat.entity.UserEntity">
+            <column name="target_id"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

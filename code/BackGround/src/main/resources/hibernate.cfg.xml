@@ -8,8 +8,20 @@
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="connection.username">v</property>
     <property name="connection.password">008748</property>
-    
-    <!-- DB schema will be updated if needed -->
+      <mapping resource="entity/FriendEntity.hbm.xml"/>
+      <mapping class="com.chat.entity.FriendEntity"/>
+      <mapping resource="entity/FriendApplyEntity.hbm.xml"/>
+      <mapping class="com.chat.entity.FriendApplyEntity"/>
+      <mapping resource="entity/MessageEntity.hbm.xml"/>
+      <mapping class="com.chat.entity.MessageEntity"/>
+      <mapping resource="entity/TagEntity.hbm.xml"/>
+      <mapping class="com.chat.entity.TagEntity"/>
+      <mapping resource="entity/UserEntity.hbm.xml"/>
+      <mapping class="com.chat.entity.UserEntity"/>
+      <mapping class="com.chat.entity.UserTagEntity"/>
+      <mapping resource="entity/UserTagEntity.hbm.xml"/>
+
+      <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>
 </hibernate-configuration>
