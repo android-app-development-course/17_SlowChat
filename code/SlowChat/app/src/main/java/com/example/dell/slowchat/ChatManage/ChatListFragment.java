@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
 
 import java.io.ByteArrayOutputStream;
@@ -48,6 +49,8 @@ public class ChatListFragment extends Fragment
     private SQLiteDatabase readDB;
 
     private HashMap<Integer,Integer> chatMsgNum;
+    private HashMap<Integer,String> lastSendDate;
+    private HashMap<Integer,String> lastMsg;
 
 
     public ChatListFragment() {}
@@ -70,9 +73,9 @@ public class ChatListFragment extends Fragment
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.chat_manage_main, container, false);
-        this.initSQLOp();
-        this.addNewChatMsgIntoDB();
-        this.iniChatList(rootView);
+        initSQLOp();
+        initShowDataInListView();
+        iniChatList(rootView);
         return rootView;
     }
 
@@ -85,35 +88,90 @@ public class ChatListFragment extends Fragment
 
 
 
-    private void iniChatList(View rootView ){
+    private void initShowDataInListView(){
+        addNewChatMsgIntoDB();
+        initLastMsg();
+        initLastSendDate();
         initChatInfos();
-        this.chatList=(ListView)rootView.findViewById(R.id.chat_manage_chat_list);
-        MyBaseAdapter myBaseAdapter=new MyBaseAdapter(getContext(),this.chatInfos);
-        this.chatList.setAdapter(myBaseAdapter);
-        initListViewClickAction();
     }
 
 
-    private void initListViewClickAction(){
-        this.chatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(getContext(),ChatInterface.class);
-                int friendID=chatInfos.get(position).getFriendId();
-                intent.putExtra("friend_id",friendID);
-                String friendName=chatInfos.get(position).getName();
-                intent.putExtra("name",friendName);
-                setFriendPortrait(position);
-                startActivity(intent);
-            }
-        });
+    private void addNewChatMsgIntoDB(){
+        List<ChatRecord> chatRecords=getDataFromServer();
+        initChatNum(chatRecords);
+        DealReceiveMsg dealReceiveMsg=new DealReceiveMsg(chatRecords,readDB);
+        dealReceiveMsg.writeDataIntoDB(writeDB);
     }
 
 
-    private void setFriendPortrait(int position){
-        Drawable portrait=chatInfos.get(position).getPortrait();
-        ChatInfo.friendPortrait=portrait;
+
+    private void initChatNum(List<ChatRecord> chatRecords){
+        chatMsgNum=new HashMap<>();
+        for(ChatRecord chatRecord:chatRecords){
+            int friendId=chatRecord.getFriendId();
+            if(chatMsgNum.containsKey(friendId))
+                chatMsgNum.put(friendId,chatMsgNum.get(friendId)+1);
+            else
+                chatMsgNum.put(friendId,1);
+        }
     }
+
+
+
+
+    private List<ChatRecord> getDataFromServer(){
+        List<ChatRecord> chatRecords =new ArrayList<>();
+//        for (int i=1;i<5;i++) {
+//            ChatRecord rercord = new ChatRecord(i, "2017-12-27", "就你会吹比");
+//            chatRecords.add(rercord);
+//            rercord = new ChatRecord(i, "2017-12-27", "不吹会死啊");
+//            chatRecords.add(rercord);
+//        }
+        return chatRecords;
+    }
+
+
+
+
+    private void initLastSendDate(){
+        lastSendDate=new HashMap<>();
+        String sqlCmm="SELECT message1.friend_id,message1.content \n" +
+                "FROM message message1,(SELECT friend_id,MAX(id) AS max_id FROM message WHERE msg_type=" +String .valueOf(ChatMsg.MessageTypeTime)+
+                " GROUP BY friend_id) message2\n" +
+                "WHERE message1.friend_id=message2.friend_id AND message1.id=message2.max_id;";
+        Cursor cursor=readDB.rawQuery(sqlCmm,null);
+        //判断游标是否为空
+        if (cursor.moveToFirst())
+        {
+            do{
+                int id=cursor.getInt(0);
+                String time = cursor.getString(1);
+                lastSendDate.put(id,time);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
+
+
+    private void initLastMsg(){
+        lastMsg=new HashMap<>();
+        String sqlCmm="SELECT message1.friend_id,message1.content \n" +
+                "FROM message message1,(SELECT friend_id,MAX(id) AS max_id FROM message WHERE msg_type<>" +String .valueOf(ChatMsg.MessageTypeTime)+
+                " GROUP BY friend_id) message2\n" +
+                "WHERE message1.friend_id=message2.friend_id AND message1.id=message2.max_id;";
+        Cursor cursor=readDB.rawQuery(sqlCmm,null);
+        //判断游标是否为空
+        if (cursor.moveToFirst())
+        {
+            do{
+                int id=cursor.getInt(0);
+                String time = cursor.getString(1);
+                lastMsg.put(id,time);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
+
 
 
     private void initChatInfos(){
@@ -124,13 +182,20 @@ public class ChatListFragment extends Fragment
             getFriendInfoFromDB();
     }
 
+    private boolean ifDBIsNull(){
+        String command="select count(*) from friend";
+        Cursor cursor =readDB.rawQuery(command,null);
+        cursor.moveToFirst();
+        int dataNum=cursor.getInt(0);
+        cursor.close();
+        return dataNum==0;
+    }
+
 
     private void getFriendInfoFromDB() {
         String[] columns = {"friend_id","name", "portrait"};
         Cursor cursor = readDB.query("friend", columns, null, null, null, null, null);
 //        String[] talks={"你好","还好吗","昨天多谢了","有啥事啊","what"};
-        HashMap<Integer,String> lastMsg=getLastMsg();
-        HashMap<Integer,String> lastSendTime=getLastSendTime();
         int index=0;
         //判断游标是否为空
         if (cursor.moveToFirst())
@@ -141,8 +206,8 @@ public class ChatListFragment extends Fragment
                 byte[] portrait = cursor.getBlob(2);
                 Drawable dPortrait=exchangeByteToDrawble(portrait);
                 String lastSenTime=(new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
-                if(lastSendTime.containsKey(id))
-                    lastSenTime=lastSendTime.get(id);
+                if(lastSendDate.containsKey(id))
+                    lastSenTime=lastSendDate.get(id);
                 String talk="你们已是朋友了，赶紧开始聊天吧！";
                 if(lastMsg.containsKey(id))
                     talk=lastMsg.get(id);
@@ -158,46 +223,7 @@ public class ChatListFragment extends Fragment
     }
 
 
-    private HashMap<Integer,String> getLastSendTime(){
-        HashMap<Integer,String> lastSendTime=new HashMap<>();
-        String sqlCmm="SELECT message1.friend_id,message1.content \n" +
-                "FROM message message1,(SELECT friend_id,MAX(id) AS max_id FROM message WHERE msg_type=" +String .valueOf(ChatMsg.MessageTypeTime)+
-                " GROUP BY friend_id) message2\n" +
-                "WHERE message1.friend_id=message2.friend_id AND message1.id=message2.max_id;";
-        Cursor cursor=readDB.rawQuery(sqlCmm,null);
-        //判断游标是否为空
-        if (cursor.moveToFirst())
-        {
-            do{
-                int id=cursor.getInt(0);
-                String time = cursor.getString(1);
-                lastSendTime.put(id,time);
-            }while (cursor.moveToNext());
-        }
-        cursor.close();
-        return lastSendTime;
-    }
 
-
-    private HashMap<Integer,String> getLastMsg(){
-        HashMap<Integer,String> LastMsg=new HashMap<>();
-        String sqlCmm="SELECT message1.friend_id,message1.content \n" +
-                "FROM message message1,(SELECT friend_id,MAX(id) AS max_id FROM message WHERE msg_type<>" +String .valueOf(ChatMsg.MessageTypeTime)+
-                " GROUP BY friend_id) message2\n" +
-                "WHERE message1.friend_id=message2.friend_id AND message1.id=message2.max_id;";
-        Cursor cursor=readDB.rawQuery(sqlCmm,null);
-        //判断游标是否为空
-        if (cursor.moveToFirst())
-        {
-            do{
-                int id=cursor.getInt(0);
-                String time = cursor.getString(1);
-                LastMsg.put(id,time);
-            }while (cursor.moveToNext());
-        }
-        cursor.close();
-        return LastMsg;
-    }
 
     private Drawable exchangeByteToDrawble(byte[] blob){
         Bitmap bmp = BitmapFactory.decodeByteArray(blob, 0, blob.length);
@@ -206,14 +232,7 @@ public class ChatListFragment extends Fragment
     }
 
 
-    private boolean ifDBIsNull(){
-        String command="select count(*) from friend";
-        Cursor cursor =readDB.rawQuery(command,null);
-        cursor.moveToFirst();
-        int dataNum=cursor.getInt(0);
-        cursor.close();
-        return dataNum==0;
-    }
+
 
     private void addAllFriends(){
         loadDataForChatInfos();
@@ -283,34 +302,34 @@ public class ChatListFragment extends Fragment
     }
 
 
-    private void addNewChatMsgIntoDB(){
-        List<ChatRecord> chatRecords=getDataFromServer();
-        initChatNum(chatRecords);
-        DealReceiveMsg dealReceiveMsg=new DealReceiveMsg(chatRecords,readDB);
-        dealReceiveMsg.writeDataIntoDB(writeDB);
+    private void iniChatList(View rootView ){
+        this.chatList=(ListView)rootView.findViewById(R.id.chat_manage_chat_list);
+        MyBaseAdapter myBaseAdapter=new MyBaseAdapter(getContext(),this.chatInfos);
+        this.chatList.setAdapter(myBaseAdapter);
+        initListViewClickAction();
     }
 
 
-    private void initChatNum(List<ChatRecord> chatRecords){
-        chatMsgNum=new HashMap<>();
-        for(ChatRecord chatRecord:chatRecords){
-            int friendId=chatRecord.getFriendId();
-            if(chatMsgNum.containsKey(friendId))
-                chatMsgNum.put(friendId,chatMsgNum.get(friendId)+1);
-            else
-                chatMsgNum.put(friendId,1);
-        }
+    private void initListViewClickAction(){
+        this.chatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(getContext(),ChatInterface.class);
+                int friendID=chatInfos.get(position).getFriendId();
+                intent.putExtra("friend_id",friendID);
+                String friendName=chatInfos.get(position).getName();
+                intent.putExtra("name",friendName);
+                String lastSendDate= ChatListFragment.this.lastSendDate.get(friendID);
+                intent.putExtra("last_send_date",lastSendDate);
+                setFriendPortrait(position);
+                startActivity(intent);
+            }
+        });
     }
 
-    private List<ChatRecord> getDataFromServer(){
-        List<ChatRecord> chatRecords =new ArrayList<>();
-//        for (int i=1;i<5;i++) {
-//            ChatRecord rercord = new ChatRecord(i, "2017-12-27", "就你会吹比");
-//            chatRecords.add(rercord);
-//            rercord = new ChatRecord(i, "2017-12-27", "不吹会死啊");
-//            chatRecords.add(rercord);
-//        }
-        return chatRecords;
+    private void setFriendPortrait(int position){
+        Drawable portrait=chatInfos.get(position).getPortrait();
+        ChatInfo.friendPortrait=portrait;
     }
 
 

@@ -11,10 +11,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.dell.slowchat.ChatManage.ChatInterface;
+import com.example.dell.slowchat.HttpReqeust.JsonParse;
+import com.example.dell.slowchat.HttpReqeust.TestData;
 import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 public class MainLogin extends AppCompatActivity {
     private String username;
@@ -37,6 +43,7 @@ public class MainLogin extends AppCompatActivity {
         initial();
         clickExit();
         clickLogin();
+        getDataFromServer();
     }
 
     @Override
@@ -109,6 +116,34 @@ public class MainLogin extends AppCompatActivity {
                 )
                 .setNegativeButton(MainLogin.this.getString(R.string.login_dialog_cancel) ,null)
                 .show();
+    }
+
+
+    private void getDataFromServer(){
+        AsyncHttpClient client=new AsyncHttpClient();
+        client.setTimeout(5);//5s超时
+        client.post(getString(R.string.server_url), new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers,
+                                  byte[] bytes) {
+                try {
+                    String json=new String(bytes,"utf-8");
+                    TestData testData= JsonParse.getTestData(json);
+                    if (testData==null)
+                        Toast.makeText(MainLogin.this,"解析失败",Toast.LENGTH_SHORT).show();
+                    else {
+                        Toast.makeText(MainLogin.this,testData.getCities().toString(),Toast.LENGTH_SHORT).show();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
+                Toast.makeText(MainLogin.this,"请求失败",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

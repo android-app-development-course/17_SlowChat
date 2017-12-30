@@ -26,7 +26,10 @@
             android:name=".MakeFriendHall.MakeFriendHall"
             android:label="@string/title_activity_make_friend_hall"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ChatManage.ChatInterface"></activity>
+        <activity android:name=".ChatManage.ChatInterface"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

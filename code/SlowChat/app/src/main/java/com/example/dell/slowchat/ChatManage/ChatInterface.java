@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -17,7 +16,6 @@ import android.widget.ListView;
 
 import com.example.dell.slowchat.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +24,7 @@ import java.util.Date;
 public class ChatInterface extends AppCompatActivity {
 
     private Button BtnSend;
-    private EditText InputBox;
+    private EditText inputBox;
     private ArrayList<ChatMsg> chatMsgs;
     private ChatBaseAdapter mAdapter;
     private ListView mListView;
@@ -36,25 +34,45 @@ public class ChatInterface extends AppCompatActivity {
     private SQLiteDatabase writeDB;
     private SQLiteDatabase readDB;
 
+    private boolean ifFirstSend;
+
+    private int friendId;
+    private String lastSendDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_manage_chat);
         this.setTitle(getFriendName());
+        friendId=getFriendID();
+        lastSendDate=getLastSendDate();
+        ifFirstSend=true;
+        inputBox=(EditText)findViewById(R.id.chat_manage_chat_input);
+
         initSQLOp();
         initPortrait();
         initChatMsgs();
         initListView();
-        InputBox=(EditText)findViewById(R.id.chat_manage_chat_input);
         initSendBtn();
     }
-
 
     private String getFriendName(){
         Intent intent=getIntent();
         String friendName=intent.getStringExtra("name");
         return friendName;
     }
+
+    private int getFriendID(){
+        Intent intent=getIntent();
+        int id=intent.getIntExtra("friend_id",1);
+        return id;
+    }
+
+    private String getLastSendDate(){
+        Intent intent=getIntent();
+        String lastSendDate=intent.getStringExtra("last_send_date");
+        return lastSendDate;
+    }
+
 
 
     private void initSQLOp(){
@@ -82,28 +100,14 @@ public class ChatInterface extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-                String inputString=InputBox.getText().toString();
+                String inputString=inputBox.getText().toString();
                 if(!inputString.equals(""))
                 {
-                    //获取时间
-                    Calendar c=Calendar.getInstance();
-                    StringBuilder mBuilder=new StringBuilder();
-                    mBuilder.append(Integer.toString(c.get(Calendar.YEAR))+"年");
-                    mBuilder.append(Integer.toString(c.get(Calendar.MONTH))+"月");
-                    mBuilder.append(Integer.toString(c.get(Calendar.DATE))+"日");
-                    mBuilder.append(Integer.toString(c.get(Calendar.HOUR_OF_DAY))+":");
-                    mBuilder.append(Integer.toString(c.get(Calendar.MINUTE)));
-                    //构造时间消息
-                    ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeTime,mBuilder.toString());
-                    chatMsgs.add(Message);
-                    //构造输入消息
-                    Message=new ChatMsg(ChatMsg.MessageTypeSend,inputString);
-                    chatMsgs.add(Message);
-                    //更新数据
-                    mAdapter.Refresh();
+                    dealFirstSend();
+                    dealSendMsg(inputString);
                 }
                 //清空输入框
-                InputBox.setText("");
+                inputBox.setText("");
                 //关闭输入法
                 imm.hideSoftInputFromWindow(v.getApplicationWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
                 //滚动列表到当前消息
@@ -113,13 +117,72 @@ public class ChatInterface extends AppCompatActivity {
     }
 
 
+    private void dealFirstSend(){
+        if(ifFirstSend){
+            String currentDate=getCurrentDate();
+            if(lastSendDate==null||compareTwoTime(currentDate,lastSendDate)){
+                lastSendDate=currentDate;
+                addChatInfosIntoSQLite(friendId,ChatMsg.MessageTypeTime,currentDate);
+                ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeTime,currentDate);
+                chatMsgs.add(Message);
+            }
+        }
+        ifFirstSend=false;
+    }
+
+
+    private String getCurrentDate(){
+        return (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
+    }
+
+
+
+
+
+    private boolean compareTwoTime(String time1,String time2){
+        try {
+            Calendar calendar1=getCalendar(time1);
+            Calendar calendar2=getCalendar(time2);
+            return calendar1.compareTo(calendar2)>0;
+        }catch (StackOverflowError e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private Calendar getCalendar(String time){
+        Calendar calendar = Calendar.getInstance();
+        String[] times = time.split("-");
+        calendar.set(Integer.valueOf(times[0]), Integer.valueOf(times[1]), Integer.valueOf(times[2]));
+        return calendar;
+    }
+
+
+    private void dealSendMsg(String inputString){
+        //构造输入消息
+        ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeSend,inputString);
+        chatMsgs.add(Message);
+        addChatInfosIntoSQLite(friendId,ChatMsg.MessageTypeSend,inputString);
+        //更新数据
+        mAdapter.Refresh();
+    }
 
 
     private void initListView(){
         mListView=(ListView)findViewById(R.id.chat_manage_chat_msg_list);
         mAdapter=new ChatBaseAdapter(this,portraits,chatMsgs);
         mListView.setAdapter(mAdapter);
-        mListView.smoothScrollToPositionFromTop(chatMsgs.size(), 0);
+        scrollMyListViewToBottom();
+    }
+
+    private void scrollMyListViewToBottom() {
+        mListView.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                mListView.setSelection(mAdapter.getCount() - 1);
+            }
+        });
     }
 
 
@@ -127,16 +190,8 @@ public class ChatInterface extends AppCompatActivity {
         if(ifDBIsNull())
             addDataIntoDB();
         else
-            initChatMsgs(getFriendID());
+            initChatMsgs(friendId);
     }
-
-
-    private int getFriendID(){
-        Intent intent=getIntent();
-        int id=intent.getIntExtra("friend_id",1);
-        return id;
-    }
-
 
 
 
@@ -145,7 +200,7 @@ public class ChatInterface extends AppCompatActivity {
 //        writeDB.execSQL(delSql);
         String[] columns = {"msg_type"};
         String whereClause = "friend_id=?";
-        String[] whereArgs = {String.valueOf(getFriendID())};
+        String[] whereArgs = {String.valueOf(friendId)};
         Cursor cursor = readDB.query("message", columns, whereClause, whereArgs, null, null, null);
         return !cursor.moveToFirst();
     }
@@ -154,7 +209,7 @@ public class ChatInterface extends AppCompatActivity {
     private void addDataIntoDB(){
         loadData();
         for (ChatMsg chatMsg:chatMsgs){
-            addChatInfosIntoSQLite(getFriendID(),chatMsg.getType(),chatMsg.getContent());
+            addChatInfosIntoSQLite(friendId,chatMsg.getType(),chatMsg.getContent());
         }
     }
 
@@ -162,7 +217,7 @@ public class ChatInterface extends AppCompatActivity {
     {
         chatMsgs=new ArrayList<>();
 
-        ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-27");
+        ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-25");
         chatMsgs.add(Message);
 
         Message=new ChatMsg(ChatMsg.MessageTypeGet,"山重水复疑无路");
@@ -177,7 +232,7 @@ public class ChatInterface extends AppCompatActivity {
         Message=new ChatMsg(ChatMsg.MessageTypeSend,"但为君故，沉吟至今");
         chatMsgs.add(Message);
 
-        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-29");
+        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-27");
         chatMsgs.add(Message);
 
         Message=new ChatMsg(ChatMsg.MessageTypeGet,"这是你做的Android程序吗？");
@@ -189,7 +244,7 @@ public class ChatInterface extends AppCompatActivity {
         Message=new ChatMsg(ChatMsg.MessageTypeGet,"为什么下面的消息发送不了呢");
         chatMsgs.add(Message);
 
-        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-30");
+        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-28");
         chatMsgs.add(Message);
 
         Message=new ChatMsg(ChatMsg.MessageTypeSend,"呵呵，我会告诉你那是直接拿图片做的么");
@@ -201,7 +256,7 @@ public class ChatInterface extends AppCompatActivity {
         Message=new ChatMsg(ChatMsg.MessageTypeSend,"因为这一部分不是今天的重点啊");
         chatMsgs.add(Message);
 
-        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-31");
+        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-29");
         chatMsgs.add(Message);
 
         Message=new ChatMsg(ChatMsg.MessageTypeGet,"好吧，可是怎么发图片啊");

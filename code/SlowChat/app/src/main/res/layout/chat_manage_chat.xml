@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="0.25"
-        android:divider="#ffffff"></ListView>
+        android:divider="#ffffff">
+    </ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/chat_manage_send_msg_rounded_button"
             android:text="@string/chat_manage_send"
             android:textColor="#ffffff"
             android:textSize="18sp" />

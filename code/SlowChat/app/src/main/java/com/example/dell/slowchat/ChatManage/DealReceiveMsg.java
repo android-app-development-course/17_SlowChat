@@ -107,13 +107,13 @@ class TimeContent{
 
     private void toAddTime(SQLiteDatabase writeDB,HashMap<Integer,String> lastSendTimes,int friendId,String time){
         String lastSendTime=lastSendTimes.get(friendId);
-        if(compareTowTime(time,lastSendTime))
+        if(compareTwoTime(time,lastSendTime))
             addChatInfosIntoSQLite(writeDB,friendId,ChatMsg.MessageTypeTime,time);
     }
 
 
 
-    private boolean compareTowTime(String time1,String time2){
+    private boolean compareTwoTime(String time1,String time2){
         try {
             Calendar calendar1=getCalendar(time1);
             Calendar calendar2=getCalendar(time2);
