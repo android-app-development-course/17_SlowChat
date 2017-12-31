@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.dell.slowchat.ChatManage.ChatInterface"
+    tools:layout_editor_absoluteX="8dp"
+    tools:layout_editor_absoluteY="8dp"
+    tools:showIn="@layout/chat_manage_chat_activity">
+
+    <ListView
+        android:id="@+id/chat_manage_chat_msg_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.25"
+        android:divider="#ffffff">
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#EEEEEE"
+        android:gravity="bottom">
+
+        <EditText
+            android:id="@+id/chat_manage_chat_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/chat_manage_bg_et"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="@color/loginNormalText">
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/chat_manage_chat_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/chat_manage_send_msg_rounded_button"
+            android:text="@string/chat_manage_send"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</LinearLayout>
+<!--</android.support.constraint.ConstraintLayout>-->

@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
 
 import java.text.SimpleDateFormat;
@@ -82,8 +83,7 @@ public class ChatInterface extends AppCompatActivity {
             case  R.id.chat_manage_action_info:
                 return true;
             case android.R.id.home:
-                prepareReturnToChatList();
-                finish();
+                returnToChatList();
                 break;
         }
 
@@ -280,18 +280,30 @@ public class ChatInterface extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK){
-            prepareReturnToChatList();
+            returnToChatList();
             finish();
         }
         return super.onKeyDown(keyCode, event);
     }
 
 
-    private void prepareReturnToChatList(){
-        Intent intent=new Intent();
+    private void returnToChatList(){
+        Intent intent=new Intent(this, MainActivity.class);
         intent.putExtra("content",chatMsgs.get(chatMsgs.size()-1).getContent());
         intent.putExtra("friend_id",friendId);
-        setResult(1,intent);
+        if(ifFromMainActivity()) {
+            setResult(1,intent);
+            finish();
+        }else{
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private boolean ifFromMainActivity(){
+        Intent intent=getIntent();
+        int code=intent.getIntExtra("from_main",0);
+        return code==1;
     }
 
 

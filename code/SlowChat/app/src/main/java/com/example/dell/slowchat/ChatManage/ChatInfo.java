@@ -26,6 +26,12 @@ public class ChatInfo {
         this.portrait=portrait;
     }
 
+    public ChatInfo(int friendId,String name,Drawable portrait){
+        this.friendId=friendId;
+        this.name=name;
+        this.portrait=portrait;
+    }
+
     public String getName() {
         return name;
     }
@@ -44,6 +50,10 @@ public class ChatInfo {
 
     public int getMsgNum() {
         return msgNum;
+    }
+
+    public void setMsgNum(int msgNum) {
+        this.msgNum = msgNum;
     }
 
     public int getFriendId() {

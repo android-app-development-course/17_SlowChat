@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.dell.slowchat.ChatManage.ChatManageSearch;
 import com.example.dell.slowchat.MakeFriendHall.MakeFriendHall;
 import com.example.dell.slowchat.R;
 
@@ -120,15 +121,20 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Intent intent;
         switch (id){
             case R.id.main_action_settings:
                 return true;
+            case R.id.main_action_exit:
+                System.exit(0);
             case R.id.main_action_friend_hall:
-                Intent intent=new Intent(this, MakeFriendHall.class);
+                intent=new Intent(this, MakeFriendHall.class);
                 startActivity(intent);
                 break;
             case R.id.main_action_search:
-                return true;
+                intent=new Intent(this, ChatManageSearch.class);
+                startActivity(intent);
+                break;
         }
 
 

@@ -23,18 +23,21 @@
         <activity
             android:name=".MainInterface.MainActivity"
             android:label="@string/title_activity_main"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".MakeFriendHall.MakeFriendHall"
             android:label="@string/title_activity_make_friend_hall"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".ChatManage.ChatInterface"
             android:theme="@style/AppTheme.NoActionBar"
+            android:windowActionBar="false"
             android:windowSoftInputMode="stateHidden">
-
+        </activity>
+        <activity
+            android:name=".ChatManage.ChatManageSearch"
+            android:label="@string/title_activity_chat_manage_search">
         </activity>
     </application>
 

@@ -6,6 +6,7 @@
 
     <!--主界面-->
     <string name="main_action_settings">设置</string>
+    <string name="main_action_exit">退出</string>
     <string name="main_action_search">搜索</string>
     <string name="main_action_friend_hall">好友大厅</string>
     <string name="title_activity_main">慢聊天</string>
@@ -17,6 +18,7 @@
     <!--聊天管理-->
     <string name="chat_manage_send">发送</string>
     <string name="chat_manage_friend_info">好友信息</string>
+    <string name="chat_manage_chat_search">聊天信息搜索</string>
 
 
     <!--好友管理-->
@@ -129,6 +131,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_chat_main">ChatMainActivity</string>
+    <string name="title_activity_chat_manage_search">ChatManageSearch</string>
 
 
     <!--个人信息-->

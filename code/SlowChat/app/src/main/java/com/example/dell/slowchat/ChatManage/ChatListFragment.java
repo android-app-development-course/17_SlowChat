@@ -27,7 +27,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.dell.slowchat.HttpReqeust.JsonParse;
+import com.example.dell.slowchat.HttpReqeust.TestData;
 import com.example.dell.slowchat.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
@@ -49,7 +55,7 @@ public class ChatListFragment extends Fragment
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ArrayList<ChatInfo> chatInfos;
     private ListView chatList;
-    MyBaseAdapter myBaseAdapter;
+    ChatMainListAdapter chatMainListAdapter;
 
     private SQLiteDatabase writeDB;
     private SQLiteDatabase readDB;
@@ -82,6 +88,7 @@ public class ChatListFragment extends Fragment
         initSQLOp();
         initShowDataInListView();
         iniChatList(rootView);
+//        testGetDataFromServer();
         return rootView;
     }
 
@@ -128,12 +135,12 @@ public class ChatListFragment extends Fragment
 
     private List<ChatRecord> getDataFromServer(){
         List<ChatRecord> chatRecords =new ArrayList<>();
-//        for (int i=1;i<5;i++) {
-//            ChatRecord rercord = new ChatRecord(i, "2017-12-27", "就你会吹比");
-//            chatRecords.add(rercord);
-//            rercord = new ChatRecord(i, "2017-12-27", "不吹会死啊");
-//            chatRecords.add(rercord);
-//        }
+        for (int i=1;i<5;i++) {
+            ChatRecord record = new ChatRecord(i, "2017-12-30", "就你会吹比");
+            chatRecords.add(record);
+            record = new ChatRecord(i, "2017-12-30", "不吹会死啊");
+            chatRecords.add(record);
+        }
         return chatRecords;
     }
 
@@ -328,8 +335,8 @@ public class ChatListFragment extends Fragment
 
     private void iniChatList(View rootView ){
         this.chatList=(ListView)rootView.findViewById(R.id.chat_manage_chat_list);
-        myBaseAdapter=new MyBaseAdapter(getContext(),this.chatInfos);
-        this.chatList.setAdapter(myBaseAdapter);
+        chatMainListAdapter =new ChatMainListAdapter(getContext(),this.chatInfos);
+        this.chatList.setAdapter(chatMainListAdapter);
         initListViewClickAction();
         onItemLongClick();
     }
@@ -342,13 +349,12 @@ public class ChatListFragment extends Fragment
                 Intent intent=new Intent(getContext(),ChatInterface.class);
                 int friendID=chatInfos.get(position).getFriendId();
                 intent.putExtra("friend_id",friendID);
-                if(chatMsgNum.containsKey(friendID))
-                    chatMsgNum.put(friendID,0);//设置消息为已读
                 String friendName=chatInfos.get(position).getName();
                 intent.putExtra("name",friendName);
                 String lastSendDate= ChatListFragment.this.lastSendDate.get(friendID);
                 intent.putExtra("last_send_date",lastSendDate);
                 setFriendPortrait(position);
+                intent.putExtra("from_main",1);
                 startActivityForResult(intent,1);
             }
         });
@@ -363,18 +369,25 @@ public class ChatListFragment extends Fragment
         if(requestCode==1&&resultCode==1){
             String content=data.getStringExtra("content");
             int friendId=data.getIntExtra("friend_id",0);
-            if(lastMsg.containsKey(friendId)){
-                lastMsg.put(friendId,content);
-                for (ChatInfo chatInfo:chatInfos){
-                    if(chatInfo.getFriendId()==friendId){
-                        chatInfo.setContent(content);
-                        break;
-                    }
-                }
-                myBaseAdapter.refresh();
-            }
+            resetListData(content,friendId);
         }
     }
+
+    
+    private void resetListData(String content, int friendId){
+        if(lastMsg.containsKey(friendId)){
+            lastMsg.put(friendId,content);
+            for(ChatInfo chatInfo:chatInfos){
+                if(chatInfo.getFriendId()==friendId){
+                    chatInfo.setContent(content);
+                    chatInfo.setMsgNum(0);
+                    break;
+                }
+            }
+        }
+        chatMainListAdapter.refresh();
+    }
+
 
     private void setFriendPortrait(int position){
         Drawable portrait=chatInfos.get(position).getPortrait();
@@ -444,7 +457,7 @@ public class ChatListFragment extends Fragment
 
     private void deleteFriendInfosInListView(int position){
         chatInfos.remove(position);
-        myBaseAdapter.refresh();
+        chatMainListAdapter.refresh();
     }
 
 
@@ -490,7 +503,7 @@ public class ChatListFragment extends Fragment
         ChatInfo chatInfo=chatInfos.get(position);
         chatInfos.remove(position);
         chatInfos.add(0,chatInfo);
-        myBaseAdapter.refresh();
+        chatMainListAdapter.refresh();
     }
 
 
@@ -499,5 +512,32 @@ public class ChatListFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
         writeDB.close();
+    }
+
+    private void testGetDataFromServer(){
+        AsyncHttpClient client=new AsyncHttpClient();
+        client.setTimeout(5);//5s超时
+        client.post(getString(R.string.server_url), new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers,
+                                  byte[] bytes) {
+                try {
+                    String json=new String(bytes,"utf-8");
+                    TestData testData= JsonParse.getTestData(json);
+                    if (testData==null)
+                        Toast.makeText(getContext(),"解析失败",Toast.LENGTH_SHORT).show();
+                    else {
+                        Toast.makeText(getContext(),testData.getCities().toString(),Toast.LENGTH_SHORT).show();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
+                Toast.makeText(getContext(),"请求失败",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
