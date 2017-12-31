@@ -6,7 +6,10 @@ package com.example.dell.slowchat.ChatManage;
 
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -16,13 +19,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
 
 import java.io.ByteArrayOutputStream;
@@ -45,6 +49,8 @@ public class ChatListFragment extends Fragment
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ArrayList<ChatInfo> chatInfos;
     private ListView chatList;
+    MyBaseAdapter myBaseAdapter;
+
     private SQLiteDatabase writeDB;
     private SQLiteDatabase readDB;
 
@@ -93,6 +99,7 @@ public class ChatListFragment extends Fragment
         initLastMsg();
         initLastSendDate();
         initChatInfos();
+        setTopFriend();
     }
 
 
@@ -177,7 +184,7 @@ public class ChatListFragment extends Fragment
     private void initChatInfos(){
         this.chatInfos=new ArrayList<>();
         if(ifDBIsNull())
-            addAllFriends();
+            initFriendData();
         else
             getFriendInfoFromDB();
     }
@@ -196,27 +203,27 @@ public class ChatListFragment extends Fragment
         String[] columns = {"friend_id","name", "portrait"};
         Cursor cursor = readDB.query("friend", columns, null, null, null, null, null);
 //        String[] talks={"你好","还好吗","昨天多谢了","有啥事啊","what"};
-        int index=0;
         //判断游标是否为空
         if (cursor.moveToFirst())
         {
             do{
                 int id=cursor.getInt(0);
+                String talk="";
+                if(lastMsg.containsKey(id))//db中没有该好友的聊天信息，不显示该好友
+                    talk=lastMsg.get(id);
+                else
+                    continue;
                 String name = cursor.getString(1);
                 byte[] portrait = cursor.getBlob(2);
                 Drawable dPortrait=exchangeByteToDrawble(portrait);
                 String lastSenTime=(new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
                 if(lastSendDate.containsKey(id))
                     lastSenTime=lastSendDate.get(id);
-                String talk="你们已是朋友了，赶紧开始聊天吧！";
-                if(lastMsg.containsKey(id))
-                    talk=lastMsg.get(id);
                 int msgNum=0;
                 if(chatMsgNum.containsKey(id))
                     msgNum=chatMsgNum.get(id);
                 ChatInfo chatInf=new ChatInfo(id,name,lastSenTime,talk,msgNum,dPortrait);
                 this.chatInfos.add(chatInf);
-                index++;
             }while (cursor.moveToNext());
         }
         cursor.close();
@@ -234,24 +241,28 @@ public class ChatListFragment extends Fragment
 
 
 
-    private void addAllFriends(){
+    private void initFriendData(){
         loadDataForChatInfos();
+        InitChatData initChatData=new InitChatData(writeDB);
         for (int i=0;i<this.chatInfos.size();i++) {
-            addFriendInfoIntoSQLite(chatInfos.get(i).getFriendId(),chatInfos.get(i).getName(),i+1);
+            int friendId=chatInfos.get(i).getFriendId();
+            addFriendInfoIntoSQLite(friendId,chatInfos.get(i).getName(),i+1);
+            initChatData.addChatMsgsIntoDB(friendId);
         }
     }
 
+
     private void loadDataForChatInfos(){
         ChatInfo chatInfo;
-        chatInfo=new ChatInfo(1,"张三","12月4号","你好",1,getPortrait(1));
+        chatInfo=new ChatInfo(1,"张三","2017-12-28","啥事",1,getPortrait(1));
         chatInfos.add(chatInfo);
-        chatInfo=new ChatInfo(2,"李四","12月4号","还好吗",2,getPortrait(2));
+        chatInfo=new ChatInfo(2,"李四","2017-12-28","你好",2,getPortrait(2));
         chatInfos.add(chatInfo);
-        chatInfo=new ChatInfo(3,"王五","12月1号","昨天多谢了",0,getPortrait(3));
+        chatInfo=new ChatInfo(3,"王五","2017-12-25","好吧，可是怎么发图片啊",0,getPortrait(3));
         chatInfos.add(chatInfo);
-        chatInfo=new ChatInfo(4,"小明","11月25号","有啥事啊",4,getPortrait(4));
+        chatInfo=new ChatInfo(4,"小明","2017-12-26","what",4,getPortrait(4));
         chatInfos.add(chatInfo);
-        chatInfo=new ChatInfo(5,"小红","11月20号","what",0,getPortrait(5));
+        chatInfo=new ChatInfo(5,"小红","2017-12-27","你丫的",0,getPortrait(5));
         chatInfos.add(chatInfo);
     }
 
@@ -302,11 +313,25 @@ public class ChatListFragment extends Fragment
     }
 
 
+    private void setTopFriend(){
+        SharedPreferences sp = getContext().getSharedPreferences("chat_manage", Context.MODE_PRIVATE);
+        int friendId = sp.getInt("top_friend_id", 0);
+        for (ChatInfo chatInfo:chatInfos){
+            if(chatInfo.getFriendId()==friendId){
+                chatInfos.remove(chatInfo);
+                chatInfos.add(0,chatInfo);
+                break;
+            }
+        }
+    }
+
+
     private void iniChatList(View rootView ){
         this.chatList=(ListView)rootView.findViewById(R.id.chat_manage_chat_list);
-        MyBaseAdapter myBaseAdapter=new MyBaseAdapter(getContext(),this.chatInfos);
+        myBaseAdapter=new MyBaseAdapter(getContext(),this.chatInfos);
         this.chatList.setAdapter(myBaseAdapter);
         initListViewClickAction();
+        onItemLongClick();
     }
 
 
@@ -317,20 +342,157 @@ public class ChatListFragment extends Fragment
                 Intent intent=new Intent(getContext(),ChatInterface.class);
                 int friendID=chatInfos.get(position).getFriendId();
                 intent.putExtra("friend_id",friendID);
+                if(chatMsgNum.containsKey(friendID))
+                    chatMsgNum.put(friendID,0);//设置消息为已读
                 String friendName=chatInfos.get(position).getName();
                 intent.putExtra("name",friendName);
                 String lastSendDate= ChatListFragment.this.lastSendDate.get(friendID);
                 intent.putExtra("last_send_date",lastSendDate);
                 setFriendPortrait(position);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
+    }
+
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1&&resultCode==1){
+            String content=data.getStringExtra("content");
+            int friendId=data.getIntExtra("friend_id",0);
+            if(lastMsg.containsKey(friendId)){
+                lastMsg.put(friendId,content);
+                for (ChatInfo chatInfo:chatInfos){
+                    if(chatInfo.getFriendId()==friendId){
+                        chatInfo.setContent(content);
+                        break;
+                    }
+                }
+                myBaseAdapter.refresh();
+            }
+        }
     }
 
     private void setFriendPortrait(int position){
         Drawable portrait=chatInfos.get(position).getPortrait();
         ChatInfo.friendPortrait=portrait;
     }
+
+
+    private void onItemLongClick() {
+//注：setOnCreateContextMenuListener是与下面onContextItemSelected配套使用的
+        chatList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+
+            public void onCreateContextMenu(ContextMenu menu, View v,
+                                            ContextMenu.ContextMenuInfo menuInfo) {
+                menu.add(0,0,0,"删除");
+                menu.add(0,1,0,"置顶");
+            }
+        });
+    }
+
+
+    // 长按菜单响应函数
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+                .getMenuInfo();
+        int position = (int) info.id;// 这里的info.id对应的就是数据库中_id的值
+        String friendName=chatInfos.get(position).getName();
+        switch(item.getItemId()) {
+            case 0:
+                String deleteTip="你确定要删除好友 "+friendName+" 的聊天信息吗？";
+                deleteDialogTip(deleteTip,position);
+                break;
+            case 1:
+                String topTip="你确定要置顶好友 "+friendName+" 的聊天信息吗？";
+                setTopDialogTip(topTip,position);
+                break;
+            default:
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
+
+
+    private void deleteDialogTip(String tip,final int position){
+        new AlertDialog.Builder(getContext())
+                .setTitle("提示")
+                .setMessage(tip)
+                .setPositiveButton("确认" ,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(
+                                    DialogInterface dialoginterface, int i) {
+                                deleteFriendMsg(position);
+                            }
+                        }
+                )
+                .setNegativeButton("取消" ,null)
+                .show();
+    }
+
+
+    private void deleteFriendMsg(int position){
+        deleteFriendInfosInDB(position);
+        deleteFriendInfosInListView(position);
+    }
+
+
+    private void deleteFriendInfosInListView(int position){
+        chatInfos.remove(position);
+        myBaseAdapter.refresh();
+    }
+
+
+    private void deleteFriendInfosInDB(int position){
+        int friendId=chatInfos.get(position).getFriendId();
+        deleteDataInDB(friendId);
+    }
+
+    private void deleteDataInDB(int friendId){
+        String whereClause = "friend_id=?";
+        String[] whereArgs = {String.valueOf(friendId)};
+        writeDB.delete("message",whereClause,whereArgs);
+    }
+
+
+    private void setTopDialogTip(String tip,final int position){
+        new AlertDialog.Builder(getContext())
+                .setTitle("提示")
+                .setMessage(tip)
+                .setPositiveButton("确认" ,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(
+                                    DialogInterface dialoginterface, int i) {
+                                recordTopFriend(position);
+                                setTopFriendInfo(position);
+                            }
+                        }
+                )
+                .setNegativeButton("取消" ,null)
+                .show();
+    }
+
+    private void recordTopFriend(int position){
+        int friendId=chatInfos.get(position).getFriendId();
+        SharedPreferences sp = getContext().getSharedPreferences("chat_manage", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("top_friend_id", friendId);
+        editor.apply();
+    }
+
+
+    private void setTopFriendInfo(int position){
+        ChatInfo chatInfo=chatInfos.get(position);
+        chatInfos.remove(position);
+        chatInfos.add(0,chatInfo);
+        myBaseAdapter.refresh();
+    }
+
 
 
     @Override

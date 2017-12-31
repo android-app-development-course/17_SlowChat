@@ -8,6 +8,10 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -41,18 +45,49 @@ public class ChatInterface extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chat_manage_chat);
+        setContentView(R.layout.chat_manage_chat_activity);
         this.setTitle(getFriendName());
         friendId=getFriendID();
         lastSendDate=getLastSendDate();
         ifFirstSend=true;
         inputBox=(EditText)findViewById(R.id.chat_manage_chat_input);
-
+        initToolbar();
         initSQLOp();
         initPortrait();
-        initChatMsgs();
+        initChatMsgs(friendId);
         initListView();
         initSendBtn();
+    }
+
+    private void initToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.chat_manage_chat_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_chat_manage, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        switch (id){
+            case  R.id.chat_manage_action_info:
+                return true;
+            case android.R.id.home:
+                prepareReturnToChatList();
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private String getFriendName(){
@@ -137,8 +172,6 @@ public class ChatInterface extends AppCompatActivity {
 
 
 
-
-
     private boolean compareTwoTime(String time1,String time2){
         try {
             Calendar calendar1=getCalendar(time1);
@@ -167,6 +200,14 @@ public class ChatInterface extends AppCompatActivity {
         mAdapter.Refresh();
     }
 
+    private void addChatInfosIntoSQLite(int friend_id,int type,String content){
+        ContentValues values=new ContentValues();
+        values.put("friend_id",String.valueOf(friend_id));
+        values.put("msg_type",String.valueOf(type));
+        values.put("content",content);
+        writeDB.insert("message",null,values);
+    }
+
 
     private void initListView(){
         mListView=(ListView)findViewById(R.id.chat_manage_chat_msg_list);
@@ -186,98 +227,27 @@ public class ChatInterface extends AppCompatActivity {
     }
 
 
-    private void initChatMsgs(){
-        if(ifDBIsNull())
-            addDataIntoDB();
-        else
-            initChatMsgs(friendId);
-    }
+//    private void initChatMsgs(){
+//        if(ifDBIsNull())
+//            addDataIntoDB();
+//        else
+//            initChatMsgs(friendId);
+//    }
 
 
 
-    private boolean ifDBIsNull(){
-//        String delSql="delete from message";
-//        writeDB.execSQL(delSql);
-        String[] columns = {"msg_type"};
-        String whereClause = "friend_id=?";
-        String[] whereArgs = {String.valueOf(friendId)};
-        Cursor cursor = readDB.query("message", columns, whereClause, whereArgs, null, null, null);
-        return !cursor.moveToFirst();
-    }
-
-
-    private void addDataIntoDB(){
-        loadData();
-        for (ChatMsg chatMsg:chatMsgs){
-            addChatInfosIntoSQLite(friendId,chatMsg.getType(),chatMsg.getContent());
-        }
-    }
-
-    private void loadData()
-    {
-        chatMsgs=new ArrayList<>();
-
-        ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-25");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeGet,"山重水复疑无路");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeSend,"柳暗花明又一村");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeGet,"青青子衿，悠悠我心");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeSend,"但为君故，沉吟至今");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-27");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeGet,"这是你做的Android程序吗？");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeSend,"是的，这是一个仿微信的聊天界面");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeGet,"为什么下面的消息发送不了呢");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-28");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeSend,"呵呵，我会告诉你那是直接拿图片做的么");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeGet,"哦哦，呵呵，你又在偷懒了");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeSend,"因为这一部分不是今天的重点啊");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017-12-29");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeGet,"好吧，可是怎么发图片啊");
-        chatMsgs.add(Message);
-
-        Message=new ChatMsg(ChatMsg.MessageTypeSend,"很简单啊，你继续定义一种布局类型，然后再写一个布局就可以了");
-        chatMsgs.add(Message);
-
-    }
+//    private boolean ifDBIsNull(){
+////        String delSql="delete from message";
+////        writeDB.execSQL(delSql);
+//        String[] columns = {"msg_type"};
+//        String whereClause = "friend_id=?";
+//        String[] whereArgs = {String.valueOf(friendId)};
+//        Cursor cursor = readDB.query("message", columns, whereClause, whereArgs, null, null, null);
+//        return !cursor.moveToFirst();
+//    }
 
 
 
-
-
-    private void addChatInfosIntoSQLite(int friend_id,int type,String content){
-        ContentValues values=new ContentValues();
-        values.put("friend_id",String.valueOf(friend_id));
-        values.put("msg_type",String.valueOf(type));
-        values.put("content",content);
-        writeDB.insert("message",null,values);
-    }
 
 
 
@@ -307,7 +277,22 @@ public class ChatInterface extends AppCompatActivity {
         cursor.close();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            prepareReturnToChatList();
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
+
+    private void prepareReturnToChatList(){
+        Intent intent=new Intent();
+        intent.putExtra("content",chatMsgs.get(chatMsgs.size()-1).getContent());
+        intent.putExtra("friend_id",friendId);
+        setResult(1,intent);
+    }
 
 
 }

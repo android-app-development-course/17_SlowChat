@@ -32,7 +32,10 @@ public class MyBaseAdapter extends BaseAdapter {
         this.mainContext=context;
     }
 
-
+    public void refresh()
+    {
+        this.notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {

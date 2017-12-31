@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.dell.slowchat">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,14 +24,18 @@
             android:name=".MainInterface.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".MakeFriendHall.MakeFriendHall"
             android:label="@string/title_activity_make_friend_hall"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ChatManage.ChatInterface"
+
+        <activity
+            android:name=".ChatManage.ChatInterface"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
+
         </activity>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

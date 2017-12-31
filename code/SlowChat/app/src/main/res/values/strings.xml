@@ -16,6 +16,7 @@
 
     <!--聊天管理-->
     <string name="chat_manage_send">发送</string>
+    <string name="chat_manage_friend_info">好友信息</string>
 
 
     <!--好友管理-->
@@ -127,6 +128,7 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="title_activity_chat_main">ChatMainActivity</string>
 
 
     <!--个人信息-->

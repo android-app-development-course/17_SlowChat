@@ -38,6 +38,10 @@ public class ChatInfo {
         return content;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public int getMsgNum() {
         return msgNum;
     }

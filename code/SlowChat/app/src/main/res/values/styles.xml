@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+
     <!--聊天管理-->
     <declare-styleable name="CircleImageView">
         <attr name="border_width" format="dimension" />
