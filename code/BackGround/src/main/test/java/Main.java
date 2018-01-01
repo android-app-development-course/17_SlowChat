@@ -1,18 +1,18 @@
+import com.chat.dao.UserDao;
 import com.chat.entity.User;
 import com.chat.util.HibernateUtil;
+import com.chat.util.SpringUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class Main {
     public static void main(String[] args) {
-        User userEntity=new User();
-        userEntity.setEmail("email");
-        userEntity.setPwd("pwd");
-        userEntity.setIntegral(12);
-        userEntity.setStatus(new Byte("0"));
+        HibernateUtil.getCurrentSession().beginTransaction();
 
-        Session session= HibernateUtil.getSession();
-        session.getTransaction().begin();
-        session.save(userEntity);
-        session.getTransaction().commit();
+        UserDao userDao=SpringUtil.getBean(UserDao.class);
+        User user=userDao.getUser("14");
+        System.out.println(user.getEmail());
+
+        HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 }
