@@ -1,14 +1,14 @@
 package com.chat.entity;
 
-import javax.persistence.*;
-import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
-@Table(name = "tag", schema = "chat", catalog = "")
-public class TagEntity {
+public class Tag {
     private short id;
     private String name;
-    private Collection<UserTagEntity> userTagsById;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -35,10 +35,10 @@ public class TagEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TagEntity tagEntity = (TagEntity) o;
+        Tag tag = (Tag) o;
 
-        if (id != tagEntity.id) return false;
-        if (name != null ? !name.equals(tagEntity.name) : tagEntity.name != null) return false;
+        if (id != tag.id) return false;
+        if (name != null ? !name.equals(tag.name) : tag.name != null) return false;
 
         return true;
     }
@@ -48,14 +48,5 @@ public class TagEntity {
         int result = (int) id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "tagByTagId")
-    public Collection<UserTagEntity> getUserTagsById() {
-        return userTagsById;
-    }
-
-    public void setUserTagsById(Collection<UserTagEntity> userTagsById) {
-        this.userTagsById = userTagsById;
     }
 }

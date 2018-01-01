@@ -4,18 +4,12 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="com.chat.entity.MessageEntity" table="message" schema="chat">
+    <class name="com.chat.entity.Message" table="message" schema="chat">
         <id name="id">
             <column name="id" sql-type="bigint(20) unsigned"/>
         </id>
         <property name="text">
             <column name="text" sql-type="text"/>
-        </property>
-        <property name="sourceId">
-            <column name="source_id" sql-type="smallint(5) unsigned"/>
-        </property>
-        <property name="targetId">
-            <column name="target_id" sql-type="smallint(5) unsigned"/>
         </property>
         <property name="status">
             <column name="status" sql-type="tinyint(3) unsigned"/>
@@ -23,11 +17,5 @@
         <property name="time">
             <column name="time" sql-type="time"/>
         </property>
-        <many-to-one name="userBySourceId" class="com.chat.entity.UserEntity">
-            <column name="source_id"/>
-        </many-to-one>
-        <many-to-one name="userByTargetId" class="com.chat.entity.UserEntity">
-            <column name="target_id"/>
-        </many-to-one>
     </class>
 </hibernate-mapping>
