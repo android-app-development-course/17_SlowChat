@@ -1,31 +1,35 @@
 package com.example.dell.slowchat.ChatManage;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class ChatInterface extends AppCompatActivity {
 
     private Button BtnSend;
-    private EditText InputBox;
+    private EditText inputBox;
     private ArrayList<ChatMsg> chatMsgs;
     private ChatBaseAdapter mAdapter;
     private ListView mListView;
@@ -35,24 +39,75 @@ public class ChatInterface extends AppCompatActivity {
     private SQLiteDatabase writeDB;
     private SQLiteDatabase readDB;
 
+    private boolean ifFirstSend;
+
+    private int friendId;
+    private String lastSendDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chat_manage_chat);
+        setContentView(R.layout.chat_manage_chat_activity);
         this.setTitle(getFriendName());
+        friendId=getFriendID();
+        lastSendDate=getLastSendDate();
+        ifFirstSend=true;
+        inputBox=(EditText)findViewById(R.id.chat_manage_chat_input);
+        initToolbar();
         initSQLOp();
         initPortrait();
+        initChatMsgs(friendId);
         initListView();
-        InputBox=(EditText)findViewById(R.id.chat_manage_chat_input);
         initSendBtn();
     }
 
+    private void initToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.chat_manage_chat_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_chat_manage, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        switch (id){
+            case  R.id.chat_manage_action_info:
+                return true;
+            case android.R.id.home:
+                returnToChatList();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private String getFriendName(){
         Intent intent=getIntent();
         String friendName=intent.getStringExtra("name");
         return friendName;
     }
+
+    private int getFriendID(){
+        Intent intent=getIntent();
+        int id=intent.getIntExtra("friend_id",1);
+        return id;
+    }
+
+    private String getLastSendDate(){
+        Intent intent=getIntent();
+        String lastSendDate=intent.getStringExtra("last_send_date");
+        return lastSendDate;
+    }
+
 
 
     private void initSQLOp(){
@@ -62,31 +117,9 @@ public class ChatInterface extends AppCompatActivity {
     }
 
 
-
-
-    private void initListView(){
-        mListView=(ListView)findViewById(R.id.chat_manage_chat_msg_list);
-        initChatMsgs(getFriendID());
-//        chatMsgs=LoadData();
-        mAdapter=new ChatBaseAdapter(this,portraits,chatMsgs);
-        mListView.setAdapter(mAdapter);
-        mListView.smoothScrollToPositionFromTop(chatMsgs.size(), 0);
-    }
-
-
-    private int getFriendID(){
-        Intent intent=getIntent();
-        int id=intent.getIntExtra("friend_id",1);
-        return id;
-    }
-
-
-
-
     public void initPortrait(){
         portraits=new Drawable[2];
         portraits[ChatMsg.MessageTypeGet]= getFriendPortrait();
-//        portraits[ChatMsg.MessageTypeGet]= ContextCompat.getDrawable(this,R.drawable.portrait_you);
         portraits[ChatMsg.MessageTypeSend]= ContextCompat.getDrawable(this,R.drawable.portrait_me);
     }
 
@@ -102,28 +135,14 @@ public class ChatInterface extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-                String inputString=InputBox.getText().toString();
+                String inputString=inputBox.getText().toString();
                 if(!inputString.equals(""))
                 {
-                    //获取时间
-                    Calendar c=Calendar.getInstance();
-                    StringBuilder mBuilder=new StringBuilder();
-                    mBuilder.append(Integer.toString(c.get(Calendar.YEAR))+"年");
-                    mBuilder.append(Integer.toString(c.get(Calendar.MONTH))+"月");
-                    mBuilder.append(Integer.toString(c.get(Calendar.DATE))+"日");
-                    mBuilder.append(Integer.toString(c.get(Calendar.HOUR_OF_DAY))+":");
-                    mBuilder.append(Integer.toString(c.get(Calendar.MINUTE)));
-                    //构造时间消息
-                    ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeTime,mBuilder.toString());
-                    chatMsgs.add(Message);
-                    //构造输入消息
-                    Message=new ChatMsg(ChatMsg.MessageTypeSend,inputString);
-                    chatMsgs.add(Message);
-                    //更新数据
-                    mAdapter.Refresh();
+                    dealFirstSend();
+                    dealSendMsg(inputString);
                 }
                 //清空输入框
-                InputBox.setText("");
+                inputBox.setText("");
                 //关闭输入法
                 imm.hideSoftInputFromWindow(v.getApplicationWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
                 //滚动列表到当前消息
@@ -132,64 +151,54 @@ public class ChatInterface extends AppCompatActivity {
         });
     }
 
-//    private ArrayList<ChatMsg> LoadData()
-//    {
-//        ArrayList<ChatMsg> Messages=new ArrayList<>();
-//
-//        ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017年12月27日");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeGet,"山重水复疑无路");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeSend,"柳暗花明又一村");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeGet,"青青子衿，悠悠我心");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeSend,"但为君故，沉吟至今");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017年12月29日");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeGet,"这是你做的Android程序吗？");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeSend,"是的，这是一个仿微信的聊天界面");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeGet,"为什么下面的消息发送不了呢");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017年12月30日");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeSend,"呵呵，我会告诉你那是直接拿图片做的么");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeGet,"哦哦，呵呵，你又在偷懒了");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeSend,"因为这一部分不是今天的重点啊");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeTime,"2017年12月31日");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeGet,"好吧，可是怎么发图片啊");
-//        Messages.add(Message);
-//
-//        Message=new ChatMsg(ChatMsg.MessageTypeSend,"很简单啊，你继续定义一种布局类型，然后再写一个布局就可以了");
-//        Messages.add(Message);
-//
-//        return Messages;
-//    }
+
+    private void dealFirstSend(){
+        if(ifFirstSend){
+            String currentDate=getCurrentDate();
+            if(lastSendDate==null||compareTwoTime(currentDate,lastSendDate)){
+                lastSendDate=currentDate;
+                addChatInfosIntoSQLite(friendId,ChatMsg.MessageTypeTime,currentDate);
+                ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeTime,currentDate);
+                chatMsgs.add(Message);
+            }
+        }
+        ifFirstSend=false;
+    }
+
+
+    private String getCurrentDate(){
+        return (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
+    }
 
 
 
+    private boolean compareTwoTime(String time1,String time2){
+        try {
+            Calendar calendar1=getCalendar(time1);
+            Calendar calendar2=getCalendar(time2);
+            return calendar1.compareTo(calendar2)>0;
+        }catch (StackOverflowError e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 
+    private Calendar getCalendar(String time){
+        Calendar calendar = Calendar.getInstance();
+        String[] times = time.split("-");
+        calendar.set(Integer.valueOf(times[0]), Integer.valueOf(times[1]), Integer.valueOf(times[2]));
+        return calendar;
+    }
+
+
+    private void dealSendMsg(String inputString){
+        //构造输入消息
+        ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeSend,inputString);
+        chatMsgs.add(Message);
+        addChatInfosIntoSQLite(friendId,ChatMsg.MessageTypeSend,inputString);
+        //更新数据
+        mAdapter.Refresh();
+    }
 
     private void addChatInfosIntoSQLite(int friend_id,int type,String content){
         ContentValues values=new ContentValues();
@@ -200,10 +209,51 @@ public class ChatInterface extends AppCompatActivity {
     }
 
 
+    private void initListView(){
+        mListView=(ListView)findViewById(R.id.chat_manage_chat_msg_list);
+        mAdapter=new ChatBaseAdapter(this,portraits,chatMsgs);
+        mListView.setAdapter(mAdapter);
+        scrollMyListViewToBottom();
+    }
 
-    private void initChatMsgs(int position){
+    private void scrollMyListViewToBottom() {
+        mListView.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                mListView.setSelection(mAdapter.getCount() - 1);
+            }
+        });
+    }
+
+
+//    private void initChatMsgs(){
+//        if(ifDBIsNull())
+//            addDataIntoDB();
+//        else
+//            initChatMsgs(friendId);
+//    }
+
+
+
+//    private boolean ifDBIsNull(){
+////        String delSql="delete from message";
+////        writeDB.execSQL(delSql);
+//        String[] columns = {"msg_type"};
+//        String whereClause = "friend_id=?";
+//        String[] whereArgs = {String.valueOf(friendId)};
+//        Cursor cursor = readDB.query("message", columns, whereClause, whereArgs, null, null, null);
+//        return !cursor.moveToFirst();
+//    }
+
+
+
+
+
+
+    private void initChatMsgs(int friend_id){
         chatMsgs=new ArrayList<>();
-        getChatInfoFromDB(position);
+        getChatInfoFromDB(friend_id);
     }
 
 
@@ -226,5 +276,35 @@ public class ChatInterface extends AppCompatActivity {
         }
         cursor.close();
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            returnToChatList();
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    private void returnToChatList(){
+        Intent intent=new Intent(this, MainActivity.class);
+        intent.putExtra("content",chatMsgs.get(chatMsgs.size()-1).getContent());
+        intent.putExtra("friend_id",friendId);
+        if(ifFromMainActivity()) {
+            setResult(1,intent);
+            finish();
+        }else{
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private boolean ifFromMainActivity(){
+        Intent intent=getIntent();
+        int code=intent.getIntExtra("from_main",0);
+        return code==1;
+    }
+
 
 }

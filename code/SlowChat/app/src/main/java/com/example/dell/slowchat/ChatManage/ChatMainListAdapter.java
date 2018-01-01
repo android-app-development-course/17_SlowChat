@@ -20,13 +20,13 @@ import java.util.ArrayList;
  * Created by dell on 2017/12/1.
  */
 
-public class MyBaseAdapter extends BaseAdapter {
+public class ChatMainListAdapter extends BaseAdapter {
     private ArrayList<ChatInfo> chatInfos;
     private LayoutInflater mInflater;
     private Context mainContext;
 
 
-    public MyBaseAdapter(Context context, ArrayList<ChatInfo> chatInfos){
+    public ChatMainListAdapter(Context context, ArrayList<ChatInfo> chatInfos){
         this.chatInfos=chatInfos;
         this.mInflater = LayoutInflater.from(context);
         this.mainContext=context;
@@ -116,6 +116,8 @@ public class MyBaseAdapter extends BaseAdapter {
             if(chatInfo.getMsgNum()!=0){
                 messageNum.showCirclePointBadge();
                 messageNum.showTextBadge(String.valueOf(chatInfo.getMsgNum()));
+            }else {
+                messageNum.hiddenBadge();
             }
         }
     }

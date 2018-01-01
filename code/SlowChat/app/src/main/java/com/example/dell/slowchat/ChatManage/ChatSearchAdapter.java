@@ -1,9 +1,6 @@
 package com.example.dell.slowchat.ChatManage;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +17,13 @@ import java.util.ArrayList;
  * Created by dell on 2017/12/1.
  */
 
-public class MyBaseAdapter extends BaseAdapter {
+public class ChatSearchAdapter extends BaseAdapter {
     private ArrayList<ChatInfo> chatInfos;
     private LayoutInflater mInflater;
     private Context mainContext;
 
 
-    public MyBaseAdapter(Context context, ArrayList<ChatInfo> chatInfos){
+    public ChatSearchAdapter(Context context, ArrayList<ChatInfo> chatInfos){
         this.chatInfos=chatInfos;
         this.mInflater = LayoutInflater.from(context);
         this.mainContext=context;
@@ -57,12 +54,9 @@ public class MyBaseAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder=new ViewHolder();
-            convertView = mInflater.inflate(R.layout.chat_manage_main_list_item, parent,false);
-            holder.portrait = (ImageView) convertView.findViewById(R.id.chat_mange_main_list_portrait);
-            holder.name = (TextView)convertView.findViewById(R.id.chat_mange_main_list_name);
-            holder.time=(TextView) convertView.findViewById(R.id.chat_mange_main_list_time);
-            holder.content=(TextView)convertView.findViewById(R.id.chat_mange_main_list_content);
-            holder.messageNum=(BGABadgeTextView)convertView.findViewById(R.id.chat_mange_main_list_message_num);
+            convertView = mInflater.inflate(R.layout.chat_manage_search_list_item, parent,false);
+            holder.portrait = (ImageView) convertView.findViewById(R.id.chat_mange_search_list_portrait);
+            holder.name = (TextView)convertView.findViewById(R.id.chat_mange_search_list_name);
             convertView.setTag(holder);
         }else {
             holder = (ViewHolder)convertView.getTag();
@@ -102,21 +96,10 @@ public class MyBaseAdapter extends BaseAdapter {
 
         private TextView name;
 
-        private TextView time;
-
-        private TextView content;
-
-        private BGABadgeTextView messageNum;
 
         private void init(ChatInfo chatInfo) {
             this.portrait.setImageDrawable(chatInfo.getPortrait());
             this.name.setText(chatInfo.getName());
-            this.time.setText(chatInfo.getTime());
-            this.content.setText(chatInfo.getContent());
-            if(chatInfo.getMsgNum()!=0){
-                messageNum.showCirclePointBadge();
-                messageNum.showTextBadge(String.valueOf(chatInfo.getMsgNum()));
-            }
         }
     }
 }

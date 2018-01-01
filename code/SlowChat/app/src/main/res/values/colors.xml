@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <!--主界面-->
-    <color name="mainSelectedText">#128f5d</color>
+    <color name="mainSelectedText">#55b364</color>
     <color name="mainNormalText">#8e9696</color>
 
 
@@ -18,8 +18,8 @@
 
 
     <!--登录-->
-    <color name="loginNormalText">#1e1b1b</color>
-    <color name="loginButton">#1b474b</color>
+    <color name="loginNormalText">#050505</color>
+    <color name="loginButton">#e68a6d</color>
 
 
     <!--交友大厅-->

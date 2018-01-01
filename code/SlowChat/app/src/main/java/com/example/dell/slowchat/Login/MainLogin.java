@@ -11,10 +11,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.dell.slowchat.ChatManage.ChatInterface;
+import com.example.dell.slowchat.HttpReqeust.JsonParse;
+import com.example.dell.slowchat.HttpReqeust.TestData;
 import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 public class MainLogin extends AppCompatActivity {
     private String username;
@@ -54,7 +60,7 @@ public class MainLogin extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.login_action_settings) {
             return true;
         }
 
@@ -110,5 +116,7 @@ public class MainLogin extends AppCompatActivity {
                 .setNegativeButton(MainLogin.this.getString(R.string.login_dialog_cancel) ,null)
                 .show();
     }
+
+
 
 }
