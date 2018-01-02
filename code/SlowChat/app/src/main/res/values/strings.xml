@@ -22,7 +22,7 @@
 
 
     <!--好友管理-->
-
+    <string name="friend_manage_title">关注的好友</string>
 
     <!--登录-->
     <string name="login_tittle" translatable="false">登录窗口</string>
@@ -132,6 +132,8 @@
     </string>
     <string name="title_activity_chat_main">ChatMainActivity</string>
     <string name="title_activity_chat_manage_search">ChatManageSearch</string>
+
+    <string name="title_activity_friend_info">FriendInfoActivity</string>
 
 
     <!--个人信息-->
