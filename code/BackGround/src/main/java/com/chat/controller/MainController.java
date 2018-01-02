@@ -1,11 +1,12 @@
 package com.chat.controller;
 
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public class MainController {
     @RequestMapping(value = "/test.do",method = RequestMethod.GET)
     @ResponseBody
-    public Object index(String name){
+    public Object index(String name, HttpServletResponse response){
         List<String> list=new ArrayList<String>();
         list.add("123");
         list.add("cs");
@@ -26,6 +27,10 @@ public class MainController {
         map.put("cd","sa");
         map.put("name",name);
         System.out.println(name);
+
+        Cookie cookie=new Cookie("v","test");
+        cookie.setPath("/");
+        response.addCookie(cookie);
         
         return map;
     }
