@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.chat.entity.Message" table="message" schema="chat">
+        <id name="id">
+            <column name="id" sql-type="bigint(20) unsigned"/>
+        </id>
+        <property name="text">
+            <column name="text" sql-type="text"/>
+        </property>
+        <property name="status">
+            <column name="status" sql-type="tinyint(3) unsigned"/>
+        </property>
+        <property name="time">
+            <column name="time" sql-type="time"/>
+        </property>
+    </class>
+</hibernate-mapping>

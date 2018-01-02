@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.chat.entity.UserTag" table="user_tag" schema="chat">
+        <id name="id">
+            <column name="id" sql-type="int(10) unsigned"/>
+        </id>
+        <many-to-one name="userByUserId" class="com.chat.entity.User">
+            <column name="user_id"/>
+        </many-to-one>
+        <many-to-one name="tagByTagId" class="com.chat.entity.Tag">
+            <column name="tag_id"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

@@ -8,7 +8,19 @@
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="connection.username">v</property>
     <property name="connection.password">008748</property>
-    
+    <mapping class="com.chat.entity.Friend"/>
+    <mapping resource="entity/Friend.hbm.xml"/>
+    <mapping class="com.chat.entity.FriendApply"/>
+    <mapping resource="entity/FriendApply.hbm.xml"/>
+    <mapping resource="entity/Message.hbm.xml"/>
+    <mapping class="com.chat.entity.Message"/>
+    <mapping class="com.chat.entity.Tag"/>
+    <mapping resource="entity/Tag.hbm.xml"/>
+    <mapping resource="entity/User.hbm.xml"/>
+    <mapping class="com.chat.entity.User"/>
+    <mapping class="com.chat.entity.UserTag"/>
+    <mapping resource="entity/UserTag.hbm.xml"/>
+
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

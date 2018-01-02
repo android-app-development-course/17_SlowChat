@@ -960,266 +960,261 @@
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="240" parent="229" name="column_6">
-      <Position>6</Position>
-      <DataType>int(11)|0</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="241" parent="229" name="friend_source">
+    <index id="240" parent="229" name="friend_source">
       <ColNames>source_id</ColNames>
     </index>
-    <index id="242" parent="229" name="friend_target">
+    <index id="241" parent="229" name="friend_target">
       <ColNames>target_id</ColNames>
     </index>
-    <key id="243" parent="229" name="PRIMARY">
+    <key id="242" parent="229" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="244" parent="229" name="friend_source">
+    <foreign-key id="243" parent="229" name="friend_source">
       <ColNames>source_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="245" parent="229" name="friend_target">
+    <foreign-key id="244" parent="229" name="friend_target">
       <ColNames>target_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="246" parent="230" name="id">
+    <column id="245" parent="230" name="id">
       <Position>1</Position>
       <DataType>int(10) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="247" parent="230" name="source_id">
+    <column id="246" parent="230" name="source_id">
       <Position>2</Position>
       <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="248" parent="230" name="target_id">
+    <column id="247" parent="230" name="target_id">
       <Position>3</Position>
       <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="249" parent="230" name="friend_apply_source">
+    <index id="248" parent="230" name="friend_apply_source">
       <ColNames>source_id</ColNames>
     </index>
-    <index id="250" parent="230" name="friend_apply_target">
+    <index id="249" parent="230" name="friend_apply_target">
       <ColNames>target_id</ColNames>
     </index>
-    <key id="251" parent="230" name="PRIMARY">
+    <key id="250" parent="230" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="252" parent="230" name="friend_apply_source">
+    <foreign-key id="251" parent="230" name="friend_apply_source">
       <ColNames>source_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="253" parent="230" name="friend_apply_target">
+    <foreign-key id="252" parent="230" name="friend_apply_target">
       <ColNames>target_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="254" parent="231" name="id">
+    <column id="253" parent="231" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="255" parent="231" name="text">
+    <column id="254" parent="231" name="text">
       <Position>2</Position>
       <DataType>text|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="256" parent="231" name="source_id">
+    <column id="255" parent="231" name="source_id">
       <Position>3</Position>
       <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="257" parent="231" name="target_id">
+    <column id="256" parent="231" name="target_id">
       <Position>4</Position>
       <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="258" parent="231" name="status">
+    <column id="257" parent="231" name="status">
       <Position>5</Position>
       <DataType>tinyint(3) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="259" parent="231" name="time">
+    <column id="258" parent="231" name="time">
       <Position>6</Position>
       <DataType>time|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="260" parent="231" name="source_id">
+    <index id="259" parent="231" name="source_id">
       <ColNames>source_id</ColNames>
     </index>
-    <index id="261" parent="231" name="target_id">
+    <index id="260" parent="231" name="target_id">
       <ColNames>target_id</ColNames>
     </index>
-    <key id="262" parent="231" name="PRIMARY">
+    <key id="261" parent="231" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="263" parent="231" name="message_ibfk_1">
+    <foreign-key id="262" parent="231" name="message_ibfk_1">
       <ColNames>source_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="264" parent="231" name="message_ibfk_2">
+    <foreign-key id="263" parent="231" name="message_ibfk_2">
       <ColNames>target_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="265" parent="232" name="id">
+    <column id="264" parent="232" name="id">
       <Position>1</Position>
       <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="266" parent="232" name="name">
+    <column id="265" parent="232" name="name">
       <Position>2</Position>
       <DataType>varchar(60)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="267" parent="232" name="name">
+    <index id="266" parent="232" name="name">
       <ColNames>name</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="268" parent="232" name="tag_name_index">
+    <index id="267" parent="232" name="tag_name_index">
       <ColNames>name</ColNames>
     </index>
-    <key id="269" parent="232" name="PRIMARY">
+    <key id="268" parent="232" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="270" parent="232" name="name">
+    <key id="269" parent="232" name="name">
       <ColNames>name</ColNames>
       <UnderlyingIndexName>name</UnderlyingIndexName>
     </key>
-    <column id="271" parent="233" name="id">
+    <column id="270" parent="233" name="id">
       <Position>1</Position>
       <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="272" parent="233" name="email">
+    <column id="271" parent="233" name="email">
       <Position>2</Position>
       <DataType>varchar(60)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="273" parent="233" name="pwd">
+    <column id="272" parent="233" name="pwd">
       <Position>3</Position>
       <DataType>varchar(60)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="274" parent="233" name="signature">
+    <column id="273" parent="233" name="signature">
       <Position>4</Position>
       <DataType>varchar(60)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="275" parent="233" name="integral">
+    <column id="274" parent="233" name="integral">
       <Position>5</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="276" parent="233" name="status">
+    <column id="275" parent="233" name="status">
       <Position>6</Position>
       <DataType>tinyint(4)|0</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="277" parent="233" name="img">
+    <column id="276" parent="233" name="img">
       <Position>7</Position>
       <DataType>varchar(120)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="278" parent="233" name="certificate">
+    <column id="277" parent="233" name="certificate">
       <Position>8</Position>
       <DataType>varchar(60)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="279" parent="233" name="email">
+    <index id="278" parent="233" name="email">
       <ColNames>email</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="280" parent="233" name="user_email_index">
+    <index id="279" parent="233" name="user_email_index">
       <ColNames>email</ColNames>
     </index>
-    <key id="281" parent="233" name="PRIMARY">
+    <key id="280" parent="233" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="282" parent="233" name="email">
+    <key id="281" parent="233" name="email">
       <ColNames>email</ColNames>
       <UnderlyingIndexName>email</UnderlyingIndexName>
     </key>
-    <column id="283" parent="234" name="id">
+    <column id="282" parent="234" name="id">
       <Position>1</Position>
       <DataType>int(10) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="284" parent="234" name="user_id">
+    <column id="283" parent="234" name="user_id">
       <Position>2</Position>
       <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="285" parent="234" name="tag_id">
+    <column id="284" parent="234" name="tag_id">
       <Position>3</Position>
       <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="286" parent="234" name="user_id">
+    <index id="285" parent="234" name="user_id">
       <ColNames>user_id</ColNames>
     </index>
-    <index id="287" parent="234" name="tag_id">
+    <index id="286" parent="234" name="tag_id">
       <ColNames>tag_id</ColNames>
     </index>
-    <key id="288" parent="234" name="PRIMARY">
+    <key id="287" parent="234" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="289" parent="234" name="user_tag_ibfk_1">
+    <foreign-key id="288" parent="234" name="user_tag_ibfk_1">
       <ColNames>user_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="290" parent="234" name="user_tag_ibfk_2">
+    <foreign-key id="289" parent="234" name="user_tag_ibfk_2">
       <ColNames>tag_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>tag</RefTableName>
