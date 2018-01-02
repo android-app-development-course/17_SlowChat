@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.dell.slowchat.FriendManage.FriendInfoActivity;
 import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
 
@@ -81,13 +82,25 @@ public class ChatInterface extends AppCompatActivity {
         int id = item.getItemId();
         switch (id){
             case  R.id.chat_manage_action_info:
-                return true;
+                //点击好友进入好友信息界面
+                turnToFirendInfo();
+                break;
             case android.R.id.home:
                 returnToChatList();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void turnToFirendInfo(){
+        Intent intent = new Intent(ChatInterface.this, FriendInfoActivity.class);
+        int friendID=friendId;
+        intent.putExtra("friend_id",friendID);
+        String friendName=getFriendName();
+        intent.putExtra("name",friendName);
+        startActivity(intent);
     }
 
     private String getFriendName(){

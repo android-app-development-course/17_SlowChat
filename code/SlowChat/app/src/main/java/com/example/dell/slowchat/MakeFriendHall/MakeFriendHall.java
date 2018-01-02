@@ -37,15 +37,15 @@ public class MakeFriendHall extends AppCompatActivity {
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.ll_sc_content);
         layout.removeAllViews();
-//        for (int i = 0; i <15; i++) {
-//            View view = View.inflate(MakeFriendHall.this, R.layout.friend_hall_item, null);
-//        //    ((TextView) view.findViewById(R.id.friend_hall_text)).setText("item"+String.valueOf(i));
-//            //动态添加 子View
-//            GridView friendHallGv=view.findViewById(R.id.friend_hall_gv);
-//            FriendHallGvAdapter gvAdapter=new FriendHallGvAdapter();
-//            friendHallGv.setAdapter(gvAdapter);
-//            layout.addView(view, i);
-//        }
+        for (int i = 0; i <15; i++) {
+            View view = View.inflate(MakeFriendHall.this, R.layout.friend_hall_item, null);
+        //    ((TextView) view.findViewById(R.id.friend_hall_text)).setText("item"+String.valueOf(i));
+            //动态添加 子View
+            GridView friendHallGv=(GridView) view.findViewById(R.id.friend_hall_gv);
+            FriendHallGvAdapter gvAdapter=new FriendHallGvAdapter();
+            friendHallGv.setAdapter(gvAdapter);
+            layout.addView(view, i);
+        }
     }
 
     public class FriendHallGvAdapter extends BaseAdapter {
