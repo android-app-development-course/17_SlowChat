@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dell.slowchat.FriendManage.FriendInfoActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="详细资料" />
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="56dp">
+
+
+
+        <com.example.dell.slowchat.FriendManage.CircleImageView
+                android:id="@+id/friend_info_headIcon2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/friend_info_nameText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户名"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_below="@id/friend_info_headIcon2"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/friend_info_sigText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/friend_info_nameText2"
+            android:text="个性签名"/>
+
+
+
+        <LinearLayout
+            android:id="@+id/friend_info_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/friend_info_sigText2"
+            android:layout_marginTop="20dp"
+            android:showDividers="middle"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/friend_info_uid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="账号"/>
+
+            <View  android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:background="#66CCFF"
+                />
+
+            <TextView
+                android:id="@+id/friend_info_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="性别"/>
+
+            <View  android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:background="#66CCFF"
+                />
+
+            <TextView
+                android:id="@+id/friend_info_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="年龄"/>
+
+            <View  android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:background="#66CCFF"
+                />
+
+            <TextView
+                android:id="@+id/friend_info_birthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="生日"/>
+
+            <View  android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:background="#66CCFF"
+                />
+
+            <TextView
+                android:id="@+id/friend_info_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="故乡"/>
+
+            <View  android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:background="#66CCFF"
+                />
+
+            <TextView
+                android:id="@+id/friend_info_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="个人标签"/>
+
+            <View  android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:background="#66CCFF"
+                />
+
+            <TextView
+                android:id="@+id/friend_info_relationText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="18sp"
+                android:text="亲密度"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/friend_info_ll"
+            android:layout_marginTop="20dp">
+
+
+            <Button
+                android:id="@+id/friend_info_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="发消息"/>
+            <Button
+                android:id="@+id/friend_info_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="删除好友"/>
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/friend_info_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="569dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout_editor_absoluteY="54dp" />
+
+
+
+</android.support.design.widget.CoordinatorLayout>

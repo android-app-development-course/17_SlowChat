@@ -373,7 +373,7 @@ public class ChatListFragment extends Fragment
         }
     }
 
-    
+
     private void resetListData(String content, int friendId){
         if(lastMsg.containsKey(friendId)){
             lastMsg.put(friendId,content);
