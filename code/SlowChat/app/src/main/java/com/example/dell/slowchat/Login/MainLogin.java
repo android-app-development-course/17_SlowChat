@@ -14,24 +14,21 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.dell.slowchat.ChatManage.ChatInterface;
-import com.example.dell.slowchat.HttpReqeust.JsonParse;
-import com.example.dell.slowchat.HttpReqeust.TestData;
 import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+
+import java.net.CookieStore;
 
 public class MainLogin extends AppCompatActivity {
-    private String username;
-    private String password;
-
+    //控件
     private EditText usernameText;
     private EditText passwordText;
 
-
     private Button loginBtn;
     private Button exitBtn;
+
+    //用户
+    private UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +58,19 @@ public class MainLogin extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.login_action_settings) {
+            Toast.makeText(this, getString(R.string.login_toolbar_setting), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.login_action_register)
+        {
+            Intent intent = new Intent(MainLogin.this, Register.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.login_action_find_back_password)
+        {
+            Toast.makeText(this, getString(R.string.login_toolbar_find_back_password), Toast.LENGTH_SHORT).show();;
             return true;
         }
 
@@ -68,14 +78,13 @@ public class MainLogin extends AppCompatActivity {
     }
 
     private void initial(){
-        this.username="admin";
-        this.password="admin";
 
         this.usernameText=(EditText) findViewById(R.id.login_username_input);
         this.passwordText=(EditText)findViewById(R.id.login_password_input);
 
         this.loginBtn=(Button)findViewById(R.id.login_login);
         this.exitBtn=(Button)findViewById(R.id.login_exit);
+
     }
 
     private void clickLogin(){
@@ -89,6 +98,12 @@ public class MainLogin extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    //
+    private void login(String username, String password)
+    {
+
     }
 
     private void clickExit(){
@@ -116,7 +131,5 @@ public class MainLogin extends AppCompatActivity {
                 .setNegativeButton(MainLogin.this.getString(R.string.login_dialog_cancel) ,null)
                 .show();
     }
-
-
 
 }
