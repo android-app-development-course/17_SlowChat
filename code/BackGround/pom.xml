@@ -57,6 +57,13 @@
       <version>2.8.2</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina -->
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-catalina</artifactId>
+      <version>9.0.0.M22</version>
+    </dependency>
+
   </dependencies>
   <build>
     <finalName>chat</finalName>

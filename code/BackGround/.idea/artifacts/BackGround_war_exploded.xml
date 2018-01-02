@@ -27,6 +27,18 @@
           <element id="library" level="project" name="Maven: org.hibernate.common:hibernate-commons-annotations:5.0.1.Final" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.8-dmr" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.2" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-catalina:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-servlet-api:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jsp-api:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-el-api:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-juli:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-annotations-api:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-api:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jni:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-coyote:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-util:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-util-scan:9.0.0.M22" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jaspic-api:9.0.0.M22" />
         </element>
       </element>
       <element id="directory" name="META-INF">

@@ -5,7 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SpringUtil {
     private static final String[] PATH={
-            "dao-application.xml"
+            "user-application.xml"
     };
     private static ApplicationContext context=
             new ClassPathXmlApplicationContext(PATH);
@@ -16,5 +16,9 @@ public class SpringUtil {
 
     public static <T> T getBean(Class<T> t){
         return context.getBean(t);
+    }
+
+    public static <T> T getBean(String id,Class<T> t){
+        return context.getBean(id,t);
     }
 }

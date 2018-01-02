@@ -33,6 +33,11 @@ public class UserDaoImpl implements UserDao{
         query.setParameter(0,email);
 
         List<User> list=query.list();
+
+        if(list.size()==0){
+            return null;
+        }
+
         return list.get(0);
     }
 }
