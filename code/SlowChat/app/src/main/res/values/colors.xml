@@ -21,6 +21,9 @@
     <color name="loginNormalText">#050505</color>
     <color name="loginButton">#e68a6d</color>
 
+    <!--注册-->
+    <color name="registerButton">#db6039</color>
+    <color name="background">#FFFFFF</color>
 
     <!--交友大厅-->
 
