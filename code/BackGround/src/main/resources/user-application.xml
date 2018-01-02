@@ -7,24 +7,24 @@
 
     <bean id="userDao" class="com.chat.dao.UserDaoImpl"/>
 
-    <bean id="registerService" class="com.chat.service.login.RegisterServiceImp"/>
+    <bean id="user" class="com.chat.entity.User" scope="prototype"/>
 
-    <bean id="user" class="com.chat.entity.User"/>
+    <bean id="registerService" class="com.chat.service.login.RegisterServiceImp"/>
 
     <bean id="loginService" class="com.chat.service.login.LoginServiceImp"/>
 
-    <bean id="failureResponse" class="com.chat.application.Response">
+    <bean id="failureResponse" class="com.chat.application.Response" scope="prototype">
         <property name="map">
             <map>
-                <entry key="code" value="0"/>
+                <entry key="code" value="1"/>
             </map>
         </property>
     </bean>
 
-    <bean id="successResponse" class="com.chat.application.Response">
+    <bean id="successResponse" class="com.chat.application.Response" scope="prototype">
         <property name="map">
             <map>
-                <entry key="code" value="1"/>
+                <entry key="code" value="0"/>
             </map>
         </property>
     </bean>
