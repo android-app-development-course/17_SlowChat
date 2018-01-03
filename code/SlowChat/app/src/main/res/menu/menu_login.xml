@@ -6,5 +6,18 @@
     <item
         android:id="@+id/login_action_settings"
         android:orderInCategory="100"
+        android:title="@string/login_toolbar_setting"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/login_action_register"
+        android:orderInCategory="100"
+        android:title="@string/login_toolbar_register"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/login_action_find_back_password"
+        android:orderInCategory="100"
+        android:title="@string/login_toolbar_find_back_password"
+        app:showAsAction="never"/>
 </menu>
