@@ -135,12 +135,12 @@ public class ChatListFragment extends Fragment
 
     private List<ChatRecord> getDataFromServer(){
         List<ChatRecord> chatRecords =new ArrayList<>();
-        for (int i=1;i<5;i++) {
-            ChatRecord record = new ChatRecord(i, "2017-12-30", "就你会吹比");
-            chatRecords.add(record);
-            record = new ChatRecord(i, "2017-12-30", "不吹会死啊");
-            chatRecords.add(record);
-        }
+//        for (int i=1;i<5;i++) {
+//            ChatRecord record = new ChatRecord(i, "2017-12-30", "就你会吹比");
+//            chatRecords.add(record);
+//            record = new ChatRecord(i, "2017-12-30", "不吹会死啊");
+//            chatRecords.add(record);
+//        }
         return chatRecords;
     }
 
@@ -428,7 +428,6 @@ public class ChatListFragment extends Fragment
         }
         return super.onContextItemSelected(item);
     }
-
 
 
 

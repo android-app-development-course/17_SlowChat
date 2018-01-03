@@ -1,13 +1,16 @@
 package com.example.dell.slowchat.ChatManage;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -26,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
 
 public class ChatInterface extends AppCompatActivity {
 
@@ -59,6 +63,7 @@ public class ChatInterface extends AppCompatActivity {
         initChatMsgs(friendId);
         initListView();
         initSendBtn();
+//        getMsgFromServer();
     }
 
     private void initToolbar(){
@@ -149,7 +154,7 @@ public class ChatInterface extends AppCompatActivity {
             public void onClick(View v) {
                 InputMethodManager imm=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                 String inputString=inputBox.getText().toString();
-                if(!inputString.equals(""))
+                if(ifLegalString(inputString))
                 {
                     dealFirstSend();
                     dealSendMsg(inputString);
@@ -162,6 +167,25 @@ public class ChatInterface extends AppCompatActivity {
                 mListView.smoothScrollToPositionFromTop(chatMsgs.size(), 0);
             }
         });
+    }
+
+
+    private boolean ifLegalString(String inputString){
+        if(inputString.equals(""))
+            return false;
+        if(inputString.length()>1000){
+            stringLenOutOfRange("输入字数不应超过1000字符！");
+            return false;
+        }
+        return true;
+    }
+
+    private void stringLenOutOfRange(String tip){
+        new AlertDialog.Builder(this)
+                .setTitle("提示")
+                .setMessage(tip)
+                .setPositiveButton("确认" ,null)
+                .show();
     }
 
 
@@ -319,5 +343,30 @@ public class ChatInterface extends AppCompatActivity {
         return code==1;
     }
 
+
+    private void getMsgFromServer(){
+        handler.postDelayed(runnable, TIME); //每隔1s执行
+    }
+
+    Handler handler = new Handler();
+    private int TIME = 1000;
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            // handler自带方法实现定时器
+            try {
+                handler.postDelayed(this, TIME);
+                ChatMsg chatMsg=new ChatMsg(ChatMsg.MessageTypeGet,"定时消息");
+                chatMsgs.add(chatMsg);
+                addChatInfosIntoSQLite(friendId,ChatMsg.MessageTypeGet,"定时消息");
+                mAdapter.Refresh();
+                scrollMyListViewToBottom();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                System.out.println("exception...");
+            }
+        }
+    };
 
 }
