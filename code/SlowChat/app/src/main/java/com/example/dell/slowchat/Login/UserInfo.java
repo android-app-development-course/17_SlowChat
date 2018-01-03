@@ -24,7 +24,7 @@ public class UserInfo {
 
     }
 
-    UserInfo(int userId, String userName, String userEmail, String userPassword, Drawable userImage)
+    UserInfo(String userName, String userEmail, String userPassword, Drawable userImage)
     {
         this.userId = userId;
         this.userName = userName;
@@ -50,97 +50,97 @@ public class UserInfo {
     }
 
     //设置用户邮箱
-    private void setUserEmail(String userEmail)
+    public void setUserEmail(String userEmail)
     {
         this.userEmail = userEmail;
     }
 
     //设置用户密码
-    private void setUserPassword(String userPassword)
+    public void setUserPassword(String userPassword)
     {
         this.userPassword = userPassword;
     }
 
     //设置用户头像
-    private void setUserImage(Drawable userImage)
+    public void setUserImage(Drawable userImage)
     {
         this.userImage = userImage;
     }
 
     //设置用户个性签名
-    private void setUserSignature(String userSignature)
+    public void setUserSignature(String userSignature)
     {
         this.userSignature = userSignature;
     }
 
     //设置用户经验值
-    private void setUserIntegral(int userIntegral)
+    public void setUserIntegral(int userIntegral)
     {
         this.userIntegral = userIntegral;
     }
 
     //设置用户签到状态
-    private void setUserStatus(int userStatus)
+    public void setUserStatus(int userStatus)
     {
         this.userStatus = userStatus;
     }
 
     //设置用户登录状态
-    private void setUserState(int userState)
+    public void setUserState(int userState)
     {
         this.userState = userState;
     }
 
     //设置用户ID
-    public int setUserId()
+    public int getUserId()
     {
         return this.userId;
     }
 
     //设置用户名
-    public String setUserName()
+    public String getUserName()
     {
         return this.userName;
     }
 
     //设置用户邮箱
-    private String setUserEmail()
+    public String getUserEmail()
     {
         return this.userEmail;
     }
 
     //设置用户密码
-    private String setUserPassword()
+    public String getUserPassword()
     {
         return this.userPassword;
     }
 
     //设置用户头像
-    private Drawable setUserImage()
+    public Drawable getUserImage()
     {
         return this.userImage;
     }
 
     //设置用户个性签名
-    private String setUserSignature()
+    public String getUserSignature()
     {
         return this.userSignature;
     }
 
     //设置用户经验值
-    private int setUserIntegral()
+    public int getUserIntegral()
     {
         return this.userIntegral;
     }
 
     //设置用户签到状态
-    private int setUserStatus()
+    public int getUserStatus()
     {
         return this.userStatus;
     }
 
     //设置用户登录状态
-    private int setUserState()
+    public int getUserState()
     {
         return this.userState;
     }

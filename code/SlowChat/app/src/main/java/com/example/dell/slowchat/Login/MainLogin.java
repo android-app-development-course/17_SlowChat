@@ -2,6 +2,7 @@ package com.example.dell.slowchat.Login;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,13 @@ import android.widget.Toast;
 import com.example.dell.slowchat.ChatManage.ChatInterface;
 import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.CookieStore;
 
@@ -29,6 +37,9 @@ public class MainLogin extends AppCompatActivity {
 
     //用户
     private UserInfo userInfo;
+
+    //对象
+    private UserInfoSQLiteHelper userInfoSQLiteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,25 +96,99 @@ public class MainLogin extends AppCompatActivity {
         this.loginBtn=(Button)findViewById(R.id.login_login);
         this.exitBtn=(Button)findViewById(R.id.login_exit);
 
+        this.userInfoSQLiteHelper = new UserInfoSQLiteHelper(this);
+
     }
 
     private void clickLogin(){
         this.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//                if(login())
+                loginOnline();
+            }
+        });
+    }
+
+    //判断是否登录
+    private boolean login()
+    {
+        String tempUserEmail = usernameText.getText().toString();
+        String tempUserPassword = passwordText.getText().toString();
+        if( tempUserEmail.length() == 0 || tempUserPassword.length() ==0 )
+            return false;
+        switch (userInfoSQLiteHelper.checkPassword(tempUserEmail, tempUserPassword))
+        {
+            case 0:
+                Toast.makeText(this, "账号不存在", Toast.LENGTH_SHORT).show();
+                return false;
+            case 2:
+                Toast.makeText(this, "密码错误", Toast.LENGTH_SHORT).show();
+                return false;
+        }
+        return true;
+    }
+
+
+    private void loginOnline()
+    {
+        String path = "http://119.29.190.214/login/login.do";
+        //创建AsyncHttpClient实例
+        AsyncHttpClient client = new AsyncHttpClient();
+        final RequestParams requestParams = new RequestParams();
+        requestParams.put("email",usernameText.getText().toString());
+        requestParams.put("pwd", passwordText.getText().toString());
+        client.setTimeout(5000);
+        client.get(path, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes)
+            {
+                JsonParse jsonParse = new JsonParse();
+                connectSuccess(jsonParse.getRegisterResult(bytes));
+            }
+
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable)
+            {
+                connectFail();
+            }
+        });
+    }
+
+    //连接服务器成功调用
+    private void connectSuccess(int result)
+    {
+        switch (result)
+        {
+            case 0:
+                sentUserEmail();
                 Intent intent = new Intent();
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.setClass(MainLogin.this, MainActivity.class);
                 startActivity(intent);
-            }
-        });
+                Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
+                break;
+            case 1:
+                Toast.makeText(this, "账号不存在或密码错误", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
-    //
-    private void login(String username, String password)
+    //连接服务器失败调用
+    private void connectFail()
     {
+        Toast.makeText(this, "网络连接失败", Toast.LENGTH_SHORT).show();
+    }
 
+    private void sentUserEmail()
+    {
+        //获取SharePreferences对象，参数表示文件名，MODE_PRIVATE表示文件操作模式
+        SharedPreferences sharedPreferences = getSharedPreferences("data", this.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
+        editor.putString("userEmail", usernameText.getText().toString());
+        editor.commit();
     }
 
     private void clickExit(){

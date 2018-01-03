@@ -26,7 +26,8 @@
 
     <!--登录-->
     <string name="login_tittle" translatable="false">登录窗口</string>
-    <string name="login_user_name" translatable="false">用户名：</string>
+    <string name="login_user_name" translatable="false">账号：</string>
+    <string name="login_user_name_hint" translatable="false">请输入邮箱</string>
     <string name="login_password" translatable="false">密码：</string>
     <string name="login_login" translatable="false">登录</string>
     <string name="login_exit" translatable="false">退出</string>
@@ -156,6 +157,9 @@
 
 
     <!--个人信息-->
+    <string name="personal_info_user_name_title">用户名:</string>
+    <string name="personal_info_user_account_title">账号:</string>
+    <string name="personal_info_user_integral_title">经验值:</string>
 
 
 </resources>
