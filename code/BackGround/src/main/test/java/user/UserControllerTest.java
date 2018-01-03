@@ -12,7 +12,7 @@ public class UserControllerTest {
     //用email获取user信息
     public static void getUser(){
         UserController controller= SpringUtil.getBean(UserController.class);
-        User user=controller.getUser("729164860@qq.com");
+        User user=controller.getUserMessage("729164860@qq.com");
         System.out.println(user);
     }
 }

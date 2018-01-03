@@ -2,6 +2,9 @@ package com.chat.dao;
 
 import com.chat.entity.*;
 
+import java.util.List;
+import java.util.Set;
+
 public interface UserDao {
     /**
      * 添加用户
