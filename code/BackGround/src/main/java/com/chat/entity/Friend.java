@@ -62,4 +62,6 @@ public class Friend {
         result = 31 * result + feeling;
         return result;
     }
+
+
 }

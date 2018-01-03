@@ -1,11 +1,8 @@
-package com.chat.application;
+package com.chat.util;
 
-import com.chat.util.SpringUtil;
-
-import java.util.HashMap;
 import java.util.Map;
 
-public class Response {
+public class ResponseUtil {
     private Map<String,Object> map;
 
     public Map<String, Object> getMap() {
@@ -21,7 +18,7 @@ public class Response {
      * @return 失败时候的哈希表模板
      */
     public static Map<String,Object> getFailureResponse(String msg){
-        Map<String,Object> map=SpringUtil.getBean("failureResponse",Response.class).getMap();
+        Map<String,Object> map=SpringUtil.getBean("failureResponse",ResponseUtil.class).getMap();
         map.put("msg",msg);
         return map;
     }
@@ -31,7 +28,7 @@ public class Response {
      * @return 返回成功操作时的哈希表
      */
     public static Map<String,Object> getsuccessResponse(){
-        return SpringUtil.getBean("successResponse",Response.class).getMap();
+        return SpringUtil.getBean("successResponse",ResponseUtil.class).getMap();
     }
 
     /**
@@ -42,6 +39,19 @@ public class Response {
     public static Map<String,Object> getsuccessResponse(String msg){
         Map<String,Object> map=getsuccessResponse();
         map.put("msg",msg);
+        return map;
+    }
+
+    /**
+     * 获取成功操作的模板
+     * @param name 要注入的类的名称
+     * @param object 要注入的类
+     * @return 返回注入这个类以后的哈希表的模板
+     */
+    public static Map<String,Object> getsuccessResponse(String name,Object object){
+        Map<String,Object> map=getsuccessResponse();
+        map.put(name,object);
+
         return map;
     }
 

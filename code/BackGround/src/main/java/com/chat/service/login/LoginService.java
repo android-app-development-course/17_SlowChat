@@ -14,7 +14,7 @@ public interface LoginService {
      * @param pwd 登录密码
      * @return 如果通过则返回true，否则返回false
      */
-    public boolean isPass(String email,String pwd);
+    boolean isPass(String email,String pwd);
 
     /**
      * 给通过登录的用户添加认证后的cookie
@@ -22,5 +22,5 @@ public interface LoginService {
      * @param response
      * @param user 已经认证通过登录的user对象
      */
-    public void addCookie(HttpServletRequest request, HttpServletResponse response, User user);
+    void addCookie(HttpServletRequest request, HttpServletResponse response, User user);
 }

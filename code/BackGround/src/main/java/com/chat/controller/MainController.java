@@ -22,7 +22,7 @@ public class MainController {
         list.add("cs");
         list.add("mywrod");
 
-        HashMap map=new HashMap();
+        HashMap<String,Object> map=new HashMap();
         map.put("ab",list);
         map.put("cd","sa");
         map.put("name",name);

@@ -1,12 +1,10 @@
-package com.chat.controller.login;
+package com.chat.controller;
 
-import com.chat.application.Response;
+import com.chat.util.ResponseUtil;
 import com.chat.dao.UserDao;
 import com.chat.entity.User;
 import com.chat.service.login.LoginService;
 import com.chat.service.login.RegisterService;
-import com.chat.util.HibernateUtil;
-import com.chat.util.SpringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,37 +28,34 @@ public class LoginController {
     @ResponseBody
     public Map<String,Object> login(HttpServletRequest request, HttpServletResponse response, String email, String pwd){
         if(!loginService.isPass(email,pwd)){
-            return Response.getFailureResponse("账号或密码不正确！");
+            return ResponseUtil.getFailureResponse("账号或密码不正确！");
         }
 
         //添加cookie
         User user= userDao.getUserByEmail(email);
         loginService.addCookie(request,response,user);
 
-        return Response.getsuccessResponse("登录成功！");
+        return ResponseUtil.getsuccessResponse("登录成功！");
     }
 
     @RequestMapping(value = "/login/register.do",method = RequestMethod.GET)
     @ResponseBody
     public Map<String,Object> register(String email,String pwd){
         if(!registerService.isEmailFit(email)){
-            return Response.getFailureResponse("邮箱格式不符合要求");
+            return ResponseUtil.getFailureResponse("邮箱格式不符合要求");
         }
 
         if(!registerService.isEmailUnregistered(email)){
-            return Response.getFailureResponse("该邮箱已注册");
+            return ResponseUtil.getFailureResponse("该邮箱已注册");
         }
 
         if(!registerService.isPwdFit(pwd)){
-            return Response.getFailureResponse("密码格式不符合要求");
+            return ResponseUtil.getFailureResponse("密码格式不符合要求");
         }
 
-        //创建user并且把user添加到数据库里面
-        User user=SpringUtil.getBean(User.class);
-        user.setEmail(email);
-        user.setPwd(pwd);
+        //添加到user
+        registerService.addUser(email,pwd);
 
-        userDao.add(user);
-        return Response.getsuccessResponse();
+        return ResponseUtil.getsuccessResponse("注册成功");
     }
 }
