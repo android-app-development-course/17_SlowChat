@@ -134,6 +134,8 @@
     <string name="title_activity_chat_manage_search">ChatManageSearch</string>
 
     <string name="title_activity_friend_info">FriendInfoActivity</string>
+    <string name="title_activity_add_friend">AddFriendActivity</string>
+
 
 
     <!--个人信息-->

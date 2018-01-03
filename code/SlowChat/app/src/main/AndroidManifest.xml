@@ -44,6 +44,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_friend_info">
         </activity>
+        <activity
+            android:name=".MakeFriendHall.AddFriendActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_friend_info">
+        </activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@
 
     <ImageView
         android:id="@+id/friend_hall_img"
-        android:layout_width="120dp"
-        android:layout_height="200dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="100dp" />
 
 </LinearLayout>
