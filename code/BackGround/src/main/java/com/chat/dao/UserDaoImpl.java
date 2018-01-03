@@ -43,4 +43,18 @@ public class UserDaoImpl implements UserDao{
 
         return list.get(0);
     }
+
+    public User getBriefUserByEmail(String email) {
+        User user=getUserByEmail(email);
+
+        HibernateUtil.getCurrentSession().evict(user);
+        user.setPwd(null);
+        user.setCertificate(null);
+        user.setTags(null);
+        user.setFriends(null);
+        user.setMessages(null);
+        user.setFriendApplies(null);
+
+        return user;
+    }
 }

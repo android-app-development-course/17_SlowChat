@@ -19,8 +19,6 @@
     <mapping resource="entity/Tag.hbm.xml"/>
     <mapping resource="entity/User.hbm.xml"/>
     <mapping class="com.chat.entity.User"/>
-    <mapping class="com.chat.entity.UserTag"/>
-    <mapping resource="entity/UserTag.hbm.xml"/>
 
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->

@@ -14,5 +14,9 @@
         <property name="feeling">
             <column name="feeling" sql-type="int(10) unsigned"/>
         </property>
+
+        <many-to-one name="targetUser" class="com.chat.entity.User">
+            <column name="target_id" not-null="true"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

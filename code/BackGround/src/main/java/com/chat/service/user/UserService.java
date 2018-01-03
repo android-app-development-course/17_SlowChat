@@ -8,7 +8,7 @@ public interface UserService {
      * @param email 用户邮箱
      * @return 除去敏感信息后的用户信息
      */
-    User getUser(String email);
+    User getUserMessage(String email);
 
     /**
      * 更新用户信息

@@ -1,14 +1,12 @@
 package com.chat.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "friend_apply", schema = "chat", catalog = "")
 public class FriendApply {
     private int id;
+    private User user;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -18,6 +16,15 @@ public class FriendApply {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @ManyToOne
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

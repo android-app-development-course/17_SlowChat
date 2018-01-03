@@ -11,13 +11,13 @@ public class UserServiceImp implements UserService{
     @Autowired
     private UserDao userDao;
 
-    public User getUser(String email) {
-        User user=userDao.getUserByEmail(email);
+    public User getUserMessage(String email) {
+        User user=userDao.getBriefUserByEmail(email);
+
         if (user==null){
             return null;
         }
-        HibernateUtil.getCurrentSession().delete(user);
-        user.setPwd(null);
+
         return user;
     }
 

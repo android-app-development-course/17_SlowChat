@@ -1,9 +1,6 @@
 package com.chat.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Time;
 
 @Entity
@@ -12,6 +9,7 @@ public class Message {
     private String text;
     private byte status;
     private Time time;
+    private User user;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -51,6 +49,15 @@ public class Message {
 
     public void setTime(Time time) {
         this.time = time;
+    }
+
+    @ManyToOne
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

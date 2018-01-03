@@ -11,7 +11,7 @@ public class UserDaoTest {
     public static void main(String[] args) {
         HibernateUtil.getCurrentSession().beginTransaction();
 
-        updataUser();
+        getUserByEmail();
 
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
@@ -19,8 +19,9 @@ public class UserDaoTest {
     //添加一个用户
     private static void addUser(){
         User user=new User();
-        user.setEmail("729164860@qq.com");
-        user.setPwd("pwd");
+        user.setEmail("2sda1ds123df");
+        user.setPwd("pwd231");
+        user.setUsername("v");
         userDao.add(user);
     }
 
@@ -31,7 +32,12 @@ public class UserDaoTest {
 
     //按照邮箱查找一个用户
     private static void getUserByEmail(){
-        System.out.println(userDao.getUserByEmail("729164860@qq.com"));
+        User user=userDao.getBriefUserByEmail("729164860@qq.com");
+        System.out.println(user);
+        System.out.println(user.getFriends());
+        System.out.println(user.getTags());
+        System.out.println(user.getFriendApplies());
+        System.out.println(user.getMessages());
     }
 
     //更新一个User

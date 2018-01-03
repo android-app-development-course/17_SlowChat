@@ -24,6 +24,13 @@ public interface UserDao {
     User getUser(String id);
 
     /**
+     * 获取去除敏感信息后游离状态的user
+     * @param email 用户邮箱
+     * @return 返回去除敏感信息后的user
+     */
+    User getBriefUserByEmail(String email);
+
+    /**
      * 更新用户
      * @param user
      */
