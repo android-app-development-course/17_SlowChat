@@ -5,13 +5,7 @@
 
     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
 
-    <bean id="userDao" class="com.chat.dao.UserDaoImpl"/>
-
     <bean id="user" class="com.chat.entity.User" scope="prototype"/>
-
-    <bean id="registerService" class="com.chat.service.login.RegisterServiceImp"/>
-
-    <bean id="loginService" class="com.chat.service.login.LoginServiceImp"/>
 
     <bean id="failureResponse" class="com.chat.util.ResponseUtil" scope="prototype">
         <property name="map">

@@ -36,7 +36,7 @@ public class RegisterServiceImp implements RegisterService {
         return mat.find();
     }
 
-    public void addUser(String email, String pwd) {
+    public void addUser(String email, String pwd,String username) {
         User user= SpringUtil.getBean(User.class);
         user.setEmail(email);
         user.setEmail(pwd);

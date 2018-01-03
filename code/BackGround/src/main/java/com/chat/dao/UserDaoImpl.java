@@ -4,11 +4,14 @@ import com.chat.entity.User;
 import com.chat.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-
+@Repository
 public class UserDaoImpl implements UserDao{
     @Transactional
     public void add(User user) {

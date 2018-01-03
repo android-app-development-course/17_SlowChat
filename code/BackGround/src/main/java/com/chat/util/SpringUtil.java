@@ -5,7 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SpringUtil {
     private static final String[] PATH={
-            "user-application.xml"
+            "mvc-dispatcher.xml"
     };
     private static ApplicationContext context=
             new ClassPathXmlApplicationContext(PATH);

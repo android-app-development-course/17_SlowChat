@@ -24,9 +24,18 @@ public class LoginController {
     @Autowired
     private RegisterService registerService;
 
+    /**
+     * 登录接口
+     * @param request
+     * @param response
+     * @param email 用户邮箱
+     * @param pwd 用户密码
+     * @return
+     */
     @RequestMapping(value = "/login/login.do",method = RequestMethod.GET)
     @ResponseBody
-    public Map<String,Object> login(HttpServletRequest request, HttpServletResponse response, String email, String pwd){
+    public Map<String,Object> login(HttpServletRequest request, HttpServletResponse response,
+                                    String email, String pwd){
         if(!loginService.isPass(email,pwd)){
             return ResponseUtil.getFailureResponse("账号或密码不正确！");
         }
@@ -38,9 +47,16 @@ public class LoginController {
         return ResponseUtil.getsuccessResponse("登录成功！");
     }
 
+    /**
+     * 注册接口
+     * @param email 用户邮箱
+     * @param pwd 用户密码
+     * @param username 用户名
+     * @return
+     */
     @RequestMapping(value = "/login/register.do",method = RequestMethod.GET)
     @ResponseBody
-    public Map<String,Object> register(String email,String pwd){
+    public Map<String,Object> register(String email,String pwd,String username){
         if(!registerService.isEmailFit(email)){
             return ResponseUtil.getFailureResponse("邮箱格式不符合要求");
         }
@@ -54,7 +70,7 @@ public class LoginController {
         }
 
         //添加到user
-        registerService.addUser(email,pwd);
+        registerService.addUser(email,pwd,username);
 
         return ResponseUtil.getsuccessResponse("注册成功");
     }

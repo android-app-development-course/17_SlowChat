@@ -18,5 +18,5 @@
     <!--配置使Spring采用CGLIB代理-->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-    <import resource="user-application.xml"/>
+    <import resource="application.xml"/>
 </beans>

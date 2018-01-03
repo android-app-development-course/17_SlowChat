@@ -6,16 +6,9 @@ public interface UserService {
     /**
      * 根据用户邮箱获取用户信息
      * @param email 用户邮箱
-     * @return 用户
+     * @return 除去敏感信息后的用户信息
      */
-    User getUserByEmail(String email);
-
-    /**
-     * 根据用户ID获取用户信息
-     * @param id 用户id
-     * @return 用户
-     */
-    User getUserById(String id);
+    User getUser(String email);
 
     /**
      * 更新用户信息
@@ -23,4 +16,11 @@ public interface UserService {
      * @param user 持久态用户
      */
     void updataUser(User user);
+
+    /**
+     * 用户进行签到
+     * @param user 持久态用户
+     * @return true代表签到成功，false代表签到失败
+     */
+    boolean signIn(User user);
 }
