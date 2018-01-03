@@ -3,12 +3,14 @@ package com.chat.service.login;
 import com.chat.dao.UserDao;
 import com.chat.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@Service
 public class LoginServiceImp implements LoginService {
     @Autowired
     private UserDao userDao;

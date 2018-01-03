@@ -28,5 +28,5 @@ public interface RegisterService {
      * @param email
      * @param pwd
      */
-    public void addUser(String email,String pwd);
+    public void addUser(String email,String pwd,String username);
 }
