@@ -39,9 +39,20 @@
             android:label="@string/title_activity_chat_manage_search"></activity>
         <activity
             android:name=".FriendManage.FriendInfoActivity"
+
             android:label="@string/title_activity_friend_info"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".Login.Register"></activity>
+
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_friend_info">
+        </activity>
+        <activity
+            android:name=".MakeFriendHall.AddFriendActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_friend_info">
+        </activity>
+
     </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>

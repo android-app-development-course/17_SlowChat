@@ -9,7 +9,7 @@ import android.os.Parcelable;
  */
 
 public class Friend implements Parcelable {
-    private String uid;
+    private int uid;
     private String userName;
     private Bitmap headIcon;
     private String signature;
@@ -20,7 +20,7 @@ public class Friend implements Parcelable {
     public String birthday;
     public int age;
 
-    public String getUid(){
+    public int getUid(){
         return uid;
     }
     public String getUserName(){
@@ -39,7 +39,7 @@ public class Friend implements Parcelable {
     public String getBirthday(){return  birthday;}
     public int getAge(){return age;}
 
-    public void setUid(String uid){this.uid=uid;}
+    public void setUid(int uid){this.uid=uid;}
     public void setUserName(String userName){this.userName=userName;}
     public void setSignature(String signature){this.signature=signature;}
     public void setRelationLevel(int digit){relationLevel=digit;}
@@ -56,7 +56,7 @@ public class Friend implements Parcelable {
     }
 
     public void writeToParcel(Parcel dest, int flags){
-        dest.writeString(uid);
+        dest.writeInt(uid);
         dest.writeString(userName);
         dest.writeString(signature);
         dest.writeString(sex);
@@ -77,7 +77,7 @@ public class Friend implements Parcelable {
 
         public Friend createFromParcel(Parcel source){
             Friend f=new Friend();
-            f.uid=source.readString();
+            f.uid=source.readInt();
             f.userName=source.readString();
             f.signature=source.readString();
             f.sex=source.readString();

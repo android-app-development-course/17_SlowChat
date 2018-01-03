@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dell.slowchat.MakeFriendHall.AddFriendActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/friend_add_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="详细资料" />
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="56dp">
+
+
+        <com.example.dell.slowchat.ChatManage.CircleImageView
+            android:id="@+id/friend_info_headIcon2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/portrait_other" />
+
+        <TextView
+            android:id="@+id/friend_info_nameText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/friend_info_headIcon2"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Neptune"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/friend_info_sigText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/friend_info_nameText2"
+            android:layout_centerHorizontal="true"
+            android:text="梦境总是幸福的，现实总是残酷的。" />
+
+
+
+        <LinearLayout
+            android:id="@+id/friend_info_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/friend_info_sigText2"
+            android:layout_marginTop="20dp"
+            android:showDividers="middle"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/friend_info_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="性别: 女"
+                android:textSize="18sp" />
+
+            <View  android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:background="#66CCFF"
+                />
+
+            <TextView
+                android:id="@+id/friend_info_birthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="生日: 1998-10-6"
+                android:textSize="18sp" />
+
+            <View  android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:background="#66CCFF"
+                />
+
+            <TextView
+                android:id="@+id/friend_info_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="故乡: 中国"
+                android:textSize="18sp" />
+
+            <View  android:layout_height="1px"
+                android:layout_width="match_parent"
+                android:background="#66CCFF"
+                />
+
+            <TextView
+                android:id="@+id/friend_info_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="个人标签:  动漫 游戏 漫画 车迷 电竞"
+                android:textSize="18sp" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/friend_info_ll"
+            android:layout_marginTop="20dp">
+
+
+            <Button
+                android:id="@+id/friend_info_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_rounded_button"
+                android:layout_weight="1"
+                android:text="添加好友"/>
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/friend_info_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="569dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout_editor_absoluteY="54dp" />
+
+
+
+</android.support.design.widget.CoordinatorLayout>

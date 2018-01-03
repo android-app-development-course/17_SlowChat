@@ -1,15 +1,15 @@
 package com.example.dell.slowchat.FriendManage;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,9 +22,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.dell.slowchat.ChatManage.ChatInfo;
+import com.example.dell.slowchat.ChatManage.SQLiteOp;
 import com.example.dell.slowchat.R;
 
-import java.lang.reflect.Field;
 import java.util.Vector;
 
 /**
@@ -41,8 +42,7 @@ public class FriendManageFragment extends Fragment {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private ImageView icon;
-    private TextView text;
+    private SQLiteDatabase readDB;
 
 
     private ListView friendShowLv;
@@ -69,8 +69,19 @@ public class FriendManageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.friend_manage_main, container, false);
-        vf = new Vector<>();
-        this.initShowView(rootView);
+        readDB=new SQLiteOp(getContext()).getReadableDatabase();
+        initListViewData();
+        initShowView(rootView);
+        return rootView;
+    }
+
+    private void setFriendBitmap(int position){
+        Drawable portrait=new BitmapDrawable(getResources(),vf.get(position).getHeadIcon());
+        ChatInfo.friendPortrait=portrait;
+    }
+
+
+    private void initShowView(View rootView) {
         friendShowAdapter = new FriendShowAdapter();
         friendShowLv = (ListView) rootView.findViewById(R.id.friend_show_lv);
         friendShowLv.setAdapter(friendShowAdapter);
@@ -79,52 +90,40 @@ public class FriendManageFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //点击好友进入好友信息界面
-                Intent intent = new Intent(((AppCompatActivity) getActivity()).getBaseContext(), FriendInfoActivity.class);
-                intent.putExtra("Object", vf.get(i));
-                //      intent.putExtra("BITMAP",vf.get(i).getHeadIcon());
-                startActivity(intent);
+                Intent intent = new Intent((getActivity()).getBaseContext(), FriendInfoActivity.class);
+                int friendID=vf.get(i).getUid();
+                intent.putExtra("friend_id",friendID);
+                String friendName=vf.get(i).getUserName();
+                intent.putExtra("name",friendName);
+                setFriendBitmap(i);
+                startActivityForResult(intent,2);
             }
         });
-        //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-        return rootView;
     }
 
 
-    private void initShowView(View rootView) {
-        /*
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        int position=getArguments().getInt(ARG_SECTION_NUMBER);
-        String showText="FriendManage index:"+String.valueOf(position);
-        textView.setText(showText);
-        */
-    }
-/*
-    private void initTab()
-    {
-        this.resetTab();
-        this.selectTab();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==2&&resultCode==1){
+            int friendId=data.getIntExtra("friend_id",0);
+            resetListData(friendId);
+        }
     }
 
-    private void selectTab()
-    {
-        this.icon=(ImageView)getActivity().findViewById(R.id.friend_manage_image_main);
-        this.icon.setSelected(true);
-        this.text=(TextView)getActivity().findViewById(R.id.friend_manage_text_main);
-        this.text.setSelected(true);
-        this.text.setTextColor(getResources().getColor(R.color.mainSelectedText));
+
+    private void resetListData(int friendId){
+        if(friendId==0)
+            return;
+        for (Friend friend:vf){
+            if(friend.getUid()==friendId){
+                vf.remove(friend);
+                break;
+            }
+        }
+        friendShowAdapter.refresh();
     }
 
-    private void resetTab()
-    {
-        ImageView chatManageI=(ImageView)getActivity().findViewById(R.id.chat_manage_image_main);
-        TextView chatManageT=(TextView)getActivity().findViewById(R.id.chat_manage_text_main);
-        chatManageT.setTextColor(getResources().getColor(R.color.mainNormalText));
-
-        ImageView personalInfoI=(ImageView)getActivity().findViewById(R.id.personal_info_image_main);
-        TextView personalInfoT=(TextView)getActivity().findViewById(R.id.personal_info_text_main);
-        personalInfoT.setTextColor(getResources().getColor(R.color.mainNormalText));
-    }
-    */
 
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -155,47 +154,16 @@ public class FriendManageFragment extends Fragment {
 
     public class FriendShowAdapter extends BaseAdapter {
         public int getCount() {
-            return 5;
+            return vf.size();
         }
 
         public Friend getItem(int position) {
-            String[]userName={"张三","李四","王五","小明","小红"};
-            Friend f = new Friend();
-            f.setUid(String.valueOf(position + 1));
-            f.setUserName(userName[position]);
-            f.setRelationLevel(0);
-//            f.setHeadIcon(BitmapFactory.decodeResource(getResources(), R.drawable.portrait_you));
-            f.setHeadIcon(((BitmapDrawable) getPortrait(position+1)).getBitmap());
-            f.setAge(18);
-            f.setSex("女");
-            f.setBirthday("7 月 25 日");
-            f.setTag("萌系 动漫 运动 游戏");
-            f.setAddr("浙江-杭州");
-            vf.add(f);
-            return f;
+            return vf.get(position);
         }
 
 
-        private Drawable getPortrait(int position) {
-            String pictureName = "portrait" + String.valueOf(position);
-            int picID = getPictureID(pictureName);
-            if (picID != 0) {
-                return ContextCompat.getDrawable(getContext(), picID);
-            }
-            return null;
-        }
-
-        public int getPictureID(String pictureName) {
-            Class drawable = R.drawable.class;
-            Field field;
-            try {
-                field = drawable.getField(pictureName);
-                int res_ID = field.getInt(field.getName());
-                return res_ID;
-            } catch (Exception e) {
-                return 0;
-            }
-
+        public void refresh(){
+            notifyDataSetChanged();
         }
 
         public View getView(int position, View ConvertVinullew, ViewGroup parent) {
@@ -206,7 +174,7 @@ public class FriendManageFragment extends Fragment {
             Friend f = getItem(position);
             img.setImageBitmap(f.getHeadIcon());
             nameText.setText(f.getUserName());
-            relationText.setText("亲密度:" + String.valueOf(f.getRelationLevel()));
+            relationText.setText("亲密度:0");
             return view;
         }
 
@@ -215,4 +183,43 @@ public class FriendManageFragment extends Fragment {
         }
     }
 
+    private void initListViewData(){
+        vf = new Vector<>();
+        getFriendInfoFromDB();
+    }
+
+
+    private void getFriendInfoFromDB() {
+        String[] columns = {"friend_id","name", "portrait"};
+        Cursor cursor = readDB.query("friend", columns, null, null, null, null, null);
+        //判断游标是否为空
+        if (cursor.moveToFirst())
+        {
+            do{
+                int id=cursor.getInt(0);
+                String name = cursor.getString(1);
+                byte[] portrait = cursor.getBlob(2);
+                Bitmap dBitmap=exchangeByteToBitmap(portrait);
+                Friend f = new Friend();
+                f.setUid(id);
+                f.setUserName(name);
+                f.setHeadIcon(dBitmap);
+                vf.add(f);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
+
+    private Bitmap exchangeByteToBitmap(byte[] blob){
+        Bitmap bmp = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+        return bmp;
+    }
+
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        readDB.close();
+    }
 }
