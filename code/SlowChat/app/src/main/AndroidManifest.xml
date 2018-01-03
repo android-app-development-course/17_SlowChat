@@ -42,11 +42,9 @@
 
             android:label="@string/title_activity_friend_info"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Login.Register"></activity>
-
+        <activity android:name=".Login.Register">
             android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_friend_info">
-        </activity>
+            android:label="@string/title_activity_friend_info"></activity>
         <activity
             android:name=".MakeFriendHall.AddFriendActivity"
             android:theme="@style/AppTheme.NoActionBar"
