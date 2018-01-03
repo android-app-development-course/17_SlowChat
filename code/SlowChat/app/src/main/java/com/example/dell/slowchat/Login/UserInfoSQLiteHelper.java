@@ -208,7 +208,7 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-//        values.put(COLUMN_USERINFO_USERID, user.getUserId());
+        values.put(COLUMN_USERINFO_USERID, user.getUserId());
         values.put(COLUMN_USERINFO_USERNAME, user.getUserName());
         values.put(COLUMN_USERINFO_USEREMAIL, user.getUserEmail());
         values.put(COLUMN_USERINFO_USERPASSWORD, user.getUserPassword());

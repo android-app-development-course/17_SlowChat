@@ -1,6 +1,7 @@
 package com.example.dell.slowchat.Login;
 
 import android.content.ContentValues;
+import android.graphics.drawable.Drawable;
 import android.util.JsonReader;
 
 import com.google.gson.Gson;
@@ -18,6 +19,8 @@ import java.util.List;
 
 public class JsonParse {
 
+
+    //解析注册和登录的json
     public int getRegisterResult(byte bytes[])
     {
         JsonReader jsonReader = new JsonReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
@@ -52,13 +55,61 @@ public class JsonParse {
         return 1;
     }
 
-    public static List<String> getInfo(String json)
+    //解析返回个人信息的json
+    public UserInfo getUserInfo(byte bytes[])
     {
-        //使用Gson库解析JSON数据
-        Gson gson = new Gson();
-        Type listType = new TypeToken<List<String>>(){}.getType();
-        //把获得的信息集合存到Infos中
-        List<String> Infos = gson.fromJson(json, listType);
-        return Infos;
+        JsonReader jsonReader = new JsonReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
+        UserInfo userInfo = new UserInfo();
+        try
+        {
+            jsonReader.beginObject();
+           while (jsonReader.hasNext())
+            {
+                String keyName = jsonReader.nextName();
+                if("id".equals(keyName))
+                {
+                    userInfo.setUserId(jsonReader.nextInt());
+                }
+                else if("email".equals(keyName))
+                {
+                    userInfo.setUserEmail(jsonReader.nextString());
+                }
+                else if("signature".equals(keyName)) {
+                    userInfo.setUserSignature(jsonReader.nextString());
+                }
+                else if("integral".equals(keyName))
+                {
+                    userInfo.setUserIntegral(jsonReader.nextInt());
+                }
+                else if("status".equals(keyName))
+                {
+                    userInfo.setUserState(jsonReader.nextInt());
+                }
+                else if("img".equals(keyName))
+                {
+                    userInfo.setUserImage(Drawable.createFromPath(jsonReader.nextString()));
+                }
+                else if("username".equals(keyName))
+                {
+                    userInfo.setUserName(jsonReader.nextString());
+                }
+
+            }
+            jsonReader.endObject();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try {
+                jsonReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return userInfo;
     }
 }
