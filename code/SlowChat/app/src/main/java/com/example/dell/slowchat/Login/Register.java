@@ -73,10 +73,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 {
                     return;
                 }
-//                if(userInfoSQLiteHelper.addUser(new UserInfo(userNameEditText.getText().toString(),
-//                        userEmailEditText.getText().toString(),
-//                        userPasswordEditText.getText().toString(),
-//                        null)))
                 registerOnline(userEmailEditText.getText().toString(),
                        userPasswordEditText.getText().toString(),
                        userNameEditText.getText().toString());
