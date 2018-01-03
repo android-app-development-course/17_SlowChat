@@ -145,4 +145,10 @@ public class UserInfo {
         return this.userState;
     }
 
+    public String toString()
+    {
+        return userId + "," + userName + "," + userEmail + "," + userPassword + "," + userImage+ ","
+                +userSignature + "," + userIntegral + "," + userStatus+ "," +userState;
+    }
+
 }

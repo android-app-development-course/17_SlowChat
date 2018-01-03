@@ -7,14 +7,12 @@ package com.example.dell.slowchat.PersonalInformation;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.sip.SipSession;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -120,8 +118,6 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
                 break;
         }
     }
-
-
 
 
     }

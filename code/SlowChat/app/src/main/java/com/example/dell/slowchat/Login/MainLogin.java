@@ -81,7 +81,7 @@ public class MainLogin extends AppCompatActivity {
 
         if (id == R.id.login_action_find_back_password)
         {
-            Toast.makeText(this, getString(R.string.login_toolbar_find_back_password), Toast.LENGTH_SHORT).show();;
+            Toast.makeText(this, getString(R.string.login_toolbar_find_back_password), Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -105,14 +105,31 @@ public class MainLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-//                if(login())
-                loginOnline();
+                login();
             }
         });
     }
+    //本地以及在线两种方式登录
+    private void login()
+    {
+        if(loginLocal())
+        {
+            sentUserEmail();
+            Intent intent = new Intent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setClass(MainLogin.this, MainActivity.class);
+            startActivity(intent);
+            Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
+        }
+        else
+        {
+            loginOnline();
+        }
+    }
 
-    //判断是否登录
-    private boolean login()
+    //连接本地数据库登录
+    private boolean loginLocal()
     {
         String tempUserEmail = usernameText.getText().toString();
         String tempUserPassword = passwordText.getText().toString();
@@ -121,16 +138,15 @@ public class MainLogin extends AppCompatActivity {
         switch (userInfoSQLiteHelper.checkPassword(tempUserEmail, tempUserPassword))
         {
             case 0:
-                Toast.makeText(this, "账号不存在", Toast.LENGTH_SHORT).show();
                 return false;
             case 2:
-                Toast.makeText(this, "密码错误", Toast.LENGTH_SHORT).show();
                 return false;
         }
         return true;
     }
 
 
+    //连接服务器端数据库登录
     private void loginOnline()
     {
         String path = "http://119.29.190.214/login/login.do";
