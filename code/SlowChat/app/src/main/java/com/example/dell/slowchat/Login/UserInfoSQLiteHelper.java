@@ -7,6 +7,12 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+
 /**
  * Created by you on 2018/1/1.
  */
@@ -229,6 +235,39 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
             db.close();
         }
         return true;
+    }
+
+    //把注册的用户更新到本地数据库中，方便查找
+    public void updateUser(String email, final String password)
+    {
+        String path = "http://119.29.190.214/user/getUserMessage.do";
+        //设置插入数据库的信息
+        final RequestParams requestParams = new RequestParams();
+        requestParams.put("email",email);
+        //创建AsyncHttpClient实例
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(5000);
+        client.get(path, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes)
+            {
+                String json = new String(bytes);
+                JsonParse jsonParse = new JsonParse();
+                System.out.println(json);
+                UserInfo userInfo = jsonParse.getUserInfo(bytes);
+                userInfo.setUserPassword(password);
+                if(addUser(userInfo))
+                {
+                    System.out.println("更新用户到数据库成功");
+                }
+                System.out.println("查询完成");
+            }
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable)
+            {
+                System.out.println("网络连接失败");
+            }
+        });
     }
 
 }

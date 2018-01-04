@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SlowChat.iml" filepath="$PROJECT_DIR$/SlowChat.iml" />
+      <module fileurl="file://D:\Users\11788\AndroidStudioProjects\17_SlowChat\code\SlowChat\SlowChat.iml" filepath="D:\Users\11788\AndroidStudioProjects\17_SlowChat\code\SlowChat\SlowChat.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\Users\11788\AndroidStudioProjects\17_SlowChat\code\SlowChat\app\app.iml" filepath="D:\Users\11788\AndroidStudioProjects\17_SlowChat\code\SlowChat\app\app.iml" />
     </modules>
   </component>
 </project>

@@ -162,6 +162,7 @@ public class MainLogin extends AppCompatActivity {
             {
                 JsonParse jsonParse = new JsonParse();
                 connectSuccess(jsonParse.getRegisterResult(bytes));
+
             }
 
             @Override
@@ -185,6 +186,7 @@ public class MainLogin extends AppCompatActivity {
                 intent.setClass(MainLogin.this, MainActivity.class);
                 startActivity(intent);
                 Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
+                userInfoSQLiteHelper.updateUser(usernameText.getText().toString(), passwordText.getText().toString());
                 break;
             case 1:
                 Toast.makeText(this, "账号不存在或密码错误", Toast.LENGTH_SHORT).show();

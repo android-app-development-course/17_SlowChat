@@ -167,6 +167,12 @@
     <string name="personal_info_detail_user__textView" translatable="false">经验值：</string>
     <string name="personal_info_detail_user_signature_textView" translatable="false">个性签名：</string>
 
+    <!--详细个人信息-->
+    <string name="personal_info_detail_user_name_title">用户名:</string>
+    <string name="personal_info_detail_user_email_title">邮箱:</string>
+    <string name="personal_info_detail_user_integral_title">经验值:</string>
+    <string name="personal_info_detail_user_signature_title">个性签名:</string>
+
 
 
 </resources>
