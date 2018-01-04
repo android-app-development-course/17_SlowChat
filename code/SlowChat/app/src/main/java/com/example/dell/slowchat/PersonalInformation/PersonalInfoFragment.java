@@ -8,6 +8,7 @@ package com.example.dell.slowchat.PersonalInformation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
     private TextView userName;
     private TextView userAccount;
     private TextView userIntegral;
+    private ConstraintLayout constraintLayout;
 
     private UserInfoSQLiteHelper userInfoSQLiteHelper;
 
@@ -88,11 +90,13 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
         userAccount = (TextView) rootView.findViewById(R.id.personal_info_user_account);
         userIntegral = (TextView) rootView.findViewById(R.id.personal_info_user_integral);
         userImage = (ImageView) rootView.findViewById(R.id.personal_info_user_image);
+        constraintLayout = (ConstraintLayout) rootView.findViewById(R.id.personal_info_constrain_layout);
     }
 
     private void initListener()
     {
         userImage.setOnClickListener(this);
+        constraintLayout.setOnClickListener(this);
     }
 
     private void initObject()
@@ -104,9 +108,9 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
     private void initPersonalInfo()
     {
         UserInfo userInfo = userInfoSQLiteHelper.getUserInfo(this.getUserEmail());
-        userName.setText(userInfo.getUserName());
-        userAccount.setText(userInfo.getUserEmail());
-//        userIntegral.setText(userInfo.getUserIntegral());
+        userName.setText(getString(R.string.personal_info_user_name_title)+userInfo.getUserName());
+        userAccount.setText(getString(R.string.personal_info_user_account_title)+userInfo.getUserEmail());
+        userIntegral.setText(getString(R.string.personal_info_user_integral_title)+userInfo.getUserIntegral());
     }
 
     public void onClick(View view)
@@ -116,6 +120,8 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
             case R.id.personal_info_user_image:
                 Toast.makeText(this.getContext(), "点击了头像", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.personal_info_constrain_layout:
+                Toast.makeText(this.getContext(), "点击了个人信息", Toast.LENGTH_SHORT).show();
         }
     }
 

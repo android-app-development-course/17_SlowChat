@@ -3,6 +3,7 @@
     package="com.example.dell.slowchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -33,24 +34,23 @@
             android:name=".ChatManage.ChatInterface"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowActionBar="false"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ChatManage.ChatManageSearch"
-            android:label="@string/title_activity_chat_manage_search"></activity>
+            android:label="@string/title_activity_chat_manage_search" />
         <activity
             android:name=".FriendManage.FriendInfoActivity"
-
             android:label="@string/title_activity_friend_info"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Login.Register">
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_friend_info"></activity>
-        <activity
-            android:name=".MakeFriendHall.AddFriendActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_friend_info">
         </activity>
-
+        <activity
+            android:name=".MakeFriendHall.AddFriendActivity"
+            android:label="@string/title_activity_friend_info"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".PersonalInformation.PersonalInformationDetail"></activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
 </manifest>
