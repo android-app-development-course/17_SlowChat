@@ -9,6 +9,7 @@
     <property name="connection.username">v</property>
     <property name="connection.password">008748</property>
     <property name="current_session_context_class">thread</property>
+    <property name="show_sql">true</property>
     <mapping class="com.chat.entity.Friend"/>
     <mapping resource="entity/Friend.hbm.xml"/>
     <mapping class="com.chat.entity.FriendApply"/>

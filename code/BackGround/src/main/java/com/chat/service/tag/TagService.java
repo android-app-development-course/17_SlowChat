@@ -15,10 +15,11 @@ public interface TagService {
     Set<Tag> getUserTags(String email);
 
     /**
-     * 给用户添加一个标签
+     * 更改用户的tags
      * @param email 用户邮箱
-     * @param tagName 标签名字
+     * @param tagsName 标签名字列表
      * @return 是否添加成功
      */
-    boolean addTag(String email,String tagName);
+    boolean setUserTags(String email, String[] tagsName);
+
 }

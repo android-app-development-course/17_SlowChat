@@ -2,10 +2,7 @@ package com.chat.aop;
 
 
 import com.chat.util.HibernateUtil;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,6 +23,12 @@ public class TransactionInterceptor {
 
     @After("pointcut()")
     public void commitTransaction(){
-        HibernateUtil.getCurrentSession().getTransaction().commit();
+//        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    @AfterThrowing(value = "pointcut()")
+    private void rollbackTransaction(){
+        System.out.println("rollback");
+        HibernateUtil.getCurrentSession().getTransaction().rollback();
     }
 }

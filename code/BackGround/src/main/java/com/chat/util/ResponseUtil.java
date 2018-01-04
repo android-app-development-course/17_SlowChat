@@ -27,7 +27,7 @@ public class ResponseUtil {
      * 获取成功操作的模板
      * @return 返回成功操作时的哈希表
      */
-    public static Map<String,Object> getsuccessResponse(){
+    public static Map<String,Object> getSuccessResponse(){
         return SpringUtil.getBean("successResponse",ResponseUtil.class).getMap();
     }
 
@@ -36,8 +36,8 @@ public class ResponseUtil {
      * @param msg 要发送的消息
      * @return 返回成功操作的哈希表
      */
-    public static Map<String,Object> getsuccessResponse(String msg){
-        Map<String,Object> map=getsuccessResponse();
+    public static Map<String,Object> getSuccessResponse(String msg){
+        Map<String,Object> map= getSuccessResponse();
         map.put("msg",msg);
         return map;
     }
@@ -48,8 +48,8 @@ public class ResponseUtil {
      * @param object 要注入的类
      * @return 返回注入这个类以后的哈希表的模板
      */
-    public static Map<String,Object> getsuccessResponse(String name,Object object){
-        Map<String,Object> map=getsuccessResponse();
+    public static Map<String,Object> getSuccessResponse(String name, Object object){
+        Map<String,Object> map= getSuccessResponse();
         map.put(name,object);
 
         return map;

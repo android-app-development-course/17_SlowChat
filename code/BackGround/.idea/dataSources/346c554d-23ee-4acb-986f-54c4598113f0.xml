@@ -1191,43 +1191,31 @@
       <ColNames>email</ColNames>
       <UnderlyingIndexName>email</UnderlyingIndexName>
     </key>
-    <column id="283" parent="234" name="id">
+    <column id="283" parent="234" name="user_id">
       <Position>1</Position>
-      <DataType>int(10) unsigned|0</DataType>
+      <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="284" parent="234" name="user_id">
+    <column id="284" parent="234" name="tag_id">
       <Position>2</Position>
       <DataType>smallint(5) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="285" parent="234" name="tag_id">
-      <Position>3</Position>
-      <DataType>smallint(5) unsigned|0</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="286" parent="234" name="user_id">
+    <index id="285" parent="234" name="user_id">
       <ColNames>user_id</ColNames>
     </index>
-    <index id="287" parent="234" name="tag_id">
+    <index id="286" parent="234" name="tag_id">
       <ColNames>tag_id</ColNames>
     </index>
-    <key id="288" parent="234" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <foreign-key id="289" parent="234" name="user_tag_ibfk_1">
+    <foreign-key id="287" parent="234" name="user_tag_ibfk_1">
       <ColNames>user_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="290" parent="234" name="user_tag_ibfk_2">
+    <foreign-key id="288" parent="234" name="user_tag_ibfk_2">
       <ColNames>tag_id</ColNames>
       <RefSchemaName>chat</RefSchemaName>
       <RefTableName>tag</RefTableName>

@@ -25,4 +25,8 @@ public interface UserService {
      * @return true代表签到成功，false代表签到失败
      */
     boolean signIn(String email);
+
+    /**
+     * 获取用户好友
+     */
 }

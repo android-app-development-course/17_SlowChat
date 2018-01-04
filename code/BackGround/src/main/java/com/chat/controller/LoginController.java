@@ -44,7 +44,7 @@ public class LoginController {
         User user= userDao.getUserByEmail(email);
         loginService.addCookie(request,response,user);
 
-        return ResponseUtil.getsuccessResponse("登录成功！");
+        return ResponseUtil.getSuccessResponse("登录成功！");
     }
 
     /**
@@ -72,6 +72,6 @@ public class LoginController {
         //添加到user
         registerService.addUser(email,pwd,username);
 
-        return ResponseUtil.getsuccessResponse("注册成功");
+        return ResponseUtil.getSuccessResponse("注册成功");
     }
 }

@@ -1,17 +1,21 @@
 package user;
 
+import com.chat.dao.TagDao;
 import com.chat.dao.UserDao;
+import com.chat.entity.Tag;
 import com.chat.entity.User;
 import com.chat.util.HibernateUtil;
 import com.chat.util.SpringUtil;
 
 public class UserDaoTest {
     private static UserDao userDao=SpringUtil.getBean(UserDao.class);
+    private static TagDao tagDao=SpringUtil.getBean(TagDao.class);
 
     public static void main(String[] args) {
         HibernateUtil.getCurrentSession().beginTransaction();
 
-        getUserByEmail();
+        System.out.println(tagDao.getTag("吃西瓜"));
+        System.out.println(tagDao.getTag("吃篮球"));
 
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
@@ -44,6 +48,22 @@ public class UserDaoTest {
     private static void updataUser(){
         User user=userDao.getUser("14");
         user.setEmail("25310@pp.com");
+        userDao.update(user);
+    }
+
+    //更新tags
+    private static void setTags(){
+        User user=userDao.getUserByEmail("729164860@qq.com");
+        Tag tag=SpringUtil.getBean(Tag.class);
+        tag.setName("柔力球");
+        HibernateUtil.getCurrentSession().save(tag);
+        HibernateUtil.getCurrentSession().flush();
+
+        user.getTags().add(tag);
+        for(Tag tag1:user.getTags()){
+            System.out.println(tag1.getName());
+        }
+
         userDao.update(user);
     }
 }
