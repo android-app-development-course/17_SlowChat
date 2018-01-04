@@ -8,5 +8,9 @@
         <id name="id">
             <column name="id" sql-type="int(10) unsigned"/>
         </id>
+
+        <many-to-one name="user" class="com.chat.entity.User">
+            <column name="target_id"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

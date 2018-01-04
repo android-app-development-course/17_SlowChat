@@ -2,6 +2,9 @@ package com.chat.dao;
 
 import com.chat.entity.*;
 
+import java.util.List;
+import java.util.Set;
+
 public interface UserDao {
     /**
      * 添加用户
@@ -22,6 +25,13 @@ public interface UserDao {
      * @return 返回查找到的实体，若找不到返回null
      */
     User getUser(String id);
+
+    /**
+     * 获取去除敏感信息后游离状态的user
+     * @param email 用户邮箱
+     * @return 返回去除敏感信息后的user
+     */
+    User getBriefUserByEmail(String email);
 
     /**
      * 更新用户

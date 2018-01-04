@@ -1,15 +1,13 @@
 package com.chat.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Friend {
     private int id;
     private short sendCount;
     private int feeling;
+    private User targetUser;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -39,6 +37,15 @@ public class Friend {
 
     public void setFeeling(int feeling) {
         this.feeling = feeling;
+    }
+
+    @ManyToOne
+    public User getTargetUser() {
+        return targetUser;
+    }
+
+    public void setTargetUser(User targetUser) {
+        this.targetUser = targetUser;
     }
 
     @Override

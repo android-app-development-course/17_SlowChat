@@ -29,5 +29,37 @@
         <property name="certificate">
             <column name="certificate" sql-type="varchar(60)" length="60"/>
         </property>
+        <property name="username">
+            <column name="username" sql-type="varchat(60)" length="60" default="未命名"/>
+        </property>
+
+        <set name="friends" table="friend" cascade="all">
+            <key>
+                <column name="source_id"/>
+            </key>
+            <one-to-many class="com.chat.entity.Friend"/>
+        </set>
+
+        <set name="tags" table="user_tag">
+            <key>
+                <column name="user_id"/>
+            </key>
+            <many-to-many class="com.chat.entity.Tag" column="tag_id"/>
+        </set>
+
+        <set name="friendApplies" table="friend_apply" cascade="all">
+            <key>
+                <column name="source_id"/>
+            </key>
+            <one-to-many class="com.chat.entity.FriendApply"/>
+        </set>
+
+        <set name="messages" table="message" cascade="all">
+            <key>
+                <column name="source_id"/>
+            </key>
+            <one-to-many class="com.chat.entity.Message"/>
+        </set>
+
     </class>
 </hibernate-mapping>

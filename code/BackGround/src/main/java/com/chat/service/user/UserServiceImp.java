@@ -11,21 +11,27 @@ public class UserServiceImp implements UserService{
     @Autowired
     private UserDao userDao;
 
-    public User getUser(String email) {
-        User user=userDao.getUserByEmail(email);
+    public User getUserMessage(String email) {
+        User user=userDao.getBriefUserByEmail(email);
+
         if (user==null){
             return null;
         }
-        HibernateUtil.getCurrentSession().delete(user);
-        user.setPwd(null);
+
         return user;
     }
 
-    public boolean signIn(User user) {
+    public boolean signIn(String email) {
+        User user=userDao.getUserByEmail(email);
+        if(user==null){
+            return false;
+        }
+
         if(user.getStatus()!=0){
             return false;
         }
 
+        //把签到状态设置为1且积分+1
         user.setStatus(new Byte("1"));
         user.setIntegral(user.getIntegral()+1);
         userDao.update(user);
@@ -33,7 +39,21 @@ public class UserServiceImp implements UserService{
         return true;
     }
 
-    public void updataUser(User user) {
-        userDao.update(user);
+    public boolean setUserMessage(String username, String signature, String email) {
+        User user=userDao.getUserByEmail(email);
+
+        if (user==null){
+            return false;
+        }
+
+        if(signature!=null){
+            user.setSignature(signature);
+        }
+
+        if (username!=null){
+            user.setUsername(username);
+        }
+
+        return true;
     }
 }

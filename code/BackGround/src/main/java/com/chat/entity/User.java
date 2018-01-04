@@ -1,9 +1,8 @@
 package com.chat.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -15,6 +14,11 @@ public class User {
     private byte status;
     private String img;
     private String certificate;
+    private String username;
+    private Set<Friend> friends;
+    private Set<FriendApply> friendApplies;
+    private Set<Tag> tags;
+    private Set<Message> messages;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -94,6 +98,57 @@ public class User {
 
     public void setCertificate(String certificate) {
         this.certificate = certificate;
+    }
+
+    @Basic
+    @Column(name = "username",nullable = false,length = 60)
+    public String getUsername() {
+        return username;
+    }
+
+    @OneToMany
+    public Set<FriendApply> getFriendApplies() {
+        return friendApplies;
+    }
+
+    public void setFriendApplies(Set<FriendApply> friendApplies) {
+        this.friendApplies = friendApplies;
+    }
+
+    @OneToMany
+    public Set<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Set<Message> messages) {
+        this.messages = messages;
+    }
+
+    @ManyToMany
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @OneToMany
+    public Set<Friend> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<Friend> friends) {
+        this.friends = friends;
     }
 
     @Override

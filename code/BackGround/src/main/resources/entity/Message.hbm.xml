@@ -17,5 +17,9 @@
         <property name="time">
             <column name="time" sql-type="time"/>
         </property>
+
+        <many-to-one name="user" class="com.chat.entity.User">
+            <column name="target_id"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

@@ -1,5 +1,6 @@
 package com.chat.dao;
 
+import com.chat.entity.Tag;
 import com.chat.entity.User;
 import com.chat.util.HibernateUtil;
 import org.hibernate.Session;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class UserDaoImpl implements UserDao{
@@ -35,12 +37,22 @@ public class UserDaoImpl implements UserDao{
                 "from User where email=?",User.class);
         query.setParameter(0,email);
 
-        List<User> list=query.list();
+        if(query.list().size()==0) return null;
 
-        if(list.size()==0){
-            return null;
-        }
+        return query.getSingleResult();
+    }
 
-        return list.get(0);
+    public User getBriefUserByEmail(String email) {
+        User user=getUserByEmail(email);
+
+        HibernateUtil.getCurrentSession().evict(user);
+        user.setPwd(null);
+        user.setCertificate(null);
+        user.setTags(null);
+        user.setFriends(null);
+        user.setMessages(null);
+        user.setFriendApplies(null);
+
+        return user;
     }
 }
