@@ -135,13 +135,20 @@ public class ChatListFragment extends Fragment
 
     private List<ChatRecord> getDataFromServer(){
         List<ChatRecord> chatRecords =new ArrayList<>();
-//        for (int i=1;i<5;i++) {
-//            ChatRecord record = new ChatRecord(i, "2017-12-30", "就你会吹比");
-//            chatRecords.add(record);
-//            record = new ChatRecord(i, "2017-12-30", "不吹会死啊");
-//            chatRecords.add(record);
-//        }
+        String currentDate=getCurrentDate();
+        for (int i=1;i<5;i++) {
+            ChatRecord record = new ChatRecord(i, currentDate, "就你会吹比");
+            chatRecords.add(record);
+            record = new ChatRecord(i, currentDate, "不吹会死啊");
+            chatRecords.add(record);
+        }
         return chatRecords;
+    }
+
+
+
+    private String getCurrentDate(){
+        return (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
     }
 
 
