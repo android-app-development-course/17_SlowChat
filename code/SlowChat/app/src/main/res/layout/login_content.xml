@@ -50,7 +50,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:ems="10"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:hint="@string/login_user_name_hint"/>
             </LinearLayout>
 
             <LinearLayout

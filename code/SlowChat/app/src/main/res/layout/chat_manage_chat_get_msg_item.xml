@@ -7,7 +7,7 @@
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <com.example.dell.slowchat.FriendManage.CircleImageView
+    <com.example.dell.slowchat.ChatManage.CircleImageView
         android:id="@+id/chat_manage_chat_portrait"
         android:layout_width="48dp"
         android:layout_height="48dp"

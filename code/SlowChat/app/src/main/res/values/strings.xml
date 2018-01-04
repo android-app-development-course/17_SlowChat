@@ -26,7 +26,8 @@
 
     <!--登录-->
     <string name="login_tittle" translatable="false">登录窗口</string>
-    <string name="login_user_name" translatable="false">用户名：</string>
+    <string name="login_user_name" translatable="false">账号：</string>
+    <string name="login_user_name_hint" translatable="false">请输入邮箱</string>
     <string name="login_password" translatable="false">密码：</string>
     <string name="login_login" translatable="false">登录</string>
     <string name="login_exit" translatable="false">退出</string>
@@ -37,6 +38,25 @@
     <string name="login_dialog_sure" translatable="false">确定</string>
     <string name="login_dialog_cancel" translatable="false">取消</string>
     <string name="login_dialog_exit" translatable="false">你确定要离开吗？</string>
+
+    <string name="login_toolbar_setting" translatable="false">设置</string>
+    <string name="login_toolbar_register" translatable="false">注册</string>
+    <string name="login_toolbar_find_back_password" translatable="false">找回密码</string>
+
+    <!--注册页面-->
+    <string name="register_user_name" translatable="false">用户名:</string>
+    <string name="register_user_name_hint" translatable="false">请输入用户名</string>
+
+    <string name="register_account" translatable="false">账号:</string>
+    <string name="register_account_hint" translatable="false">邮箱</string>
+
+    <string name="register_password" translatable="false">密码:</string>
+    <string name="register_password_hint" translatable="false">请输入密码</string>
+
+    <string name="register_confirm_password" translatable="false">确认密码:</string>
+    <string name="register_confirm_password_hint" translatable="false">请重新输入密码</string>
+
+    <string name="register_btn" translatable="false">注册</string>
 
 
     <!--交友大厅-->
@@ -134,9 +154,19 @@
     <string name="title_activity_chat_manage_search">ChatManageSearch</string>
 
     <string name="title_activity_friend_info">FriendInfoActivity</string>
+    <string name="title_activity_add_friend">AddFriendActivity</string>
 
 
     <!--个人信息-->
+    <string name="personal_info_user_name_title">用户名:</string>
+    <string name="personal_info_user_account_title">账号:</string>
+    <string name="personal_info_user_integral_title">经验值:</string>
+
+    <string name="personal_info_detail_user_name_textView" translatable="false">用户名：</string>
+    <string name="personal_info_detail_user_email_textView" translatable="false">账号：</string>
+    <string name="personal_info_detail_user__textView" translatable="false">经验值：</string>
+    <string name="personal_info_detail_user_signature_textView" translatable="false">个性签名：</string>
+
 
 
 </resources>
