@@ -38,7 +38,7 @@
                     android:id="@+id/login_username_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:text="@string/login_user_name"
                     android:textAlignment="center"
                     android:textColor="@color/loginNormalText"
@@ -64,7 +64,7 @@
                     android:id="@+id/login_password_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:text="@string/login_password"
                     android:textAlignment="center"
                     android:textColor="@color/loginNormalText"
@@ -76,7 +76,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:ems="10"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:hint="@string/login_user_password_hint"/>
 
             </LinearLayout>
 
@@ -96,7 +97,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:background="@drawable/login_rounded_button"
                     android:text="@string/login_login"
                     android:textColor="@color/loginNormalText"
@@ -112,7 +113,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:background="@drawable/login_rounded_button"
                     android:text="@string/login_exit"
                     android:textColor="@color/loginNormalText"

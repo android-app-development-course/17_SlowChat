@@ -41,6 +41,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:text="@string/personal_info_detail_user_name_title"
+                android:textSize="18sp"
                 android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -48,12 +49,14 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/personal_info_detail_user_name"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginStart="4dp"
                 android:text="TextView"
+                android:textSize="18sp"
+                android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
@@ -71,6 +74,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:text="@string/personal_info_detail_user_email_title"
+                android:textSize="18sp"
                 android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
@@ -78,10 +82,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/personal_info_detail_user_email"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:text="TextView"
+                android:textSize="18sp"
+                android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -105,6 +111,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:text="@string/personal_info_detail_user_integral_title"
+                android:textSize="18sp"
                 android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
@@ -112,10 +119,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/personal_info_detail_user_integral"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:text="TextView"
+                android:textSize="18sp"
+                android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
@@ -141,13 +150,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:text="@string/personal_info_detail_user_signature_title"
+                android:textSize="18sp"
                 android:gravity="center_vertical"/>
 
             <TextView
-                android:id="@+id/personal_information_detail_user_signature_textView"
+                android:id="@+id/personal_information_detail_user_signature"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="TextView" />
+                android:text="@string/personal_info_detail_user_signature_default"
+                android:textSize="18sp"
+                android:gravity="center_vertical"/>
 
         </LinearLayout>
 
