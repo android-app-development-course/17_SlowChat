@@ -99,7 +99,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 String json = new String(bytes);
                 System.out.println(json);
                 connectSuccess(jsonParse.getRegisterResult(bytes));
-                updateUser(userEmailEditText.getText().toString());
+
             }
             @Override
             public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable)
@@ -117,6 +117,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         switch (result)
         {
             case 0:
+                userInfoSQLiteHelper.updateUser(userEmailEditText.getText().toString(), userPasswordEditText.getText().toString());
                 Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
                 finish();
                 break;
@@ -132,40 +133,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         Toast.makeText(this, "网络连接失败", Toast.LENGTH_SHORT).show();
     }
 
-
-    //把注册的用户更新到本地数据库中，方便查找
-    private void updateUser(String email)
-    {
-        final UserInfoSQLiteHelper userInfoSQLiteHelper = new UserInfoSQLiteHelper(this);
-        String path = "http://119.29.190.214/user/getUserMessage.do";
-        //设置插入数据库的信息
-        final RequestParams requestParams = new RequestParams();
-        requestParams.put("email",email);
-        //创建AsyncHttpClient实例
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.setTimeout(5000);
-        client.get(path, requestParams, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int i, Header[] headers, byte[] bytes)
-            {
-                String json = new String(bytes);
-                JsonParse jsonParse = new JsonParse();
-                System.out.println(json);
-                UserInfo userInfo = jsonParse.getUserInfo(bytes);
-                userInfo.setUserPassword(userPasswordEditText.getText().toString());
-                if(userInfoSQLiteHelper.addUser(userInfo))
-                {
-                    System.out.println("更新用户到数据库成功");
-                }
-                System.out.println("查询完成");
-            }
-            @Override
-            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable)
-            {
-                System.out.println("网络连接失败");
-            }
-        });
-    }
 
     //判断输入的注册信息是否正确
     private int checkUserInfo()

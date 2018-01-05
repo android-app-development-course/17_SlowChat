@@ -7,6 +7,12 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+
 /**
  * Created by you on 2018/1/1.
  */
@@ -171,7 +177,7 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         UserInfo userInfo = new UserInfo();
         // array of columns to fetch
-        String[] columns = {COLUMN_USERINFO_USERNAME, COLUMN_USERINFO_USEREMAIL, COLUMN_USERINFO_USERINTEGRAL};
+        String[] columns = {COLUMN_USERINFO_USERNAME, COLUMN_USERINFO_USEREMAIL, COLUMN_USERINFO_USERINTEGRAL, COLUMN_USERINFO_USERSIGNATURE};
         // selection criteria
         String selection = COLUMN_USERINFO_USEREMAIL + " = ?";
         // selection argument
@@ -193,6 +199,7 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
         userInfo.setUserName(cursor.getString(0));
         userInfo.setUserEmail(cursor.getString(1));
         userInfo.setUserIntegral(cursor.getInt(2));
+        userInfo.setUserSignature(cursor.getString(3));
         cursor.close();
         db.close();
         return  userInfo;
@@ -231,4 +238,115 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    //把注册的用户更新到本地数据库中，方便查找
+    public void updateUser(String email, final String password)
+    {
+        String path = "http://119.29.190.214/user/getUserMessage.do";
+        //设置插入数据库的信息
+        final RequestParams requestParams = new RequestParams();
+        requestParams.put("email",email);
+        //创建AsyncHttpClient实例
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(5000);
+        client.get(path, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes)
+            {
+                String json = new String(bytes);
+                JsonParse jsonParse = new JsonParse();
+                System.out.println(json);
+                UserInfo userInfo = jsonParse.getUserInfo(bytes);
+                userInfo.setUserPassword(password);
+                if(addUser(userInfo))
+                {
+                    System.out.println("更新用户到数据库成功");
+                }
+                System.out.println("查询完成");
+            }
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable)
+            {
+                System.out.println("网络连接失败");
+            }
+        });
+    }
+
+    public boolean updateUserInfo(UserInfo userInfo)
+    {
+        if(updateUserInfoLocal(userInfo))
+        {
+            System.out.println("更新用户信息到本地数据库成功");
+            updateUserInfoOnline(userInfo);
+            return true;
+        }
+        else
+        {
+            System.out.println("更新用户信息到本地数据库失败");
+            return false;
+        }
+    }
+
+    //更新本地数据库中的用户的信息
+    public boolean updateUserInfoLocal(UserInfo userInfo)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try
+        {
+            String sql = "UPDATE " + TABLE_NAME + " SET " + COLUMN_USERINFO_USERNAME + " = ?, "
+                    + COLUMN_USERINFO_USEREMAIL + " = ?, "
+                    + COLUMN_USERINFO_USERINTEGRAL + " = ?, "
+                    + COLUMN_USERINFO_USERSIGNATURE + " = ? WHERE "
+                    + COLUMN_USERINFO_USEREMAIL + " = ?";
+            db.execSQL(sql, new Object[]{userInfo.getUserName(),
+                    userInfo.getUserEmail(),
+                    userInfo.getUserIntegral(),
+                    userInfo.getUserSignature(),
+                    userInfo.getUserEmail()});
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+        finally
+        {
+            db.close();
+        }
+        return true;
+    }
+
+    //更新服务器端数据库中的用户信息
+    public void updateUserInfoOnline(UserInfo userInfo)
+    {
+        String path = "http://119.29.190.214/user/setUserMessage.do";
+        //设置插入数据库的信息
+        final RequestParams requestParams = new RequestParams();
+        requestParams.put("name", userInfo.getUserName());
+        requestParams.put("signature", userInfo.getUserSignature());
+        requestParams.put("email", userInfo.getUserEmail());
+        //创建AsyncHttpClient实例
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(5000);
+        client.get(path, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes)
+            {
+                String json = new String(bytes);
+                JsonParse jsonParse = new JsonParse();
+                System.out.println(json);
+                if(jsonParse.getRegisterResult(bytes) == 0)
+                {
+                    System.out.println("更新用户到服务器端数据库成功");
+                }
+                else
+                {
+                    System.out.println("更新用户到服务器端数据库成功");
+                }
+            }
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable)
+            {
+                System.out.println("网络连接失败");
+            }
+        });
+    }
 }

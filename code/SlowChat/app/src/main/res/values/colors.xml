@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#db6039</color>
+    <color name="colorPrimary">#67c199</color>
     <color name="colorPrimaryDark">#1b1817</color>
     <color name="colorAccent">#FF4081</color>
 
@@ -19,10 +19,10 @@
 
     <!--登录-->
     <color name="loginNormalText">#050505</color>
-    <color name="loginButton">#f2ab8d</color>
+    <color name="loginButton">#a8e9c4</color>
 
     <!--注册-->
-    <color name="registerButton">#e68a6d</color>
+    <color name="registerButton">#91ebb7</color>
     <color name="background">#FFFFFF</color>
 
     <!--交友大厅-->

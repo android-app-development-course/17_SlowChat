@@ -49,8 +49,11 @@
         <activity
             android:name=".MakeFriendHall.AddFriendActivity"
             android:label="@string/title_activity_friend_info"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".PersonalInformation.PersonalInformationDetail"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".PersonalInformation.PersonalInformationDetail" />
+        <activity
+            android:name=".PersonalInformation.PersonalInformationUpdateUserName"
+            android:label="@string/title_activity_personal_information_update"></activity>
     </application>
 
 </manifest>

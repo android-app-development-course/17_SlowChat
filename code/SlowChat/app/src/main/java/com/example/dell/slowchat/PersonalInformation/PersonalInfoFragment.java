@@ -6,6 +6,7 @@ package com.example.dell.slowchat.PersonalInformation;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -58,23 +59,13 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.personal_info_main, container, false);
-//        this.initShowText(rootView);
 
         this.initView(rootView);
         this.initObject();
         this.initListener();
         this.initPersonalInfo();
-//        textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
         return rootView;
-    }
-
-    private void initShowText(View rootView)
-    {
-//        TextView textView = (TextView) rootView.findViewById(R.id.show_person_info);
-        int position = getArguments().getInt(ARG_SECTION_NUMBER);
-        String showText = "PersonInf index:" + String.valueOf(position);
-//        textView.setText(showText);
     }
 
     private String getUserEmail()
@@ -121,7 +112,10 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(this.getContext(), "点击了头像", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.personal_info_constrain_layout:
-                Toast.makeText(this.getContext(), "点击了个人信息", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PersonalInfoFragment.this.getContext(), PersonalInformationDetail.class);
+                intent.putExtra("email", this.getUserEmail());
+                startActivity(intent);
+//                Toast.makeText(this.getContext(), "点击了个人信息", Toast.LENGTH_SHORT).show();
         }
     }
 
