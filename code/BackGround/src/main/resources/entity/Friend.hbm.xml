@@ -7,6 +7,7 @@
     <class name="com.chat.entity.Friend" table="friend" schema="chat">
         <id name="id">
             <column name="id" sql-type="int(10) unsigned"/>
+            <generator class="identity"/>
         </id>
         <property name="sendCount">
             <column name="send_count" sql-type="smallint(5) unsigned"/>

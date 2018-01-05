@@ -14,8 +14,15 @@ public class UserDaoTest {
     public static void main(String[] args) {
         HibernateUtil.getCurrentSession().beginTransaction();
 
-        System.out.println(tagDao.getTag("吃西瓜"));
-        System.out.println(tagDao.getTag("吃篮球"));
+        Tag tag=SpringUtil.getBean(Tag.class);
+        tag.setName("开摩托");
+        tagDao.addTag(tag);
+
+        System.out.println(tag.getId());
+
+        User user=userDao.getUserByEmail("729164860@qq.com");
+        user.getTags().clear();
+        user.getTags().add(tag);
 
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }

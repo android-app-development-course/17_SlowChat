@@ -7,6 +7,7 @@
     <class name="com.chat.entity.User" table="user" schema="chat">
         <id name="id">
             <column name="id" sql-type="smallint(5) unsigned"/>
+            <generator class="identity"/>
         </id>
         <property name="email">
             <column name="email" sql-type="varchar(60)" unique="true" length="60"/>
