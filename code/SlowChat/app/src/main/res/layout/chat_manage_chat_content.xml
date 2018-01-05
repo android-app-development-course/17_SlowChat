@@ -33,7 +33,7 @@
             android:background="@drawable/chat_manage_bg_et"
             android:ems="10"
             android:inputType="text"
-            android:textColor="@color/loginNormalText">
+            android:textColor="@color/NormalText">
 
             <requestFocus />
         </EditText>

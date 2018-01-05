@@ -18,8 +18,8 @@
 
 
     <!--登录-->
-    <color name="loginNormalText">#050505</color>
-    <color name="loginButton">#a8e9c4</color>
+    <color name="NormalText">#050505</color>
+    <color name="Button">#a8e9c4</color>
 
     <!--注册-->
     <color name="registerButton">#91ebb7</color>

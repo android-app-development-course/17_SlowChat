@@ -26,13 +26,13 @@ public class PersonalInformationDetail extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_information_detail);
 
-        InitObject();
-        InitView();
-        InitListener();
-        InitTextView();
+        initObject();
+        initView();
+        initListener();
+        initTextView();
     }
 
-    private void InitObject()
+    private void initObject()
     {
         Intent intent = getIntent();
         userEmail = intent.getStringExtra("email");
@@ -41,7 +41,7 @@ public class PersonalInformationDetail extends AppCompatActivity implements View
         userInfo = userInfoSQLiteHelper.getUserInfo(userEmail);
     }
 
-    private void InitView()
+    private void initView()
     {
         userNameTextView = (TextView) findViewById(R.id.personal_info_detail_user_name);
         userEmailTextView = (TextView) findViewById(R.id.personal_info_detail_user_email);
@@ -49,7 +49,7 @@ public class PersonalInformationDetail extends AppCompatActivity implements View
         userSignatureTextView = (TextView) findViewById(R.id.personal_information_detail_user_signature);
     }
 
-    private void InitListener()
+    private void initListener()
     {
         userNameTextView.setOnClickListener(this);
         userEmailTextView.setOnClickListener(this);
@@ -58,7 +58,7 @@ public class PersonalInformationDetail extends AppCompatActivity implements View
 
     }
 
-    private void InitTextView()
+    private void initTextView()
     {
         userNameTextView.setText(userInfo.getUserName());
         userEmailTextView.setText(userInfo.getUserEmail());
@@ -78,30 +78,60 @@ public class PersonalInformationDetail extends AppCompatActivity implements View
                 break;
             case R.id.personal_info_detail_user_email:
                 Toast.makeText(this, "邮箱不可更改", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.personal_information_detail_user_signature:
+                editSignature();
+                break;
 
         }
+    }
+
+    private void editSignature()
+    {
+        Intent intent = new Intent(PersonalInformationDetail.this, PersonalInformationUpdateUserSignature.class);
+        intent.putExtra("userSignature", userSignatureTextView.getText().toString());
+        startActivityForResult(intent, 2);
     }
 
     //其他Activity返回的数据处理
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1)
+        switch (requestCode)
         {
-            if(resultCode == 1)
-            {
-                userInfo.setUserName(data.getStringExtra("userName"));
-                if(userInfoSQLiteHelper.updateUserInfo(userInfo))
+            case 1:
+                if(resultCode == 1)
                 {
-                    InitTextView();
+                    userInfo.setUserName(data.getStringExtra("userName"));
+                    if(userInfoSQLiteHelper.updateUserInfo(userInfo))
+                    {
+                        initTextView();
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "修改用户名失败", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
-                else
+                break;
+            case 2:
+                if(resultCode == 2)
                 {
-                    Toast.makeText(this, "更新用户信息失败", Toast.LENGTH_SHORT).show();
+                    userInfo.setUserSignature(data.getStringExtra("userSignature"));
+                    if(userInfoSQLiteHelper.updateUserInfo(userInfo))
+                    {
+                        initTextView();
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "修改个性签名失败", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
-            }
         }
+
+
+
     }
 }
 
