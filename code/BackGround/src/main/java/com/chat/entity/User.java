@@ -1,7 +1,6 @@
 package com.chat.entity;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,8 +14,8 @@ public class User {
     private String img;
     private String certificate;
     private String username;
-    private Set<Friend> friends;
-    private Set<FriendApply> friendApplies;
+    private Set<User> friends;
+    private Set<User> acceptFriends;
     private Set<Tag> tags;
     private Set<Message> messages;
 
@@ -107,15 +106,6 @@ public class User {
     }
 
     @OneToMany
-    public Set<FriendApply> getFriendApplies() {
-        return friendApplies;
-    }
-
-    public void setFriendApplies(Set<FriendApply> friendApplies) {
-        this.friendApplies = friendApplies;
-    }
-
-    @OneToMany
     public Set<Message> getMessages() {
         return messages;
     }
@@ -142,13 +132,22 @@ public class User {
         this.username = username;
     }
 
-    @OneToMany
-    public Set<Friend> getFriends() {
+    @ManyToMany
+    public Set<User> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<Friend> friends) {
+    public void setFriends(Set<User> friends) {
         this.friends = friends;
+    }
+
+    @ManyToMany
+    public Set<User> getAcceptFriends() {
+        return acceptFriends;
+    }
+
+    public void setAcceptFriends(Set<User> acceptFriends) {
+        this.acceptFriends = acceptFriends;
     }
 
     @Override

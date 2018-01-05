@@ -1,17 +1,12 @@
 package com.chat.dao;
 
-import com.chat.entity.Tag;
 import com.chat.entity.User;
 import com.chat.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Set;
 
 @Repository
 public class UserDaoImpl implements UserDao{
@@ -51,7 +46,7 @@ public class UserDaoImpl implements UserDao{
         user.setTags(null);
         user.setFriends(null);
         user.setMessages(null);
-        user.setFriendApplies(null);
+        user.setAcceptFriends(null);
 
         return user;
     }

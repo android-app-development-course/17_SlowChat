@@ -12,8 +12,6 @@
     <property name="show_sql">true</property>
     <mapping class="com.chat.entity.Friend"/>
     <mapping resource="entity/Friend.hbm.xml"/>
-    <mapping class="com.chat.entity.FriendApply"/>
-    <mapping resource="entity/FriendApply.hbm.xml"/>
     <mapping resource="entity/Message.hbm.xml"/>
     <mapping class="com.chat.entity.Message"/>
     <mapping class="com.chat.entity.Tag"/>
