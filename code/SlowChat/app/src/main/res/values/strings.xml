@@ -40,6 +40,10 @@
     <string name="login_dialog_cancel" translatable="false">取消</string>
     <string name="login_dialog_exit" translatable="false">你确定要离开吗？</string>
 
+    <string name="login_check_box_remember_password">记住密码</string>
+    <string name="login_check_box_auto_login">自动登录</string>
+
+    <!--登录-菜单栏-->
     <string name="login_toolbar_setting" translatable="false">设置</string>
     <string name="login_toolbar_register" translatable="false">注册</string>
     <string name="login_toolbar_find_back_password" translatable="false">找回密码</string>
@@ -49,7 +53,7 @@
     <string name="register_user_name_hint" translatable="false">请输入用户名</string>
 
     <string name="register_account" translatable="false">账号:</string>
-    <string name="register_account_hint" translatable="false">邮箱</string>
+    <string name="register_account_hint" translatable="false">请输入邮箱账号</string>
 
     <string name="register_password" translatable="false">密码:</string>
     <string name="register_password_hint" translatable="false">请输入密码</string>

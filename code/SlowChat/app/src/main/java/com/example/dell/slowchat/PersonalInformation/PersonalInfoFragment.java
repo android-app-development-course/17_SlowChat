@@ -63,9 +63,15 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
         this.initView(rootView);
         this.initObject();
         this.initListener();
-        this.initPersonalInfo();
+
 
         return rootView;
+    }
+
+    public void onStart()
+    {
+        super.onStart();
+        this.initPersonalInfo();
     }
 
     private String getUserEmail()

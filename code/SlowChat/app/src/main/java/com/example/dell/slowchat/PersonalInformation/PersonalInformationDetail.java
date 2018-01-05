@@ -75,9 +75,9 @@ public class PersonalInformationDetail extends AppCompatActivity implements View
                 Intent intent = new Intent(PersonalInformationDetail.this, PersonalInformationUpdateUserName.class);
                 intent.putExtra("userName", userNameTextView.getText().toString());
                 startActivityForResult(intent, 1);
-                Toast.makeText(this, "点击了用户名", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.personal_info_detail_user_email:
-                Toast.makeText(this, "点击了邮箱", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "邮箱不可更改", Toast.LENGTH_SHORT).show();
 
         }
     }
