@@ -23,10 +23,7 @@ public class TagDaoImp implements TagDao{
     }
 
     public void addTag(Tag tag) {
-        Session session=HibernateUtil.openSession();
-        session.beginTransaction();
+        Session session=HibernateUtil.getCurrentSession();
         session.save(tag);
-        session.getTransaction().commit();
-        session.close();
     }
 }

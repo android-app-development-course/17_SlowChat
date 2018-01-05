@@ -22,27 +22,23 @@ public class TagServiceImp implements TagService{
     TagDao tagDao;
 
     public boolean setUserTags(String email, String[] tagsName) {
+        //判断user是否为空并清楚tag集
         User user=userDao.getUserByEmail(email);
         if (user==null) return false;
         Set<Tag> tags=user.getTags();
         tags.clear();
 
-        System.out.println(tags.size());
-
         for(String tagName:tagsName){
             Tag tag=tagDao.getTag(tagName);
-            System.out.println(tagName);
+
             if(tag==null){
+                //加入tag
                 tag= SpringUtil.getBean(Tag.class);
                 tag.setName(tagName);
                 tagDao.addTag(tag);
-
-                System.out.println(tagName);
             }
 
             tags.add(tag);
-            HibernateUtil.getCurrentSession().getTransaction().commit();
-            HibernateUtil.getCurrentSession().beginTransaction();
         }
 
         return true;

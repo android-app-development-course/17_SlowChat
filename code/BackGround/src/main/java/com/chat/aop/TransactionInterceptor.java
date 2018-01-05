@@ -23,7 +23,7 @@ public class TransactionInterceptor {
 
     @After("pointcut()")
     public void commitTransaction(){
-//        HibernateUtil.getCurrentSession().getTransaction().commit();
+        HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
     @AfterThrowing(value = "pointcut()")
