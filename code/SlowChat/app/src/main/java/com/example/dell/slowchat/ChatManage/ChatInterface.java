@@ -1,8 +1,10 @@
 package com.example.dell.slowchat.ChatManage;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
@@ -20,15 +22,23 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.dell.slowchat.FriendManage.FriendInfoActivity;
+import com.example.dell.slowchat.HttpReqeust.HttpHelper;
+import com.example.dell.slowchat.HttpReqeust.JsonParse;
 import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class ChatInterface extends AppCompatActivity {
@@ -63,7 +73,7 @@ public class ChatInterface extends AppCompatActivity {
         initChatMsgs(friendId);
         initListView();
         initSendBtn();
-//        getMsgFromServer();
+        getMsgFromServerEverySecond();
     }
 
     private void initToolbar(){
@@ -170,6 +180,42 @@ public class ChatInterface extends AppCompatActivity {
     }
 
 
+    private void dealSendMsg(String inputString){
+        //构造输入消息
+        ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeSend,inputString);
+        chatMsgs.add(Message);
+        if(sendMsgToServer(inputString))
+            addChatInfosIntoSQLite(friendId,ChatMsg.MessageTypeSend,inputString);
+        //更新数据
+        mAdapter.Refresh();
+    }
+
+
+    private boolean sendMsgToServer(String message){
+        RequestParams params=sendMsgToServerGetParams(message);
+        try{
+            HttpHelper.sendMsgToServer(this,params,getString(R.string.chat_manage_send_mag_server_url));
+            return true;
+        }catch (Exception e){
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private RequestParams sendMsgToServerGetParams(String message){
+        HashMap<String,String> hashMap=new HashMap<>();
+        hashMap.put("user_id",getUserId());
+        hashMap.put("friend_id",String.valueOf(friendId));
+        hashMap.put("send_msg",message);
+        return HttpHelper.getParams(hashMap);
+    }
+
+    private String getUserId(){
+        SharedPreferences sp = getSharedPreferences("SlowChat", Context.MODE_PRIVATE);
+        return sp.getString("uid", null);
+    }
+
+
     private boolean ifLegalString(String inputString){
         if(inputString.equals(""))
             return false;
@@ -228,14 +274,7 @@ public class ChatInterface extends AppCompatActivity {
     }
 
 
-    private void dealSendMsg(String inputString){
-        //构造输入消息
-        ChatMsg Message=new ChatMsg(ChatMsg.MessageTypeSend,inputString);
-        chatMsgs.add(Message);
-        addChatInfosIntoSQLite(friendId,ChatMsg.MessageTypeSend,inputString);
-        //更新数据
-        mAdapter.Refresh();
-    }
+
 
     private void addChatInfosIntoSQLite(int friend_id,int type,String content){
         ContentValues values=new ContentValues();
@@ -344,7 +383,7 @@ public class ChatInterface extends AppCompatActivity {
     }
 
 
-    private void getMsgFromServer(){
+    private void getMsgFromServerEverySecond(){
         handler.postDelayed(runnable, TIME); //每隔1s执行
     }
 
@@ -356,9 +395,7 @@ public class ChatInterface extends AppCompatActivity {
             // handler自带方法实现定时器
             try {
                 handler.postDelayed(this, TIME);
-                ChatMsg chatMsg=new ChatMsg(ChatMsg.MessageTypeGet,"定时消息");
-                chatMsgs.add(chatMsg);
-                addChatInfosIntoSQLite(friendId,ChatMsg.MessageTypeGet,"定时消息");
+                getMsgFromServer();
                 mAdapter.Refresh();
                 scrollMyListViewToBottom();
             } catch (Exception e) {
@@ -368,5 +405,43 @@ public class ChatInterface extends AppCompatActivity {
             }
         }
     };
+
+
+    private void getMsgFromServer(){
+        AsyncHttpClient client=new AsyncHttpClient();
+        client.setTimeout(5);//5s超时
+        RequestParams params=getMsgFromServerGetParams();
+        client.post(getString(R.string.chat_manage_chat_record_server_url),params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers,
+                                  byte[] bytes) {
+                try {
+                    String json=new String(bytes,"utf-8");
+                    List<ChatRecord> chatRecords= JsonParse.getChatRecords(json);
+                    if (chatRecords!=null)
+                        for (ChatRecord chatRecord:chatRecords){
+                            ChatMsg chatMsg=new ChatMsg(ChatMsg.MessageTypeGet,chatRecord.getContent());
+                            chatMsgs.add(chatMsg);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
+                Toast.makeText(ChatInterface.this,"网络请求失败",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private RequestParams getMsgFromServerGetParams(){
+        HashMap<String,String> hashMap=new HashMap<>();
+        hashMap.put("user_id",getUserId());
+        hashMap.put("friend_id",String.valueOf(friendId));
+        return HttpHelper.getParams(hashMap);
+    }
+
 
 }
