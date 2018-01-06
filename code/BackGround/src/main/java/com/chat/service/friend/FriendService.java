@@ -1,9 +1,6 @@
 package com.chat.service.friend;
 
-import com.chat.dao.FriendDao;
 import com.chat.entity.User;
-
-import java.util.List;
 
 public interface FriendService {
     /**

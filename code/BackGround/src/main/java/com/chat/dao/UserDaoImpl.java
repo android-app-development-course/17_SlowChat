@@ -32,22 +32,16 @@ public class UserDaoImpl implements UserDao{
                 "from User where email=?",User.class);
         query.setParameter(0,email);
 
-        if(query.list().size()==0) return null;
-
-        return query.getSingleResult();
+        return query.uniqueResult();
     }
 
     public User getBriefUserByEmail(String email) {
-        User user=getUserByEmail(email);
+        Session session=HibernateUtil.getCurrentSession();
+        Query<User> query=session.createQuery(
+                "select new User (id,email,signature,integral,status,img,username)" +
+                        "from User where email=:email",User.class);
+        query.setParameter("email",email);
 
-        HibernateUtil.getCurrentSession().evict(user);
-        user.setPwd(null);
-        user.setCertificate(null);
-        user.setTags(null);
-        user.setFriends(null);
-        user.setMessages(null);
-        user.setAcceptFriends(null);
-
-        return user;
+        return query.uniqueResult();
     }
 }

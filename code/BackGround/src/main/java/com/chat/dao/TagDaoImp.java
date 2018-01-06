@@ -16,10 +16,7 @@ public class TagDaoImp implements TagDao{
         Query<Tag> query= session.createQuery("from Tag where name=?",Tag.class);
         query.setParameter(0,tagName);
 
-        //空处理
-        if(query.list().size()==0) return null;
-
-        return query.getSingleResult();
+        return query.uniqueResult();
     }
 
     public void addTag(Tag tag) {

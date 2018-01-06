@@ -9,6 +9,8 @@
 
     <bean id="tag" class="com.chat.entity.Tag" scope="prototype"/>
 
+    <bean id="friend" class="com.chat.entity.Friend" scope="prototype"/>
+
     <bean id="failureResponse" class="com.chat.util.ResponseUtil" scope="prototype">
         <property name="map">
             <map>

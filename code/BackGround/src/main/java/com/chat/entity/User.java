@@ -14,10 +14,31 @@ public class User {
     private String img;
     private String certificate;
     private String username;
-    private Set<User> friends;
+    private Set<Friend> friends;
     private Set<User> acceptFriends;
     private Set<Tag> tags;
     private Set<Message> messages;
+
+    /**
+     * 构造去除敏感信息后的简介版user，用户hibernate的查询
+     * @param id
+     * @param email
+     * @param signature
+     * @param integral
+     * @param status
+     * @param img
+     * @param username
+     */
+    public User(short id,String email,String signature,
+                int integral,byte status,String img,String username){
+        this.id=id;
+        this.email=email;
+        this.signature=signature;
+        this.integral=integral;
+        this.status=status;
+        this.img=img;
+        this.username=username;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -132,12 +153,12 @@ public class User {
         this.username = username;
     }
 
-    @ManyToMany
-    public Set<User> getFriends() {
+    @OneToMany
+    public Set<Friend> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<User> friends) {
+    public void setFriends(Set<Friend> friends) {
         this.friends = friends;
     }
 

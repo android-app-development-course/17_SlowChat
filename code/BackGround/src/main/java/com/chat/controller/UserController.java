@@ -51,7 +51,7 @@ public class UserController {
         if(userService.setUserMessage(username,signature,email)){
             return ResponseUtil.getSuccessResponse();
         }else {
-            return ResponseUtil.getFailureResponse("用户邮箱为空!");
+            return ResponseUtil.getFailureResponse("传递参数不正确！");
         }
     }
 

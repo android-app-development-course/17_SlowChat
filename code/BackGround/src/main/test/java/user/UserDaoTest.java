@@ -14,22 +14,14 @@ public class UserDaoTest {
     public static void main(String[] args) {
         HibernateUtil.getCurrentSession().beginTransaction();
 
-        Tag tag=SpringUtil.getBean(Tag.class);
-        tag.setName("开摩托");
-        tagDao.addTag(tag);
-
-        System.out.println(tag.getId());
-
-        User user=userDao.getUserByEmail("729164860@qq.com");
-        user.getTags().clear();
-        user.getTags().add(tag);
+        getUserByEmail();
 
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
     //添加一个用户
     private static void addUser(){
-        User user=new User();
+        User user=SpringUtil.getBean(User.class);
         user.setEmail("2sda1ds123df");
         user.setPwd("pwd231");
         user.setUsername("v");
@@ -43,7 +35,7 @@ public class UserDaoTest {
 
     //按照邮箱查找一个用户
     private static void getUserByEmail(){
-        User user=userDao.getBriefUserByEmail("729164860@qq.com");
+        User user=userDao.getBriefUserByEmail("asdf");
         System.out.println(user);
         System.out.println(user.getFriends());
         System.out.println(user.getTags());

@@ -38,7 +38,7 @@
             <key>
                 <column name="source_id"/>
             </key>
-            <many-to-many class="com.chat.entity.User" column="target_id"/>
+            <one-to-many class="com.chat.entity.Friend"/>
         </set>
 
         <set name="tags" table="user_tag">
