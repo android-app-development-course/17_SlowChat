@@ -2,7 +2,7 @@
     <string name="app_name">慢聊天</string>
 
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="server_url">http://119.23.35.35/home/selectProfileDetail?id=6</string>
+
 
     <!--主界面-->
     <string name="main_action_settings">设置</string>
@@ -19,6 +19,8 @@
     <string name="chat_manage_send">发送</string>
     <string name="chat_manage_friend_info">好友信息</string>
     <string name="chat_manage_chat_search">聊天信息搜索</string>
+    <string name="chat_manage_chat_record_server_url">http://119.23.35.35/home</string>
+    <string name="chat_manage_send_mag_server_url">http://119.23.35.35/home</string>
 
 
     <!--好友管理-->
