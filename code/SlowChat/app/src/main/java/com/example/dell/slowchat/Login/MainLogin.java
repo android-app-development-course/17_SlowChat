@@ -39,9 +39,6 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
     private CheckBox rememberPasswordCheckBox;
     private CheckBox autoLoginCheckBox;
 
-    //用户
-    private UserInfo userInfo;
-
     //对象
     private UserInfoSQLiteHelper userInfoSQLiteHelper;
     private boolean ifAutolog;
@@ -138,17 +135,17 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
     //本地以及在线两种方式登录
     private void login()
     {
-        if(loginLocal())
-        {
-            sentUserEmail();
-            Intent intent = new Intent();
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.setClass(MainLogin.this, MainActivity.class);
-            startActivity(intent);
-            Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
-        }
-        else
+//        if(loginLocal())
+//        {
+//            sentUserEmail();
+//            Intent intent = new Intent();
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+//                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            intent.setClass(MainLogin.this, MainActivity.class);
+//            startActivity(intent);
+//            Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
+//        }
+//        else
         {
             loginOnline();
         }
@@ -199,6 +196,7 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
             case 2:
                 return false;
         }
+//        userInfoSQLiteHelper.
         return true;
     }
 
@@ -218,7 +216,9 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
             public void onSuccess(int i, Header[] headers, byte[] bytes)
             {
                 JsonParse jsonParse = new JsonParse();
-                connectSuccess(jsonParse.getRegisterResult(bytes));
+                String json= new String(bytes);
+                System.out.println(json);
+                connectSuccess(jsonParse.getRegisterResult(json));
 
             }
 
@@ -236,14 +236,14 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
         switch (result)
         {
             case 0:
+                userInfoSQLiteHelper.updateUserLocal(usernameText.getText().toString(), passwordText.getText().toString());
                 sentUserEmail();
                 Intent intent = new Intent();
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.setClass(MainLogin.this, MainActivity.class);
                 startActivity(intent);
-                Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
-                userInfoSQLiteHelper.updateUser(usernameText.getText().toString(), passwordText.getText().toString());
+                System.out.println("登录成功");
                 break;
             case 1:
                 Toast.makeText(this, "账号不存在或密码错误", Toast.LENGTH_SHORT).show();
@@ -263,8 +263,11 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
         SharedPreferences sharedPreferences = getSharedPreferences("data", this.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
         editor.putString("userEmail", usernameText.getText().toString());
+        editor.putString("userId", String.valueOf(userInfoSQLiteHelper.getUserInfoLocal(usernameText.getText().toString())));
         editor.commit();
     }
+
+
 
     public void onClick(View view)
     {

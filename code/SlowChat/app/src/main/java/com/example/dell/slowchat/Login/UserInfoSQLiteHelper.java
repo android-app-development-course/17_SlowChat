@@ -72,14 +72,54 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+//    /**
+//     * This method to check user exist or not
+//     *
+//     * @param email
+//     * @return true/false
+//     */
+//    public boolean checkUser(String email) {
+//
+//        // array of columns to fetch
+//        String[] columns = {COLUMN_USERINFO_USERID};
+//        SQLiteDatabase db = this.getReadableDatabase();
+//
+//        // selection criteria
+//        String selection = COLUMN_USERINFO_USEREMAIL + " = ?";
+//
+//        // selection argument
+//        String[] selectionArgs = {email};
+//
+//        // query user table with condition
+//        /**
+//         * Here query function is used to fetch records from user table this function works like we use sql query.
+//         * SQL query equivalent to this query function is
+//         * SELECT user_id FROM user WHERE user_email = 'jack@androidtutorialshub.com';
+//         */
+//        Cursor cursor = db.query(TABLE_NAME, //Table to query
+//                columns,                    //columns to return
+//                selection,                  //columns for the WHERE clause
+//                selectionArgs,              //The values for the WHERE clause
+//                null,                       //group the rows
+//                null,                      //filter by row groups
+//                null);                      //The sort order
+//        int cursorCount = cursor.getCount();
+//        cursor.close();
+//        db.close();
+//        if (cursorCount > 0) {
+//            return true;
+//        }
+//        return false;
+//    }
+
     /**
-     * This method to check user exist or not
+     * This method to check user exist or not locally
      *
      * @param email
      * @return true/false
      */
-    public boolean checkUser(String email) {
-
+    public boolean checkUserLocal(String email)
+    {
         // array of columns to fetch
         String[] columns = {COLUMN_USERINFO_USERID};
         SQLiteDatabase db = this.getReadableDatabase();
@@ -113,14 +153,26 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
     }
 
 
+//    /**
+//     * This method to check user exist or not online
+//     *
+//     * @param email
+//     * @return true/false
+//     */
+//    public boolean checkUserOnline(String email)
+//    {
+//        return false;
+//    }
+
+
     /**
-     * This method to check password right or not
+     * This method to check password right or not locally
      *
      * @param email
      * @return true/false
      */
-    public int checkPassword(String email, String password) {
-
+    public int checkPassword(String email, String password)
+    {
         // array of columns to fetch
         String[] columns = {COLUMN_USERINFO_USERPASSWORD};
         SQLiteDatabase db = this.getReadableDatabase();
@@ -172,22 +224,28 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
         return flag;
     }
 
-    public UserInfo getUserInfo(String email)
+
+    /**
+     * This method to get user information in local database
+     *
+     * @param email
+     * @return true/false
+     */
+    public UserInfo getUserInfoLocal(String email)
     {
         SQLiteDatabase db = this.getReadableDatabase();
         UserInfo userInfo = new UserInfo();
         // array of columns to fetch
-        String[] columns = {COLUMN_USERINFO_USERNAME, COLUMN_USERINFO_USEREMAIL, COLUMN_USERINFO_USERINTEGRAL, COLUMN_USERINFO_USERSIGNATURE};
+        String[] columns = {COLUMN_USERINFO_USERID,
+                COLUMN_USERINFO_USERNAME,
+                COLUMN_USERINFO_USEREMAIL,
+                COLUMN_USERINFO_USERINTEGRAL,
+                COLUMN_USERINFO_USERSIGNATURE};
         // selection criteria
         String selection = COLUMN_USERINFO_USEREMAIL + " = ?";
         // selection argument
         String[] selectionArgs = {email};
         // query user table with condition
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id FROM user WHERE user_email = 'jack@androidtutorialshub.com';
-         */
         Cursor cursor = db.query(TABLE_NAME, //Table to query
                 columns,                    //columns to return
                 selection,                  //columns for the WHERE clause
@@ -196,30 +254,79 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
                 null,                      //filter by row groups
                 null);                      //The sort order
         cursor.moveToFirst();
-        userInfo.setUserName(cursor.getString(0));
-        userInfo.setUserEmail(cursor.getString(1));
-        userInfo.setUserIntegral(cursor.getInt(2));
-        userInfo.setUserSignature(cursor.getString(3));
+        userInfo.setUserId(cursor.getInt(0));
+        userInfo.setUserName(cursor.getString(1));
+        userInfo.setUserEmail(cursor.getString(2));
+        userInfo.setUserIntegral(cursor.getInt(3));
+        userInfo.setUserSignature(cursor.getString(4));
         cursor.close();
         db.close();
         return  userInfo;
     }
 
+
     /**
-     * This method is to create user record
-     *
-     * @param user
+     * This method is to create user record in local database
+     *把登录的用户更新到本地数据库中，方便查找
+     * @param email password
      */
-    public boolean addUser(UserInfo user)
+    public void updateUserLocal(final String email, final String password)
+    {
+        String path = "http://119.29.190.214/user/getUserMessage.do";
+        //设置插入数据库的信息
+        final RequestParams requestParams = new RequestParams();
+        requestParams.put("email",email);
+        //创建AsyncHttpClient实例
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(5000);
+        client.get(path, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes)
+            {
+                String json = new String(bytes);
+                System.out.print(json);
+                JsonParse jsonParse = new JsonParse();
+                UserInfo userInfo = jsonParse.getUserInfo(json);
+                userInfo.setUserPassword(password);
+                if(checkUserLocal(email))
+                {
+                    if(updateUserInfoLocal(userInfo))
+                    {
+                        System.out.println("更新用户信息到本地数据库成功");
+                    }
+                }
+                else
+                {
+                    if(addUserLocal(userInfo))
+                    {
+                        System.out.println("添加用户信息到本地数据库成功");
+                    }
+                }
+
+            }
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable)
+            {
+                System.out.println("网络连接失败");
+            }
+        });
+    }
+
+    /**
+     * This method is to create user record in local database
+     *在本地数据库添加一条用户信息
+     * @param userInfo
+     */
+    public boolean addUserLocal(UserInfo userInfo)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_USERINFO_USERID, user.getUserId());
-        values.put(COLUMN_USERINFO_USERNAME, user.getUserName());
-        values.put(COLUMN_USERINFO_USEREMAIL, user.getUserEmail());
-        values.put(COLUMN_USERINFO_USERPASSWORD, user.getUserPassword());
-        values.put(COLUMN_USERINFO_USERINTEGRAL, user.getUserIntegral());
+        values.put(COLUMN_USERINFO_USERID, userInfo.getUserId());
+        values.put(COLUMN_USERINFO_USERNAME, userInfo.getUserName());
+        values.put(COLUMN_USERINFO_USEREMAIL, userInfo.getUserEmail());
+        values.put(COLUMN_USERINFO_USERPASSWORD, userInfo.getUserPassword());
+        values.put(COLUMN_USERINFO_USERINTEGRAL, userInfo.getUserIntegral());
 
         // Inserting Row
         try
@@ -238,38 +345,6 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    //把注册的用户更新到本地数据库中，方便查找
-    public void updateUser(String email, final String password)
-    {
-        String path = "http://119.29.190.214/user/getUserMessage.do";
-        //设置插入数据库的信息
-        final RequestParams requestParams = new RequestParams();
-        requestParams.put("email",email);
-        //创建AsyncHttpClient实例
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.setTimeout(5000);
-        client.get(path, requestParams, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int i, Header[] headers, byte[] bytes)
-            {
-                String json = new String(bytes);
-                JsonParse jsonParse = new JsonParse();
-                System.out.println(json);
-                UserInfo userInfo = jsonParse.getUserInfo(bytes);
-                userInfo.setUserPassword(password);
-                if(addUser(userInfo))
-                {
-                    System.out.println("更新用户到数据库成功");
-                }
-                System.out.println("查询完成");
-            }
-            @Override
-            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable)
-            {
-                System.out.println("网络连接失败");
-            }
-        });
-    }
 
     public boolean updateUserInfo(UserInfo userInfo)
     {
@@ -315,12 +390,12 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
     }
 
     //更新服务器端数据库中的用户信息
-    public void updateUserInfoOnline(UserInfo userInfo)
+    public void updateUserInfoOnline(final UserInfo userInfo)
     {
         String path = "http://119.29.190.214/user/setUserMessage.do";
         //设置插入数据库的信息
         final RequestParams requestParams = new RequestParams();
-        requestParams.put("name", userInfo.getUserName());
+        requestParams.put("username", userInfo.getUserName());
         requestParams.put("signature", userInfo.getUserSignature());
         requestParams.put("email", userInfo.getUserEmail());
         //创建AsyncHttpClient实例
@@ -333,13 +408,14 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
                 String json = new String(bytes);
                 JsonParse jsonParse = new JsonParse();
                 System.out.println(json);
-                if(jsonParse.getRegisterResult(bytes) == 0)
+                if(jsonParse.getRegisterResult(json) == 0)
                 {
-                    System.out.println("更新用户到服务器端数据库成功");
+                    System.out.println("更新用户信息到服务器端数据库成功");
+                    getUserInfoOnline(userInfo.getUserEmail());
                 }
                 else
                 {
-                    System.out.println("更新用户到服务器端数据库成功");
+                    System.out.println("更新用户信息到服务器端数据库失败");
                 }
             }
             @Override
@@ -349,4 +425,37 @@ public class UserInfoSQLiteHelper extends SQLiteOpenHelper {
             }
         });
     }
+
+
+    /**
+     * This method is to get user information online
+     *从服务器端获取用户信息
+     * @param email
+     */
+    public void getUserInfoOnline(final String email)
+    {
+        String path = "http://119.29.190.214/user/getUserMessage.do";
+        //设置插入数据库的信息
+        final RequestParams requestParams = new RequestParams();
+        requestParams.put("email",email);
+        //创建AsyncHttpClient实例
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(5000);
+        client.get(path, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes)
+            {
+                String json = new String(bytes);
+                System.out.println(json);
+
+            }
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable)
+            {
+                System.out.println("网络连接失败");
+            }
+        });
+    }
 }
+
+

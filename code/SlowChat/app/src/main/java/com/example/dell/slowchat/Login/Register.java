@@ -98,7 +98,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 JsonParse jsonParse = new JsonParse();
                 String json = new String(bytes);
                 System.out.println(json);
-                connectSuccess(jsonParse.getRegisterResult(bytes));
+                connectSuccess(jsonParse.getRegisterResult(json));
 
             }
             @Override
@@ -117,7 +117,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         switch (result)
         {
             case 0:
-                userInfoSQLiteHelper.updateUser(userEmailEditText.getText().toString(), userPasswordEditText.getText().toString());
+                userInfoSQLiteHelper.updateUserLocal(userEmailEditText.getText().toString(), userPasswordEditText.getText().toString());
                 Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
                 finish();
                 break;
@@ -182,7 +182,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             }
             else
             {
-                if(userInfoSQLiteHelper.checkUser(tempUserEmail))
+                if(userInfoSQLiteHelper.checkUserLocal(tempUserEmail))
                 {
                     Toast.makeText(this, "邮箱已被注册", Toast.LENGTH_SHORT).show();
                     return 0;

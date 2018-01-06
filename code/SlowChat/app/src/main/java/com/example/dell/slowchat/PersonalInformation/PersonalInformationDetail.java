@@ -38,7 +38,7 @@ public class PersonalInformationDetail extends AppCompatActivity implements View
         userEmail = intent.getStringExtra("email");
         userInfoSQLiteHelper = new UserInfoSQLiteHelper(this);
         //从本地数据库中获取用户信息
-        userInfo = userInfoSQLiteHelper.getUserInfo(userEmail);
+        userInfo = userInfoSQLiteHelper.getUserInfoLocal(userEmail);
     }
 
     private void initView()
