@@ -39,7 +39,7 @@ public class UserDaoTest {
         System.out.println(user);
         System.out.println(user.getFriends());
         System.out.println(user.getTags());
-        System.out.println(user.getAcceptFriends());
+        System.out.println(user.getApplyFriends());
         System.out.println(user.getMessages());
     }
 

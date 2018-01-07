@@ -15,7 +15,7 @@ public class User {
     private String certificate;
     private String username;
     private Set<Friend> friends;
-    private Set<User> acceptFriends;
+    private Set<User> applyFriends;
     private Set<Tag> tags;
     private Set<Message> messages;
 
@@ -165,12 +165,12 @@ public class User {
     }
 
     @ManyToMany
-    public Set<User> getAcceptFriends() {
-        return acceptFriends;
+    public Set<User> getApplyFriends() {
+        return applyFriends;
     }
 
-    public void setAcceptFriends(Set<User> acceptFriends) {
-        this.acceptFriends = acceptFriends;
+    public void setApplyFriends(Set<User> acceptFriends) {
+        this.applyFriends = acceptFriends;
     }
 
     @Override

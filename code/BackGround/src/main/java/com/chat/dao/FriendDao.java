@@ -2,7 +2,9 @@ package com.chat.dao;
 
 import com.chat.entity.Friend;
 import com.chat.entity.User;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface FriendDao {
     /**
      * 获取Friend对象

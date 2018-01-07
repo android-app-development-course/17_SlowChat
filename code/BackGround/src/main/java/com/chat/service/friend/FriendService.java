@@ -9,26 +9,26 @@ import java.util.Set;
 public interface FriendService {
     /**
      * 发送好友申请
-     * @param sponsor 发送者
-     * @param reciver 接受者
+     * @param sponsorEmail 发送者
+     * @param reciverEmail 接受者
      * @return 是否成功
      */
-    void sponsorFriend(User sponsor, User reciver);
+    boolean sponsorFriend(String sponsorEmail, String reciverEmail);
 
     /**
      * 接收好友申请
-     * @param sponsor 发送者
-     * @param reciver 接受者
+     * @param sponsorMail 发送者
+     * @param reciverMail 接受者
      * @return 是否成功
      */
-    boolean acceptFriend(User sponsor,User reciver);
+    boolean acceptFriend(String sponsorMail,String reciverMail);
 
     /**
      * 删除一名好友
-     * @param sponsor 发起者
-     * @param receiver 被删除者
+     * @param sponsorMail 发起者
+     * @param receiverMail 被删除者
      */
-    void deleteFriend(User sponsor,User receiver);
+    boolean deleteFriend(String sponsorMail,String receiverMail);
 
     /**
      * 获取待接收的好友申请

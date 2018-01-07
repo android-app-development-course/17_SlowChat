@@ -16,8 +16,6 @@ public class FriendServiceTest {
         HibernateUtil.getCurrentSession().beginTransaction();
         Set<User> set=getAcceptFriends();
         UserDao dao=SpringUtil.getBean(UserDao.class);
-        User user=dao.getUserByEmail("2535109853@qq.com");
-        set.add(user);
 
         HibernateUtil.getCurrentSession().getTransaction().commit();
         System.out.println(set.size());
