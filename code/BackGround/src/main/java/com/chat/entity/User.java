@@ -19,6 +19,8 @@ public class User {
     private Set<Tag> tags;
     private Set<Message> messages;
 
+    public User(){}
+
     /**
      * 构造去除敏感信息后的简介版user，用户hibernate的查询
      * @param id

@@ -35,7 +35,7 @@ public class UserDaoTest {
 
     //按照邮箱查找一个用户
     private static void getUserByEmail(){
-        User user=userDao.getBriefUserByEmail("asdf");
+        User user=userDao.getBriefUserByEmail("729164860@qq.com");
         System.out.println(user);
         System.out.println(user.getFriends());
         System.out.println(user.getTags());

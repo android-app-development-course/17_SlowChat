@@ -19,14 +19,17 @@ public class FriendDaoImp implements FriendDao{
     }
 
     public void addFriend(Friend friend) {
-
+        Session session=HibernateUtil.getCurrentSession();
+        session.save(friend);
     }
 
     public void deleteFriend(Friend friend) {
-
+        Session session=HibernateUtil.getCurrentSession();
+        session.remove(friend);
     }
 
     public void updataFriend(Friend friend) {
-
+        Session session=HibernateUtil.getCurrentSession();
+        session.update(friend);
     }
 }
