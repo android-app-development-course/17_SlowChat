@@ -42,7 +42,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/register_user_name"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/NormalText"/>
 
             <EditText
                 android:id="@+id/register_user_name_editText"
@@ -67,7 +68,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/register_account"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/NormalText"/>
 
             <EditText
                 android:id="@+id/register_user_email_editText"
@@ -93,7 +95,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/register_password"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/NormalText"/>
 
             <EditText
                 android:id="@+id/register_user_password_editText"
@@ -119,7 +122,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/register_confirm_password"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/NormalText"/>
 
             <EditText
                 android:id="@+id/register_user_confirm_password_editText"

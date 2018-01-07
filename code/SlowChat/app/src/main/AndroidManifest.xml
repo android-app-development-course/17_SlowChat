@@ -53,7 +53,8 @@
         <activity android:name=".PersonalInformation.PersonalInformationDetail" />
         <activity
             android:name=".PersonalInformation.PersonalInformationUpdateUserName"
-            android:label="@string/title_activity_personal_information_update"></activity>
+            android:label="@string/title_activity_personal_information_update" />
+        <activity android:name=".PersonalInformation.PersonalInformationUpdateUserSignature"></activity>
     </application>
 
 </manifest>

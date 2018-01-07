@@ -157,9 +157,8 @@
                 android:id="@+id/personal_information_detail_user_signature"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="@string/personal_info_detail_user_signature_default"
-                android:textSize="18sp"
-                android:gravity="center_vertical"/>
+                android:hint="@string/personal_info_detail_user_signature_default"
+                android:textSize="18sp" />
 
         </LinearLayout>
 

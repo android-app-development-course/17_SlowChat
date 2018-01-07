@@ -30,7 +30,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -41,7 +41,7 @@
                     android:layout_weight="1"
                     android:text="@string/login_user_name"
                     android:textAlignment="center"
-                    android:textColor="@color/loginNormalText"
+                    android:textColor="@color/NormalText"
                     android:textSize="18sp" />
 
                 <EditText
@@ -56,7 +56,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -67,7 +67,7 @@
                     android:layout_weight="1"
                     android:text="@string/login_password"
                     android:textAlignment="center"
-                    android:textColor="@color/loginNormalText"
+                    android:textColor="@color/NormalText"
                     android:textSize="18sp" />
 
                 <EditText
@@ -83,7 +83,42 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <CheckBox
+                    android:id="@+id/login_check_box_remember_password"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:layout_marginLeft="12dip"
+                    android:text="@string/login_check_box_remember_password"
+                    android:textColor="#000000" />
+
+                <CheckBox
+                    android:id="@+id/login_check_box_auto_login"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:layout_marginLeft="12dip"
+                    android:text="@string/login_check_box_auto_login"
+                    android:textColor="#000000" />
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -100,8 +135,8 @@
                     android:layout_weight="2"
                     android:background="@drawable/login_rounded_button"
                     android:text="@string/login_login"
-                    android:textColor="@color/loginNormalText"
-                    android:textSize="24sp" />
+                    android:textColor="@color/NormalText"
+                    android:textSize="20sp" />
 
                 <Space
                     android:layout_width="0dp"
@@ -116,8 +151,8 @@
                     android:layout_weight="2"
                     android:background="@drawable/login_rounded_button"
                     android:text="@string/login_exit"
-                    android:textColor="@color/loginNormalText"
-                    android:textSize="24sp" />
+                    android:textColor="@color/NormalText"
+                    android:textSize="20sp" />
 
 
                 <Space
@@ -126,8 +161,9 @@
                     android:layout_weight="1" />
 
             </LinearLayout>
-
         </LinearLayout>
+
+
 
         <Space
             android:layout_width="match_parent"

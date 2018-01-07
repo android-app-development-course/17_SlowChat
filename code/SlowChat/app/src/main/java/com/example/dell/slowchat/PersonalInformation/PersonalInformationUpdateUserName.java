@@ -53,7 +53,6 @@ public class PersonalInformationUpdateUserName extends Activity implements View.
         {
             case R.id.personal_info_update_confirm_btn:
                 clickConfirmBtn();
-                Toast.makeText(this, "点击", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -63,9 +63,15 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
         this.initView(rootView);
         this.initObject();
         this.initListener();
-        this.initPersonalInfo();
+
 
         return rootView;
+    }
+
+    public void onStart()
+    {
+        super.onStart();
+        this.initPersonalInfo();
     }
 
     private String getUserEmail()
@@ -98,7 +104,7 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
 
     private void initPersonalInfo()
     {
-        UserInfo userInfo = userInfoSQLiteHelper.getUserInfo(this.getUserEmail());
+        UserInfo userInfo = userInfoSQLiteHelper.getUserInfoLocal(this.getUserEmail());
         userName.setText(getString(R.string.personal_info_user_name_title)+userInfo.getUserName());
         userAccount.setText(getString(R.string.personal_info_user_account_title)+userInfo.getUserEmail());
         userIntegral.setText(getString(R.string.personal_info_user_integral_title)+userInfo.getUserIntegral());

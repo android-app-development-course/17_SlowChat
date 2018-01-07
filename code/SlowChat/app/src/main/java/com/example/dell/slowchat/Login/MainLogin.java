@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import org.json.JSONObject;
 
 import java.net.CookieStore;
 
-public class MainLogin extends AppCompatActivity {
+public class MainLogin extends AppCompatActivity implements View.OnClickListener{
     //控件
     private EditText usernameText;
     private EditText passwordText;
@@ -35,11 +36,12 @@ public class MainLogin extends AppCompatActivity {
     private Button loginBtn;
     private Button exitBtn;
 
-    //用户
-    private UserInfo userInfo;
+    private CheckBox rememberPasswordCheckBox;
+    private CheckBox autoLoginCheckBox;
 
     //对象
     private UserInfoSQLiteHelper userInfoSQLiteHelper;
+    private boolean ifAutolog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +50,24 @@ public class MainLogin extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
 
+        ifAutolog = true;
         initial();
         clickExit();
         clickLogin();
+    }
+
+    protected void onStart()
+    {
+        super.onStart();
+        autoLogin();
+        ifAutolog = false;
+    }
+
+    protected void onStop()
+    {
+        super.onStop();
+        saveAutoLoginState();
+
     }
 
     @Override
@@ -75,6 +92,9 @@ public class MainLogin extends AppCompatActivity {
         if (id == R.id.login_action_register)
         {
             Intent intent = new Intent(MainLogin.this, Register.class);
+            SharedPreferences sharedPreferences = getSharedPreferences("login", this.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
+            editor.clear();
             startActivity(intent);
             return true;
         }
@@ -96,6 +116,9 @@ public class MainLogin extends AppCompatActivity {
         this.loginBtn=(Button)findViewById(R.id.login_login);
         this.exitBtn=(Button)findViewById(R.id.login_exit);
 
+        this.rememberPasswordCheckBox=(CheckBox) findViewById(R.id.login_check_box_remember_password);
+        this.autoLoginCheckBox=(CheckBox) findViewById(R.id.login_check_box_auto_login);
+
         this.userInfoSQLiteHelper = new UserInfoSQLiteHelper(this);
 
     }
@@ -112,21 +135,52 @@ public class MainLogin extends AppCompatActivity {
     //本地以及在线两种方式登录
     private void login()
     {
-        if(loginLocal())
-        {
-            sentUserEmail();
-            Intent intent = new Intent();
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.setClass(MainLogin.this, MainActivity.class);
-            startActivity(intent);
-            Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
-        }
-        else
+//        if(loginLocal())
+//        {
+//            sentUserEmail();
+//            Intent intent = new Intent();
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+//                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            intent.setClass(MainLogin.this, MainActivity.class);
+//            startActivity(intent);
+//            Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
+//        }
+//        else
         {
             loginOnline();
         }
     }
+
+    //自动登录
+    private void autoLogin()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences("login",this.MODE_PRIVATE);
+        if(ifAutolog && sharedPreferences.getBoolean("remember_password", false))
+        {
+            rememberPasswordCheckBox.setChecked(true);
+            usernameText.setText(sharedPreferences.getString("userEmail",""));
+            passwordText.setText(sharedPreferences.getString("userPassword",""));
+            if(sharedPreferences.getBoolean("auto_login",false))
+            {
+                autoLoginCheckBox.setChecked(true);
+                login();
+            }
+        }
+    }
+
+
+    //保存记住密码和自动登录状态
+    private void saveAutoLoginState()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences("login", this.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
+        editor.putString("userEmail", usernameText.getText().toString());
+        editor.putString("userPassword", passwordText.getText().toString());
+        editor.putBoolean("remember_password", rememberPasswordCheckBox.isChecked());
+        editor.putBoolean("auto_login", autoLoginCheckBox.isChecked());
+        editor.commit();
+    }
+
 
     //连接本地数据库登录
     private boolean loginLocal()
@@ -142,6 +196,7 @@ public class MainLogin extends AppCompatActivity {
             case 2:
                 return false;
         }
+//        userInfoSQLiteHelper.
         return true;
     }
 
@@ -161,7 +216,9 @@ public class MainLogin extends AppCompatActivity {
             public void onSuccess(int i, Header[] headers, byte[] bytes)
             {
                 JsonParse jsonParse = new JsonParse();
-                connectSuccess(jsonParse.getRegisterResult(bytes));
+                String json= new String(bytes);
+                System.out.println(json);
+                connectSuccess(jsonParse.getRegisterResult(json));
 
             }
 
@@ -179,14 +236,14 @@ public class MainLogin extends AppCompatActivity {
         switch (result)
         {
             case 0:
+                userInfoSQLiteHelper.updateUserLocal(usernameText.getText().toString(), passwordText.getText().toString());
                 sentUserEmail();
                 Intent intent = new Intent();
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.setClass(MainLogin.this, MainActivity.class);
                 startActivity(intent);
-                Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
-                userInfoSQLiteHelper.updateUser(usernameText.getText().toString(), passwordText.getText().toString());
+                System.out.println("登录成功");
                 break;
             case 1:
                 Toast.makeText(this, "账号不存在或密码错误", Toast.LENGTH_SHORT).show();
@@ -203,10 +260,24 @@ public class MainLogin extends AppCompatActivity {
     private void sentUserEmail()
     {
         //获取SharePreferences对象，参数表示文件名，MODE_PRIVATE表示文件操作模式
-        SharedPreferences sharedPreferences = getSharedPreferences("data", this.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("SlowChat", this.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
         editor.putString("userEmail", usernameText.getText().toString());
+        editor.putString("userId", String.valueOf(userInfoSQLiteHelper.getUserInfoLocal(usernameText.getText().toString())));
         editor.commit();
+    }
+
+
+
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.login_check_box_remember_password:
+            case R.id.login_check_box_auto_login:
+                break;
+
+        }
     }
 
     private void clickExit(){

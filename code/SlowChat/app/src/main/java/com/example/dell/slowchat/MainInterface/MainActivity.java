@@ -1,6 +1,7 @@
 package com.example.dell.slowchat.MainInterface;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dell.slowchat.ChatManage.ChatManageSearch;
 import com.example.dell.slowchat.MakeFriendHall.MakeFriendHall;
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.main_action_settings:
                 return true;
             case R.id.main_action_exit:
+                clearAutoLogin();
                 System.exit(0);
             case R.id.main_action_friend_hall:
                 intent=new Intent(this, MakeFriendHall.class);
@@ -139,6 +142,14 @@ public class MainActivity extends AppCompatActivity
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void clearAutoLogin()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences("login", this.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
+        editor.putBoolean("auto_login", false);
+        editor.commit();
     }
 
     private void initLayout()

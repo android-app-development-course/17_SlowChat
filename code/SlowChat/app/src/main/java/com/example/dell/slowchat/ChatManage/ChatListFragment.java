@@ -29,11 +29,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.dell.slowchat.HttpReqeust.HttpHelper;
 import com.example.dell.slowchat.HttpReqeust.JsonParse;
 import com.example.dell.slowchat.HttpReqeust.TestData;
+import com.example.dell.slowchat.Login.UserInfo;
+import com.example.dell.slowchat.Login.UserInfoSQLiteHelper;
 import com.example.dell.slowchat.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
@@ -60,6 +64,7 @@ public class ChatListFragment extends Fragment
     private SQLiteDatabase writeDB;
     private SQLiteDatabase readDB;
 
+    private List<ChatRecord> chatRecordsFromServer;
     private HashMap<Integer,Integer> chatMsgNum;
     private HashMap<Integer,String> lastSendDate;
     private HashMap<Integer,String> lastMsg;
@@ -111,9 +116,9 @@ public class ChatListFragment extends Fragment
 
 
     private void addNewChatMsgIntoDB(){
-        List<ChatRecord> chatRecords=getDataFromServer();
-        initChatNum(chatRecords);
-        DealReceiveMsg dealReceiveMsg=new DealReceiveMsg(chatRecords,readDB);
+        getDataFromServer();
+        initChatNum(chatRecordsFromServer);
+        DealReceiveMsg dealReceiveMsg=new DealReceiveMsg(chatRecordsFromServer,readDB);
         dealReceiveMsg.writeDataIntoDB(writeDB);
     }
 
@@ -133,18 +138,51 @@ public class ChatListFragment extends Fragment
 
 
 
-    private List<ChatRecord> getDataFromServer(){
-        List<ChatRecord> chatRecords =new ArrayList<>();
+    private List<ChatRecord> getDataFromServer1(){
+        chatRecordsFromServer =new ArrayList<>();
         String currentDate=getCurrentDate();
         for (int i=1;i<5;i++) {
             ChatRecord record = new ChatRecord(i, currentDate, "就你会吹比");
-            chatRecords.add(record);
+            chatRecordsFromServer.add(record);
             record = new ChatRecord(i, currentDate, "不吹会死啊");
-            chatRecords.add(record);
+            chatRecordsFromServer.add(record);
         }
-        return chatRecords;
+        return chatRecordsFromServer;
     }
 
+
+    private void getDataFromServer(){
+        chatRecordsFromServer =new ArrayList<>();
+        AsyncHttpClient client=new AsyncHttpClient();
+        client.setTimeout(5);//5s超时
+        RequestParams params= new RequestParams();
+        params.put("user_id",getUserId());
+        client.post(getString(R.string.chat_manage_chat_record_server_url),params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers,
+                                  byte[] bytes) {
+                try {
+                    String json=new String(bytes,"utf-8");
+                    chatRecordsFromServer= JsonParse.getChatRecords(json);
+                    if (chatRecordsFromServer==null)
+                        Toast.makeText(getContext(),"解析失败",Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
+                Toast.makeText(getContext(),"网络请求失败",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private String getUserId(){
+        SharedPreferences sp = getActivity().getSharedPreferences("SlowChat", Context.MODE_PRIVATE);
+        return sp.getString("userId", null);
+    }
 
 
     private String getCurrentDate(){
@@ -520,30 +558,5 @@ public class ChatListFragment extends Fragment
         writeDB.close();
     }
 
-    private void testGetDataFromServer(){
-        AsyncHttpClient client=new AsyncHttpClient();
-        client.setTimeout(5);//5s超时
-        client.post(getString(R.string.server_url), new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, org.apache.http.Header[] headers,
-                                  byte[] bytes) {
-                try {
-                    String json=new String(bytes,"utf-8");
-                    TestData testData= JsonParse.getTestData(json);
-                    if (testData==null)
-                        Toast.makeText(getContext(),"解析失败",Toast.LENGTH_SHORT).show();
-                    else {
-                        Toast.makeText(getContext(),testData.getCities().toString(),Toast.LENGTH_SHORT).show();
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
-                Toast.makeText(getContext(),"请求失败",Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 }
