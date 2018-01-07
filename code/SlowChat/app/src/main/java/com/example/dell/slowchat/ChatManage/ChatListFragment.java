@@ -181,7 +181,7 @@ public class ChatListFragment extends Fragment
 
     private String getUserId(){
         SharedPreferences sp = getActivity().getSharedPreferences("SlowChat", Context.MODE_PRIVATE);
-        return sp.getString("uid", null);
+        return sp.getString("userId", null);
     }
 
 

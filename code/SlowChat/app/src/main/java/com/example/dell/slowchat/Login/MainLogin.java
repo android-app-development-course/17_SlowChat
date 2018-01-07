@@ -260,7 +260,7 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
     private void sentUserEmail()
     {
         //获取SharePreferences对象，参数表示文件名，MODE_PRIVATE表示文件操作模式
-        SharedPreferences sharedPreferences = getSharedPreferences("data", this.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("SlowChat", this.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
         editor.putString("userEmail", usernameText.getText().toString());
         editor.putString("userId", String.valueOf(userInfoSQLiteHelper.getUserInfoLocal(usernameText.getText().toString())));

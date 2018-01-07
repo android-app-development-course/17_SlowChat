@@ -212,7 +212,7 @@ public class ChatInterface extends AppCompatActivity {
 
     private String getUserId(){
         SharedPreferences sp = getSharedPreferences("SlowChat", Context.MODE_PRIVATE);
-        return sp.getString("uid", null);
+        return sp.getString("userId", null);
     }
 
 
