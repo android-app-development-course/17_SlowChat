@@ -430,7 +430,7 @@ public class ChatInterface extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
-                Toast.makeText(ChatInterface.this,"网络请求失败",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ChatInterface.this,"网络请求失败",Toast.LENGTH_SHORT).show();
             }
         });
     }
