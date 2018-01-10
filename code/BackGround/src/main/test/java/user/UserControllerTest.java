@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class UserControllerTest {
     public static void main(String[] args) {
-        setTags();
+        getUser();
     }
 
     //用email获取user信息

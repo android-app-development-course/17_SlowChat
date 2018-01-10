@@ -7,7 +7,8 @@ public class Friend {
     private int id;
     private short sendCount;
     private int feeling;
-    private User targetUser;
+    private User friend;
+    private User user;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -40,12 +41,21 @@ public class Friend {
     }
 
     @ManyToOne
-    public User getTargetUser() {
-        return targetUser;
+    public User getFriend() {
+        return friend;
     }
 
-    public void setTargetUser(User targetUser) {
-        this.targetUser = targetUser;
+    public void setFriend(User targetUser) {
+        this.friend = targetUser;
+    }
+
+    @ManyToOne
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User sourceUser) {
+        this.user = sourceUser;
     }
 
     @Override
@@ -69,6 +79,4 @@ public class Friend {
         result = 31 * result + feeling;
         return result;
     }
-
-
 }

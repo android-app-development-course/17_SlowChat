@@ -46,6 +46,10 @@ public class UserServiceImp implements UserService{
             return false;
         }
 
+        if(signature==null&username==null){
+            return false;
+        }
+
         if(signature!=null){
             user.setSignature(signature);
         }

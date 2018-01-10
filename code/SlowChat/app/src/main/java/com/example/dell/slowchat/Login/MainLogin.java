@@ -295,18 +295,4 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
                 .show();
     }
 
-    //    private void sentUserEmail()
-//    {
-//        //获取SharePreferences对象，参数表示文件名，MODE_PRIVATE表示文件操作模式
-//        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
-//        editor.putString("userEmail", usernameText.getText().toString());
-//        editor.putString("userId", String.valueOf(userInfoSQLiteHelper.getUserInfoLocal(usernameText.getText().toString())));
-//        editor.apply();
-////        editor.commit();
-//    }
-
 }
-
-
-

@@ -48,11 +48,11 @@
             <many-to-many class="com.chat.entity.Tag" column="tag_id"/>
         </set>
 
-        <set name="friendApplies" table="friend_apply" cascade="all">
+        <set name="applyFriends" table="friend_apply" cascade="all">
             <key>
-                <column name="source_id"/>
+                <column name="target_id"/>
             </key>
-            <one-to-many class="com.chat.entity.FriendApply"/>
+            <many-to-many column="source_id" class="com.chat.entity.User"/>
         </set>
 
         <set name="messages" table="message" cascade="all">

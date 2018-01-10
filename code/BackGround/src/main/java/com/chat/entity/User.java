@@ -1,7 +1,6 @@
 package com.chat.entity;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,9 +15,32 @@ public class User {
     private String certificate;
     private String username;
     private Set<Friend> friends;
-    private Set<FriendApply> friendApplies;
+    private Set<User> applyFriends;
     private Set<Tag> tags;
     private Set<Message> messages;
+
+    public User(){}
+
+    /**
+     * 构造去除敏感信息后的简介版user，用户hibernate的查询
+     * @param id
+     * @param email
+     * @param signature
+     * @param integral
+     * @param status
+     * @param img
+     * @param username
+     */
+    public User(short id,String email,String signature,
+                int integral,byte status,String img,String username){
+        this.id=id;
+        this.email=email;
+        this.signature=signature;
+        this.integral=integral;
+        this.status=status;
+        this.img=img;
+        this.username=username;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -107,15 +129,6 @@ public class User {
     }
 
     @OneToMany
-    public Set<FriendApply> getFriendApplies() {
-        return friendApplies;
-    }
-
-    public void setFriendApplies(Set<FriendApply> friendApplies) {
-        this.friendApplies = friendApplies;
-    }
-
-    @OneToMany
     public Set<Message> getMessages() {
         return messages;
     }
@@ -149,6 +162,15 @@ public class User {
 
     public void setFriends(Set<Friend> friends) {
         this.friends = friends;
+    }
+
+    @ManyToMany
+    public Set<User> getApplyFriends() {
+        return applyFriends;
+    }
+
+    public void setApplyFriends(Set<User> acceptFriends) {
+        this.applyFriends = acceptFriends;
     }
 
     @Override

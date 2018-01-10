@@ -173,7 +173,7 @@ public class ChatListFragment extends Fragment
 
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
-                Toast.makeText(getContext(),"网络请求失败",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"无法连接服务器",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -181,7 +181,7 @@ public class ChatListFragment extends Fragment
 
     private String getUserId(){
         SharedPreferences sp = getActivity().getSharedPreferences("SlowChat", Context.MODE_PRIVATE);
-        return sp.getString("uid", null);
+        return sp.getString("userId", null);
     }
 
 

@@ -51,7 +51,7 @@ public class HttpHelper {
 
             @Override
             public void onFailure(int statusCode, org.apache.http.Header[] headers, byte[] bytes, Throwable throwable) {
-                Toast.makeText(context,"网络请求失败",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"无法连接服务器",Toast.LENGTH_SHORT).show();
             }
         });
     }
