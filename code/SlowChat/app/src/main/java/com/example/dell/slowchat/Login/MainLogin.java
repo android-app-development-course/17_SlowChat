@@ -1,5 +1,6 @@
 package com.example.dell.slowchat.Login;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.dell.slowchat.ChatManage.ChatInterface;
+import com.example.dell.slowchat.HttpReqeust.HttpHelper;
 import com.example.dell.slowchat.MainInterface.MainActivity;
 import com.example.dell.slowchat.R;
 import com.loopj.android.http.AsyncHttpClient;
@@ -92,7 +94,7 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
         if (id == R.id.login_action_register)
         {
             Intent intent = new Intent(MainLogin.this, Register.class);
-            SharedPreferences sharedPreferences = getSharedPreferences("login", this.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
             editor.clear();
             startActivity(intent);
@@ -135,17 +137,17 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
     //本地以及在线两种方式登录
     private void login()
     {
-//        if(loginLocal())
-//        {
-//            sentUserEmail();
-//            Intent intent = new Intent();
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-//                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            intent.setClass(MainLogin.this, MainActivity.class);
-//            startActivity(intent);
-//            Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT);
-//        }
-//        else
+        if(loginLocal())
+        {
+            //更新本地数据库登录用户信息
+            userInfoSQLiteHelper.updateUserLocal(this, usernameText.getText().toString(), passwordText.getText().toString());
+            Intent intent = new Intent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setClass(MainLogin.this, MainActivity.class);
+            startActivity(intent);
+        }
+        else
         {
             loginOnline();
         }
@@ -154,7 +156,7 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
     //自动登录
     private void autoLogin()
     {
-        SharedPreferences sharedPreferences = getSharedPreferences("login",this.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         if(ifAutolog && sharedPreferences.getBoolean("remember_password", false))
         {
             rememberPasswordCheckBox.setChecked(true);
@@ -172,12 +174,13 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
     //保存记住密码和自动登录状态
     private void saveAutoLoginState()
     {
-        SharedPreferences sharedPreferences = getSharedPreferences("login", this.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
         editor.putString("userEmail", usernameText.getText().toString());
         editor.putString("userPassword", passwordText.getText().toString());
         editor.putBoolean("remember_password", rememberPasswordCheckBox.isChecked());
         editor.putBoolean("auto_login", autoLoginCheckBox.isChecked());
+        editor.apply();
         editor.commit();
     }
 
@@ -196,7 +199,6 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
             case 2:
                 return false;
         }
-//        userInfoSQLiteHelper.
         return true;
     }
 
@@ -217,9 +219,7 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
             {
                 JsonParse jsonParse = new JsonParse();
                 String json= new String(bytes);
-                System.out.println(json);
                 connectSuccess(jsonParse.getRegisterResult(json));
-
             }
 
             @Override
@@ -236,8 +236,9 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
         switch (result)
         {
             case 0:
-                userInfoSQLiteHelper.updateUserLocal(usernameText.getText().toString(), passwordText.getText().toString());
-                sentUserEmail();
+                //更新本地数据库登录用户信息
+                userInfoSQLiteHelper.updateUserLocal(this, usernameText.getText().toString(), passwordText.getText().toString());
+                //启动主Activity
                 Intent intent = new Intent();
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -254,20 +255,8 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
     //连接服务器失败调用
     private void connectFail()
     {
-        Toast.makeText(this, "网络连接失败", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "网络连接失败，login", Toast.LENGTH_SHORT).show();
     }
-
-    private void sentUserEmail()
-    {
-        //获取SharePreferences对象，参数表示文件名，MODE_PRIVATE表示文件操作模式
-        SharedPreferences sharedPreferences = getSharedPreferences("data", this.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
-        editor.putString("userEmail", usernameText.getText().toString());
-        editor.putString("userId", String.valueOf(userInfoSQLiteHelper.getUserInfoLocal(usernameText.getText().toString())));
-        editor.commit();
-    }
-
-
 
     public void onClick(View view)
     {
@@ -306,4 +295,18 @@ public class MainLogin extends AppCompatActivity implements View.OnClickListener
                 .show();
     }
 
+    //    private void sentUserEmail()
+//    {
+//        //获取SharePreferences对象，参数表示文件名，MODE_PRIVATE表示文件操作模式
+//        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit(); //获取编辑器
+//        editor.putString("userEmail", usernameText.getText().toString());
+//        editor.putString("userId", String.valueOf(userInfoSQLiteHelper.getUserInfoLocal(usernameText.getText().toString())));
+//        editor.apply();
+////        editor.commit();
+//    }
+
 }
+
+
+

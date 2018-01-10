@@ -1,6 +1,7 @@
 package com.example.dell.slowchat.Login;
 
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -117,7 +118,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         switch (result)
         {
             case 0:
-                userInfoSQLiteHelper.updateUserLocal(userEmailEditText.getText().toString(), userPasswordEditText.getText().toString());
+                //更新用户信息到本地数据库
+                userInfoSQLiteHelper.updateUserLocal(this, userEmailEditText.getText().toString(), userPasswordEditText.getText().toString());
                 Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
                 finish();
                 break;

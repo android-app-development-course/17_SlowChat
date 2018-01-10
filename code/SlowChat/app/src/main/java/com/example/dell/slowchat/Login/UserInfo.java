@@ -37,6 +37,18 @@ public class UserInfo {
         this.userState = 0;
     }
 
+    //设置用户基本信息（无密码）
+    public void setUserInfo(int userId, String userName, String userEmail, String userSignature,
+    int userIntegral, int userStatus)
+    {
+        this.userId = userId;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userSignature = userSignature;
+        this.userIntegral = userIntegral;
+        this.userStatus = userStatus;
+    }
+
     //设置用户ID
     public void setUserId(int userId)
     {
@@ -91,55 +103,56 @@ public class UserInfo {
         this.userState = userState;
     }
 
-    //设置用户ID
+
+    //获取用户ID
     public int getUserId()
     {
         return this.userId;
     }
 
-    //设置用户名
+    //获取用户名
     public String getUserName()
     {
         return this.userName;
     }
 
-    //设置用户邮箱
+    //获取用户邮箱
     public String getUserEmail()
     {
         return this.userEmail;
     }
 
-    //设置用户密码
+    //获取用户密码
     public String getUserPassword()
     {
         return this.userPassword;
     }
 
-    //设置用户头像
+    //获取用户头像
     public Drawable getUserImage()
     {
         return this.userImage;
     }
 
-    //设置用户个性签名
+    //获取用户个性签名
     public String getUserSignature()
     {
         return this.userSignature;
     }
 
-    //设置用户经验值
+    //获取用户经验值
     public int getUserIntegral()
     {
         return this.userIntegral;
     }
 
-    //设置用户签到状态
+    //获取用户签到状态
     public int getUserStatus()
     {
         return this.userStatus;
     }
 
-    //设置用户登录状态
+    //获取用户登录状态
     public int getUserState()
     {
         return this.userState;
